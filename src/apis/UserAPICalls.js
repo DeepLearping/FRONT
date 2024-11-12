@@ -1,8 +1,8 @@
 import { loginRequest, request } from "./Apis";
-import { loadUserInfo, login, updateUser, loadPetInfo } from "../modules/UserModule";
+import { loadUserInfo, login, updateUser} from "../modules/UserModule";
 
 /* 로그인 정보 전달 받는 함수 */
-export function callLoginAPI(loginInfo) {
+export function callLoginAPI(code) {
 
 
     console.log('login api calls...');
@@ -10,22 +10,14 @@ export function callLoginAPI(loginInfo) {
     return async (dispatch, getState) => {
         try {
             // 서버에 로그인 요청
-            const result = await loginRequest('POST', '/login', loginInfo);
+            const result = await loginRequest('GET', `/auth/google/callback?code=${code}`);
             console.log('login result : ', result); // 서버에서 반환된 유저 정보
 
-            if (result.data.failType) {
-                return result.data.failType; // 로그인 실패
-            }
-
             // 로그인 성공 시 action dispatch
-            const token = result.headers['authorization']; // 'Bearer <token>' 형식
-            const userInfo = result.data.userInfo; // 사용자 정보 획득
-
-            // 유저 상태가 'secession'인지 확인
-            if (userInfo.userState === 'secession') {
-                return 'secession'; // 탈퇴 처리된 사용자일 경우 'secession' 반환
-            }
-
+            const token = result.data.results.token;
+            console.log("token : ",token);
+            const userInfo = result.data.results.user
+            console.log("userInfo : ",userInfo);
             dispatch(login({ token, userInfo }));
 
             return true; // 로그인 성공
@@ -78,52 +70,6 @@ export function updateUserInfo(id, modifyUserInfo) {
 
             return result; // 포장한 데이터를 반환해주기.
 
-
-        } catch (error) {
-            console.error('API error:', error);
-        }
-    }
-}
-
-// 유저의 펫 정보 불러오기
-export function getPetInfo() {
-
-    console.log('유저 펫 정보 불러오기...');
-
-    return async (dispatch) => {
-
-        try {
-            const result = await request('GET', `/api/v1/pets/myPet`);
-            console.log('result : ', result); // 서버에서 받아온 data 정보
-
-            const data = result.results.pets;
-            console.log('data :', data);
-
-            dispatch(loadPetInfo(data))
-
-            return result; // 포장한 데이터를 반환해주기.
-
-        } catch (error) {
-            console.error('API error:', error);
-        }
-    }
-}
-
-// 유저의 펫 정보 수정오기
-export function updatePetInfo(petId, modifyPetInfo) {
-
-    console.log('유저 펫 정보 수정하기...');
-
-    return async (dispatch) => {
-
-        try {
-            const result = await request('PUT', `/api/v1/pets/${petId}`, modifyPetInfo);
-            console.log('result : ', result); // 서버에서 받아온 data 정보
-
-            // const data = result.results.pets;
-            // console.log('data :', data);
-
-            return result; // 포장한 데이터를 반환해주기.
 
         } catch (error) {
             console.error('API error:', error);
