@@ -12,12 +12,12 @@ function UserMain() {
     useEffect(() => {
         const searchParams = new URLSearchParams(window.location.search);
         const code = searchParams.get('code'); // 쿼리 파라미터에서 code 추출
-    
+
         if (code) {
           // 백엔드에 code 전송하여 액세스 토큰 요청
           dispatch(callLoginAPI(code))
-            
         }
+
       }, [dispatch]);
 
     return (
@@ -32,6 +32,9 @@ function UserMain() {
                     <li className="user-main-nav-item">
                         <NavLink to="/test">
                             <h1>TEST</h1>
+                        </NavLink>
+                        <NavLink to="/chat_room">
+                            <h1>채팅방</h1>
                         </NavLink>
                     </li>
                 </ul>

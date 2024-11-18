@@ -3,10 +3,15 @@ import UserLayout from "./layouts/Layout";
 import UserMain from "./pages/UserMain";
 import TestPage from "./TestPage";
 import Login from "./pages/user/Login";
-import { useSelector } from "react-redux";
+import ChatRoom from "./pages/ChatRoom";
+
+// ProtectedRoute 컴포넌트 정의
+const ProtectedRoute = ({ element, token }) => {
+  return token ? element : <Navigate to="/login" />;
+};
 
 function App() {
-  const token = useSelector(state => state.user.token);
+  const token = localStorage.getItem('token');
 
   return (
     <BrowserRouter>
@@ -14,7 +19,8 @@ function App() {
         <Route path="/" element={<UserLayout />}>
           <Route index element={<UserMain />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/test" element={token ? <TestPage /> : <Navigate to="/login" />} />
+          <Route path="/test" element={<ProtectedRoute element={<TestPage />} token={token} />} />
+          <Route path="/chat_room" element={<ProtectedRoute element={<ChatRoom />} token={token} />} />
         </Route>
       </Routes>
     </BrowserRouter>
