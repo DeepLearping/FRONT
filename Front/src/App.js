@@ -3,6 +3,7 @@ import UserLayout from "./layouts/Layout";
 import UserMain from "./pages/UserMain";
 import TestPage from "./TestPage";
 import Login from "./pages/user/Login";
+import SelectCharacterPage from "./pages/selectCharacterPage/selectCharacterPage";
 import { useSelector } from "react-redux";
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
           <Route index element={<UserMain />} />
           <Route path="/login" element={<Login />} />
           <Route path="/test" element={token ? <TestPage /> : <Navigate to="/login" />} />
+          <Route path="/selectCharacterPage" element={<SelectCharacterPage/>} />
         </Route>
       </Routes>
     </BrowserRouter>
