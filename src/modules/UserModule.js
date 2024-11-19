@@ -8,19 +8,21 @@ const initialState = {
     userInfo: [],
     token: null,
     users: [],
+    characters: [],
+    character: [],
 };
 
 /* 액션 타입 설정 */
 export const LOGIN = 'user/LOGIN';
 export const LOG_OUT = 'user/LOG_OUT';
-export const LOAD_USER_INFO = 'user/LOAD_USER_INFO';
+export const LOAD_ALL_CHARACTER_INFO = 'user/LOAD_ALL_CHARACTER_INFO';
 export const UPDATE_USER = 'user/UPDATE_USER';
 
 /* 유저 관련 액션 함수 */
-export const { user : { login, logOut, loadUserInfo, updateUser }} = createActions({
+export const { user : { login, logOut, loadAllCharacterInfo, updateUser }} = createActions({
     [LOGIN]: ({ token, userInfo }) => ({ token, userInfo }),
     [LOG_OUT]: () => ({ }),
-    [LOAD_USER_INFO]: (data) => (data),
+    [LOAD_ALL_CHARACTER_INFO]: (data) => (data),
     [UPDATE_USER]: (modifyUserInfo) => (modifyUserInfo),
 
 });
@@ -43,14 +45,13 @@ const userReducer = handleActions(
             localStorage.removeItem('token');  // 로그인 토큰 삭제
             return initialState;
         },
-        [LOAD_USER_INFO]: (state, data) => {
+        [LOAD_ALL_CHARACTER_INFO]: (state, data) => {
 
             console.log('data : ', data);
-            
 
             return {
                 ...state,
-                userInfo: data.payload, // 상태 업데이트
+                characters: data.payload, // 상태 업데이트
             };
         },
         [UPDATE_USER]: (state, modifyUserInfo) => {
