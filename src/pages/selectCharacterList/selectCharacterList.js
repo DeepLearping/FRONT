@@ -1,62 +1,91 @@
 import React, { useEffect, useState } from 'react';
 import '../../css/selectCharacterList.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadAllProfileImages } from '../../apis/ImageAPICalls';
+import { getAllCharacterInfo } from '../../apis/UserAPICalls';
+import searchIcon from '../selectCharacterList/icon.png';
+import cha1 from '../selectCharacterList/cha1.png';
+import cha2 from '../selectCharacterList/cha2.png';
+import cha3 from '../selectCharacterList/cha3.png';
+import cha4 from '../selectCharacterList/cha4.png';
+import cha5 from '../selectCharacterList/cha5.png';
+import cha6 from '../selectCharacterList/cha6.png';
+
 
 function SelectCharacterList() {
-    const [characters, setCharacters] = useState([]); // 캐릭터 데이터를 저장할 상태
-    const [loading, setLoading] = useState(true); // 로딩 상태 관리
+    const dispatch = useDispatch();
+
+    const allCharacter = useSelector(state => state.user.characters)
+    console.log("캐릭터 목록: {}",allCharacter)
+
+    const [searchTerm, setSearchTerm] = useState('');
     const [error, setError] = useState(null); // 에러 상태 관리
+    const [filteredCharacters, setFilteredCharacters] = useState([]);
+    const characterImages = [cha1, cha2, cha3, cha4, cha5, cha6];
 
     useEffect(() => {
-        const fetchCharacters = async () => {
-            try {
-                const response = await fetch('https://api.example.com/characters'); // API URL 수정 필요
-                if (!response.ok) {
-                    throw new Error('데이터를 가져오는 데 실패했습니다.');
-                }
-                const data = await response.json();
-                setCharacters(data); // API 데이터를 상태에 저장
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false); // 로딩 상태 해제
-            }
-        };
+        dispatch(loadAllProfileImages());
+        dispatch(getAllCharacterInfo());
 
-        fetchCharacters();
-    }, []);
+    }, [dispatch]);
 
-    if (loading) {
-        return <div className="loading">로딩 중...</div>;
-    }
+
+    useEffect(() => {
+        const filtered = allCharacter.filter((character) =>
+            character.charName.includes(searchTerm) 
+        );
+        setFilteredCharacters(filtered);
+    }, [searchTerm, allCharacter]);
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value); 
+    };
 
     if (error) {
         return <div className="error">에러 발생: {error}</div>;
     }
 
     return (
-        <div className="container">
-            {/* 고정된 헤더 영역 */}
-            <header className="header">
-                <div className="title">캐릭터 목록</div>
-                <div className="search-container">
-                    <div className="search-bar">
-                        <input type="text" placeholder="캐릭터 이름" />
+        <div className="container-selectChar">
+            <header className="header-selectChar">
+                <div className="title-selectChar">캐릭터 목록</div>
+                <div className="search-container-selectChar">
+                    <div className="search-bar-selectChar">
+                        <input
+                            type="text"
+                            placeholder="캐릭터 이름"
+                            value={searchTerm} 
+                            onChange={handleSearchChange} 
+                        />
                         <button>
-                            <img src="search-icon.png" alt="Search" />
+                            <img src={searchIcon} alt="Search" />
                         </button>
                     </div>
                 </div>
-                <div className="section-header">모든 캐릭터</div>
+                <div className='header-all-characterList'>
+                    <div className="section-header-selectChar">모든 캐릭터</div>
+                    <div className='line-sc'></div>
+                </div>
             </header>
 
-            {/* 스크롤 가능한 캐릭터 그리드 */}
-            <div className="character-grid">
-                {characters.map((character) => (
-                    <div key={character.id} className="character-item">
-                        <img src={character.image} alt={character.name} />
-                        <div className="character-name">{character.name}</div>
-                    </div>
-                ))}
+            
+            <div className="character-grid-selectChar">
+                {filteredCharacters.length === 0 ? (
+                    <div>검색된 캐릭터가 없습니다.</div> // 필터된 캐릭터가 없을 때 표시
+                ) : (
+                    filteredCharacters.map((character, index) => (
+                        <div key={character.charNo} className="character-item-selectChar">
+                            <img 
+                                src={characterImages[index % characterImages.length]} 
+                                alt={character.charName} 
+                            />
+                            <div className="character-description-selectChar">
+                                <div className="charName-sc">{character.charName}</div>
+                                <div className='character-description-sc'>{character.description}</div>      
+                            </div>
+                        </div>
+                    ))
+                )}
             </div>
         </div>
     );

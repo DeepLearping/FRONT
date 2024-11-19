@@ -10,12 +10,12 @@ const initialState = {
 };
 
 /* 액션 타입 설정 */
-export const LOAD_ALL_PROFILE_IMAGES = 'user/LOAD_ALL_PROFILE_IMAGES';
-export const LOG_OUT = 'user/LOG_OUT';
+export const LOAD_ALL_PROFILE_IMAGES = 'image/LOAD_ALL_PROFILE_IMAGES';
+export const LOG_OUT = 'image/LOG_OUT';
 
 /* 유저 관련 액션 함수 */
 export const { image : { loadAllProfileImages, logOut }} = createActions({
-    [LOAD_ALL_PROFILE_IMAGES]: () => ({}),
+    [LOAD_ALL_PROFILE_IMAGES]: (data) => (data),
     [LOG_OUT]: () => ({ }),
 
 });
@@ -23,11 +23,11 @@ export const { image : { loadAllProfileImages, logOut }} = createActions({
 /* 리듀서 함수 */
 const imageReducer = handleActions(
     {   
-        [LOAD_ALL_PROFILE_IMAGES]: (state) => {
+        [LOAD_ALL_PROFILE_IMAGES]: (state, data) => {
 
             return {
                 ...state,
-                
+
             } 
         },
         [LOG_OUT]: () => {

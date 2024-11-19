@@ -1,78 +1,148 @@
-/* selectCharacterList.css */
+body{
+    background-color: #f2f2f2;
+}
 
-.container {
+.container-selectChar {
+    margin-left: 35vh;
     display: flex;
     flex-direction: column;
-    height: 100vh; /* 전체 화면 높이 */
-    overflow: hidden; /* 부모 영역에서 스크롤 관리 */
+    width: 160vh;
+    height: 100vh;
+    overflow: hidden;
 }
 
-.header {
-    position: sticky; /* 고정된 헤더 */
+.header-selectChar {
+    position: sticky; 
     top: 0;
-    background-color: #fff; /* 배경색 설정 */
-    z-index: 10; /* 겹침 우선순위 */
+    z-index: 10; 
     padding: 16px;
-    border-bottom: 1px solid #ddd;
 }
 
-.title {
-    font-size: 1.5rem;
+
+
+.title-selectChar {
+    margin-top: 1%;
+    font-size: 1.6rem;
     font-weight: bold;
     margin-bottom: 10px;
 }
 
-.search-container {
+.search-container-selectChar {
     display: flex;
     margin-bottom: 10px;
 }
 
-.search-bar {
+.search-bar-selectChar {
+    border-radius: 50px;
     display: flex;
-    width: 100%;
+    width: 40%;
+    margin-left: auto;
 }
 
-.search-bar input {
+.search-bar-selectChar input {
     flex: 1;
     padding: 8px;
+    padding-left: 18px; 
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 30px; 
 }
 
-.search-bar button {
+
+.search-bar-selectChar button {
     padding: 8px;
+    left: -30%;
     border: none;
     background: none;
     cursor: pointer;
+    border-radius: 8px; 
 }
 
-.section-header {
-    font-size: 1.2rem;
+
+.header-all-characterList {
+    margin-top: 4vh;
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+}
+
+.section-header-selectChar {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 1.4rem;
     font-weight: bold;
-    margin-top: 10px;
+    margin-left: 8vh; 
 }
 
-.character-grid {
-    flex: 1; /* 남은 공간 차지 */
-    overflow-y: auto; /* 세로 스크롤 활성화 */
+.line-sc {
+    flex: 0.95; 
+    height: 1vh;
+    border-bottom: 7px solid #ffd2d2;
+}
+
+
+.character-grid-selectChar {
+    margin-top: 3vh;
+    margin-left: 20vh;
+    width: 120vh;
+    overflow-y: auto;
     padding: 16px;
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3열 레이아웃 */
-    gap: 16px; /* 이미지 간 간격 */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 30px; 
+    flex: 1; 
 }
 
-.character-item {
-    text-align: center;
+.character-item-selectChar {
+    width: 32vh;
+    height: 24vh;
+    position: relative; 
+    text-align: center; 
 }
 
-.character-item img {
-    width: 100%;
-    height: auto;
+.character-item-selectChar img {
+    width: 32vh;
+    height: 24vh;
     border-radius: 8px;
+    transition: opacity 0.3s ease, transform 0.3s ease; 
 }
 
-.character-name {
-    margin-top: 8px;
-    font-size: 0.9rem;
-    color: #333;
+.character-item-selectChar:hover img {
+    opacity: 0.7; 
+    transform: scale(1.1); 
 }
+
+.character-description-selectChar {
+    position: absolute;
+    top: -5%;
+    left: -5%;
+    width: 104%;
+    height: 102%; 
+    background-color: rgba(158, 158, 158, 0.8); 
+    color: white; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: flex-start; 
+    justify-content: center; 
+    padding: 10px; 
+    font-size: 1.13rem; 
+    text-align: left; 
+    border-radius: 24px; 
+    opacity: 0; 
+    transition: opacity 0.3s ease; 
+}
+
+.character-item-selectChar:hover .character-description-selectChar {
+    opacity: 1; 
+}
+
+.charName-sc {
+    font-size: 1.3rem;
+    font-weight: bold; 
+    margin-bottom: 4px; 
+}
+
+.character-description-sc {
+    font-size: 1.2rem;
+    margin-bottom: 4px; 
+}
+
+
