@@ -20,6 +20,8 @@ export function callLoginAPI(code) {
             console.log("userInfo : ",userInfo);
             dispatch(login({ token, userInfo }));
 
+            window.location.href = 'http://localhost:3000'
+
             return true; // 로그인 성공
         } catch (error) {
             console.error('Login API error:', error);
@@ -53,20 +55,21 @@ export function getUserInfo(userId) {
     }
 }
 
-// 유저 정보 수정
-export function updateUserInfo(id, modifyUserInfo) {
+// 유저 정보 불러오기
+export function getAllCharacterInfo() {
 
-    console.log('유저 정보 수정...');
+    console.log('모든 캐릭터 정보 불러오기...');
 
     return async (dispatch) => {
 
         try {
-            const result = await request('PUT', `/api/v1/user/${id}`, modifyUserInfo);
+            const result = await request('GET', `/character`);
             console.log('result : ', result); // 서버에서 받아온 data 정보
 
-            const data = result.results.user;
+            // const data = result.results.user;
+            // console.log('data :', data);
 
-            dispatch(updateUser(data));
+            // dispatch(loadUserInfo(data))
 
             return result; // 포장한 데이터를 반환해주기.
 
@@ -76,6 +79,7 @@ export function updateUserInfo(id, modifyUserInfo) {
         }
     }
 }
+
 
 // ✨함수 정의 예시✨
 export function allHospitalAPI() {

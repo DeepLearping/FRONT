@@ -1,0 +1,78 @@
+/* selectCharacterList.css */
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* 전체 화면 높이 */
+    overflow: hidden; /* 부모 영역에서 스크롤 관리 */
+}
+
+.header {
+    position: sticky; /* 고정된 헤더 */
+    top: 0;
+    background-color: #fff; /* 배경색 설정 */
+    z-index: 10; /* 겹침 우선순위 */
+    padding: 16px;
+    border-bottom: 1px solid #ddd;
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.search-container {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.search-bar {
+    display: flex;
+    width: 100%;
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.search-bar button {
+    padding: 8px;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.section-header {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.character-grid {
+    flex: 1; /* 남은 공간 차지 */
+    overflow-y: auto; /* 세로 스크롤 활성화 */
+    padding: 16px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3열 레이아웃 */
+    gap: 16px; /* 이미지 간 간격 */
+}
+
+.character-item {
+    text-align: center;
+}
+
+.character-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.character-name {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: #333;
+}
