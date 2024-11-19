@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import React, { useState, useEffect } from 'react';
 import '../css/UserMain.css';
 import { useDispatch } from "react-redux";
-import { callLoginAPI } from "../apis/UserAPICalls";
+import { callKakaoLoginAPI, callLoginAPI } from "../apis/UserAPICalls";
 
 
 function UserMain() {
@@ -16,6 +16,7 @@ function UserMain() {
         if (code) {
           // 백엔드에 code 전송하여 액세스 토큰 요청
           dispatch(callLoginAPI(code))
+          dispatch(callKakaoLoginAPI(code))
         }
 
       }, [dispatch]);
