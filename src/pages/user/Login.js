@@ -3,7 +3,7 @@ import React from 'react';
 function Login() {
 
     const handleGoogleLogin = () => {
-        const clientId = '447676513898-dcf1ft0rpj7rtvdesegt6v2hrs60btpg.apps.googleusercontent.com'; // 구글 클라이언트 ID
+        const clientId = '294655601674-c93mo2jvfqe96spanjq8npovo0um1j97.apps.googleusercontent.com'; // 구글 클라이언트 ID
         const redirectUri = 'http://localhost:3000'; // 리디렉션 URI
         const scope = 'profile email'; // 요청할 권한
         const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
