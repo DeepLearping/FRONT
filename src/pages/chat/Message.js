@@ -1,5 +1,5 @@
 import React from 'react';
-import './chat.css';
+import '../../css/chat.css';
 
 const Message = ({ role, content }) => {
   return (
