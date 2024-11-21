@@ -91,7 +91,7 @@ export function getAllCharacterInfo() {
     return async (dispatch) => {
 
         try {
-            const result = await request('GET', `/character`);
+            const result = await request('GET', `/api/v1/character`);
             console.log('result : ', result); // 서버에서 받아온 data 정보
 
             const data = result.results.character;

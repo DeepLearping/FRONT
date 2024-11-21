@@ -101,7 +101,7 @@ body{
 .character-item-selectChar img {
     width: 32vh;
     height: 24vh;
-    border-radius: 8px;
+    border-radius: 23px;
     transition: opacity 0.3s ease, transform 0.3s ease; 
 }
 
@@ -123,7 +123,7 @@ body{
     align-items: flex-start; 
     justify-content: center; 
     padding: 10px; 
-    font-size: 1.13rem; 
+    font-size: 1rem; 
     text-align: left; 
     border-radius: 24px; 
     opacity: 0; 
@@ -135,14 +135,14 @@ body{
 }
 
 .charName-sc {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     font-weight: bold; 
-    margin-bottom: 4px; 
+    margin-bottom: 10px; 
 }
 
 .character-description-sc {
-    font-size: 1.2rem;
-    margin-bottom: 4px; 
+    font-size: 1.1rem;
+    margin-bottom: 2px; 
 }
 
 
