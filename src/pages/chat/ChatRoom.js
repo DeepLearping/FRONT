@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import '../../css/chat.css';
-import { getAllCharacterInfo } from '../../apis/UserAPICalls';
-import { sendMessageToAI } from '../../apis/ChatAPICalls';
-import Message from './Message';
-import voiceButton from '../chat/voice.png'
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
+import "../../css/chat.css";
+import { getAllCharacterInfo } from "../../apis/UserAPICalls";
+import { sendMessageToAI } from "../../apis/ChatAPICalls";
+import Message from "./Message";
+import voiceButton from "../chat/voice.png";
 
-const ChatRoom = ({ userId, conversationId }) => {
+const ChatRoom = ({ conversationId }) => {
+  const [searchParams] = useSearchParams();
+  const charNo = searchParams.get("character_id"); // URL에서 charNo 추출
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isDescriptionVisible, setDescriptionVisible] = useState(false);
@@ -14,21 +17,31 @@ const ChatRoom = ({ userId, conversationId }) => {
   const dispatch = useDispatch();
   const allCharacter = useSelector((state) => state.user.characters);
 
+  // 캐릭터 정보 로드
   useEffect(() => {
-    // 캐릭터 정보를 가져오는 Redux 액션 호출
     dispatch(getAllCharacterInfo());
   }, [dispatch]);
 
-  const character = allCharacter && allCharacter.find((char) => char.role === "ai");
-  const imageUrl = character ? `http://localhost:8080/api/v1/character${character.profileImage}` : "";
-  const charName = character ? character.charName : "";
+  // 현재 캐릭터 정보 추출
+  const character = allCharacter?.find(
+    (character) => String(character.charNo) === charNo
+  );
+
+  const imageUrl = character
+    ? `http://localhost:8080/api/v1/character${character.profileImage}`
+    : "";
+  const charName = character ? character.charName : "알 수 없음";
   const description = character ? character.description : "";
 
-  // 기존 채팅 히스토리 가져오기
+  // 채팅 기록 로드
   useEffect(() => {
     const fetchChatHistory = async () => {
+      if (!conversationId) return; // conversationId가 없는 경우 처리 생략
       try {
-        const response = await fetch(`http://localhost:8000/chat_history/${conversationId}`);
+        const response = await fetch(
+          // `http://localhost:8000/chat_history/${conversationId}`
+          `http://localhost:8000/chat_history/1`
+        );
         const data = await response.json();
         setMessages(data.messages || []);
       } catch (error) {
@@ -41,21 +54,19 @@ const ChatRoom = ({ userId, conversationId }) => {
 
   // 메시지 전송
   const sendMessage = async () => {
-    if (input.trim() === "") return;
+    if (!input.trim()) return;
 
-    // 유저 메시지 추가
     const userMessage = { role: "user", content: input };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
 
     try {
       const aiResponse = await sendMessageToAI(input);
       const aiMessage = { role: "ai", content: aiResponse.answer };
-
-      // AI 응답 추가
       setMessages((prevMessages) => [...prevMessages, aiMessage]);
-      setInput(""); // 입력값 초기화
     } catch (error) {
       console.error("Error sending message:", error);
+    } finally {
+      setInput(""); // 입력값 초기화
     }
   };
 

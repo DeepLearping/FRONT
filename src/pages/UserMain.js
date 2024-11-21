@@ -34,9 +34,9 @@ function UserMain() {
                         <NavLink to="/test">
                             <h1>TEST</h1>
                         </NavLink>
-                        <NavLink to="/chat_room">
+                        {/* <NavLink to="/chat_room">
                             <h1>채팅방</h1>
-                        </NavLink>
+                        </NavLink> */}
                         <NavLink to="/selectCharacterList">
                             <h1>캐릭터 목록</h1>
                         </NavLink>
