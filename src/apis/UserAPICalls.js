@@ -41,14 +41,14 @@ export function callKakaoLoginAPI(code) {
             const result = await loginRequest('GET', `/auth/kakao/callback?code=${code}`);
             console.log('카카오 login result : ', result); // 서버에서 반환된 유저 정보
 
-            // // 로그인 성공 시 action dispatch
-            // const token = result.data.results.token;
-            // console.log("token : ",token);
-            // const userInfo = result.data.results.user
-            // console.log("userInfo : ",userInfo);
-            // dispatch(login({ token, userInfo }));
+            // 로그인 성공 시 action dispatch
+            const token = result.data.results.token;
+            console.log("token : ",token);
+            const userInfo = result.data.results.user
+            console.log("userInfo : ",userInfo);
+            dispatch(login({ token, userInfo }));
 
-            // window.location.href = 'http://localhost:3000'
+            window.location.href = 'http://localhost:3000'
 
             return true; // 로그인 성공
         } catch (error) {
