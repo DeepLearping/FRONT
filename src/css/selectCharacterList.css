@@ -1,0 +1,148 @@
+body{
+    background-color: #f2f2f2;
+}
+
+.container-selectChar {
+    margin-left: 35vh;
+    display: flex;
+    flex-direction: column;
+    width: 160vh;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.header-selectChar {
+    position: sticky; 
+    top: 0;
+    z-index: 10; 
+    padding: 16px;
+}
+
+
+
+.title-selectChar {
+    margin-top: 1%;
+    font-size: 1.6rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.search-container-selectChar {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.search-bar-selectChar {
+    border-radius: 50px;
+    display: flex;
+    width: 40%;
+    margin-left: auto;
+}
+
+.search-bar-selectChar input {
+    flex: 1;
+    padding: 8px;
+    padding-left: 18px; 
+    border: 1px solid #ccc;
+    border-radius: 30px; 
+}
+
+
+.search-bar-selectChar button {
+    padding: 8px;
+    left: -30%;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-radius: 8px; 
+}
+
+
+.header-all-characterList {
+    margin-top: 4vh;
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+}
+
+.section-header-selectChar {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-left: 8vh; 
+}
+
+.line-sc {
+    flex: 0.95; 
+    height: 1vh;
+    border-bottom: 7px solid #ffd2d2;
+}
+
+
+.character-grid-selectChar {
+    margin-top: 3vh;
+    margin-left: 20vh;
+    width: 120vh;
+    overflow-y: auto;
+    padding: 16px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 30px; 
+    flex: 1; 
+}
+
+.character-item-selectChar {
+    width: 32vh;
+    height: 24vh;
+    position: relative; 
+    text-align: center; 
+}
+
+.character-item-selectChar img {
+    width: 32vh;
+    height: 24vh;
+    border-radius: 23px;
+    transition: opacity 0.3s ease, transform 0.3s ease; 
+}
+
+.character-item-selectChar:hover img {
+    opacity: 0.7; 
+    transform: scale(1.1); 
+}
+
+.character-description-selectChar {
+    position: absolute;
+    top: -5%;
+    left: -5%;
+    width: 104%;
+    height: 102%; 
+    background-color: rgba(158, 158, 158, 0.8); 
+    color: white; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: flex-start; 
+    justify-content: center; 
+    padding: 10px; 
+    font-size: 1rem; 
+    text-align: left; 
+    border-radius: 24px; 
+    opacity: 0; 
+    transition: opacity 0.3s ease; 
+}
+
+.character-item-selectChar:hover .character-description-selectChar {
+    opacity: 1; 
+}
+
+.charName-sc {
+    font-size: 1.25rem;
+    font-weight: bold; 
+    margin-bottom: 10px; 
+}
+
+.character-description-sc {
+    font-size: 1.1rem;
+    margin-bottom: 2px; 
+}
+
+

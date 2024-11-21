@@ -9,7 +9,7 @@ import logger from 'redux-logger';
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['user', 'review']
+    whitelist: ['user', 'image','characters']
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
