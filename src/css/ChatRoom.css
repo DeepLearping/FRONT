@@ -1,98 +1,178 @@
-.chat-container-chatRoom {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 400px; /* 채팅창 너비 */
-    height: 600px; /* 채팅창 높이 */
-    margin: 50px auto; /* 중앙 정렬 */
-    border: 2px solid #ccc;
-    border-radius: 15px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    background-color: #f9f9f9; /* 배경색 */
+.body-chatRoom {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    overflow-y: auto;
 }
 
-.chat-header {
-    background-color: #ffd2d2; /* 헤더 배경색 */
-    color: #333; /* 헤더 텍스트 색상 */
-    font-size: 1.2rem;
-    font-weight: bold;
+.chat-room-chatRoom {
+    width: auto;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    height: 98vh;
+}
+
+.chat-header-chatRoom {
+    background-color: #f9f9f9;
+    padding-top: 15px;
     text-align: center;
-    padding: 15px 10px;
-    border-bottom: 2px solid #ffb3b3; /* 구분선 */
-}
-
-.message-container-chatRoom {
-    flex: 1; /* 채팅 메시지 컨테이너의 확장 */
-    overflow-y: auto; /* 스크롤 가능 */
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    background-color: #fff; /* 메시지 배경 */
-}
-
-.input-container-chatRoom {
-    display: flex;
-    padding: 10px;
-    background-color: #f2f2f2; /* 입력창 배경 */
-    border-top: 1px solid #ccc;
-}
-/* 왼쪽 캐릭터 메시지 */
-.character-message {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-}
-
-.character-message img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%; /* 프로필 이미지를 동그랗게 */
-}
-
-.character-message .message-text {
-    background-color: #ffe4e4;
+    font-size: 20px;
     color: #333;
-    padding: 10px 15px;
-    border-radius: 10px;
-    font-size: 0.9rem;
-    max-width: 70%;
-    word-wrap: break-word; /* 텍스트 줄바꿈 */
+    font-weight: bold;
 }
 
-/* 오른쪽 유저 메시지 */
-.user-message {
-    align-self: flex-end; /* 오른쪽 정렬 */
-    background-color: #d2f7d2;
-    color: #333;
+.charaImg-chatRoom {
+    width: 10vh;
+    height: 10vh;
+    border-radius: 50px;
+}
+
+.chat-header-chatRoom button {
+    background-color: #f9f9f9;
+    border: none;
+}
+
+.chat-header-chatRoom p {
+    font-size: 1.1rem;
+    margin: 10px;
+}
+
+.chat-chara-description-chatRoom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    width: 50vh;
+    height: auto;
+    background-color: #f9f9f9;
+}
+
+
+.chat-messages-chatRoom {
+    flex: 1;
+    padding: 15px;
+    background-color: #f9f9f9;
+}
+
+.message-chatRoom {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.message-chatRoom.user {
+    justify-content: flex-end;
+}
+
+.message-chatRoom.ai {
+    justify-content: flex-start;
+}
+
+.message-bubble-chatRoom {
+    margin-bottom: 3vh;
     padding: 10px 15px;
-    border-radius: 10px;
-    font-size: 0.9rem;
+    border-radius: 15px;
     max-width: 70%;
     word-wrap: break-word;
 }
-.input-container-chatRoom input {
+
+.message-bubble-chatRoom.user {
+    margin-right: 10vh;
+    background-color: #f5c0c0;
+    color: #333;
+    text-align: right;
+}
+
+.message-bubble-chatRoom.ai {
+    margin-left: 10vh;
+    background-color: #ffec99;
+    color: #333;
+    text-align: left;
+}
+
+.chat-charInfo-chatRoom {
+    margin-left: 5vh;
+    display: flex;
+    align-items: center;
+    gap: 2vh;
+    margin-bottom: 1vh;
+    background-color: #f9f9f9;
+    padding: 1vh;
+    border-radius: 8px;
+}
+
+.chat-charInfo-chatRoom img {
+    width: 3.4vh;
+    height: 3.4vh;
+    border-radius: 50%;
+}
+
+.chat-charInfo-chatRoom p {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 3.4vh;
+}
+
+
+.chat-input-chatRoom {
+    display: flex;
+    align-items: center;
+    /* 요소를 세로 가운데 정렬 */
+    border-top: 1px solid #ddd;
+    background-color: #ddd;
+    padding: 10px 1vh;
+}
+
+.chat-input-chatRoom input {
     flex: 1;
     padding: 10px;
-    font-size: 1rem;
+    padding-left: 30px;
     border: 1px solid #ccc;
-    border-radius: 20px;
-    outline: none;
+    border-radius: 50px;
+    height: 3vh;
+    margin-left: 50px;
+    width: auto;
+    /* 가로 크기 조정 가능 */
 }
 
-.input-container-chatRoom button {
-    background-color: #ff7f7f; /* 버튼 색상 */
-    color: white;
-    font-size: 1rem;
-    padding: 10px 20px;
-    margin-left: 10px;
+.chat-input-chatRoom button {
+    width: 11vh;
+    height: 5vh;
+    margin-left: 30px;
+    padding: 10px 15px;
+    background-color: #ffb3b3;
     border: none;
-    border-radius: 20px;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
-.input-container-chatRoom button:hover {
-    background-color: #ff4d4d; /* 버튼 hover 색상 */
+.chat-input-chatRoom button:hover {
+    background-color: #f78787;
+}
+
+.voice-button-chatRoom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-voiceButton-chatRoom {
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 5vh;
+    height: 5vh;
+    background-color: #f9f9f9;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-voiceButton-chatRoom img {
+    position: absolute;
+    width: 2.5vh;
+    height: 2.5vh;
 }
