@@ -9,7 +9,7 @@ function UserLayout() {
                 <Outlet />
             </div>
         </div>
-    )
+    ) 
 }
 
 export default UserLayout;
