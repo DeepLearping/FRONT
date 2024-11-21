@@ -3,7 +3,7 @@ import UserLayout from "./layouts/Layout";
 import UserMain from "./pages/UserMain";
 import TestPage from "./TestPage";
 import Login from "./pages/user/Login";
-import ChatRoom from "./pages/ChatRoom";
+import ChatRoom from "./pages/chat/ChatRoom";
 import SelectCharacterList from "./pages/selectCharacterList/selectCharacterList";
 
 
