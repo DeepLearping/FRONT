@@ -3,11 +3,15 @@ import React, { useState, useEffect } from 'react';
 import '../css/UserMain.css';
 import { useDispatch } from "react-redux";
 import { callKakaoLoginAPI, callLoginAPI } from "../apis/UserAPICalls";
+import LoginModal from "../components/LoginModal";
+import ProfileModal from "../components/ProfileModal";
 
 
 function UserMain() {
 
     const dispatch = useDispatch();
+    const [isModalOpen, setModalOpen] = useState(false);
+    const [isProfileModalOpen, setProfileModalOpen] = useState(false);
 
     useEffect(() => {
         const searchParams = new URLSearchParams(window.location.search);
@@ -20,6 +24,31 @@ function UserMain() {
         }
 
       }, [dispatch]);
+
+    const openLoginModal = () => {
+        setModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setModalOpen(false);
+    };
+
+    const openProfileModal = () => {
+        setProfileModalOpen(true);
+    };
+
+    const closeProfileModal = () => {
+        setProfileModalOpen(false);
+    };
+
+    const handleProfileClick = () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            openProfileModal();
+        } else {
+            openLoginModal();
+        }
+    };
 
     return (
         <>
@@ -34,15 +63,20 @@ function UserMain() {
                         <NavLink to="/test">
                             <h1>TEST</h1>
                         </NavLink>
-                        {/* <NavLink to="/chat_room">
+                        <NavLink to="#" onClick={handleProfileClick}>
+                            <h1>프로필</h1>
+                        </NavLink>
+                        <NavLink to="/chat_room">
                             <h1>채팅방</h1>
-                        </NavLink> */}
+                        </NavLink>
                         <NavLink to="/selectCharacterList">
                             <h1>캐릭터 목록</h1>
                         </NavLink>
                     </li>
                 </ul>
             </div>
+            <LoginModal isOpen={isModalOpen} onClose={closeModal} />
+            <ProfileModal isOpen={isProfileModalOpen} onClose={closeProfileModal} />
         </>
     );
 }
