@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loadAllProfileImages } from '../../apis/ImageAPICalls';
 import { getAllCharacterInfo } from '../../apis/UserAPICalls';
 import searchIcon from '../selectCharacterList/images/icon.png';
+import { useNavigate } from 'react-router-dom';
 // import cha1 from '../selectCharacterList/images/cha1.png';
 // import cha2 from '../selectCharacterList/images/cha2.png';
 // import cha3 from '../selectCharacterList/images/cha3.png';
@@ -27,6 +28,12 @@ function SelectCharacterList() {
         dispatch(getAllCharacterInfo());
 
     }, [dispatch]);
+
+    const navigate = useNavigate();
+
+    const handleCharacterClick = (charNo) => {
+        navigate(`/chat_room?character_id=${charNo}`);
+    };
 
 
     useEffect(() => {
@@ -80,11 +87,11 @@ function SelectCharacterList() {
                         <div key={character.charNo} className="character-item-selectChar">
                             <img 
                                 src={imageUrl} 
-                                alt={character.charName} 
+                                alt={character.charName}
                             />
-                            <div className="character-description-selectChar">
+                            <div className="character-description-selectChar" onClick={() => handleCharacterClick(character.charNo)}>
                                 <div className="charName-sc">{character.charName}</div>
-                                <div className='character-description-sc'>{character.description}</div>      
+                                <div className='character-description-sc'>{character.description}</div>
                             </div>
                         </div>
                         );
