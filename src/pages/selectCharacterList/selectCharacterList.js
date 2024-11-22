@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../../css/selectCharacterList.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadAllProfileImages } from '../../apis/ImageAPICalls';
+import { loadAllProfileImages, updateCharacterChatCount } from '../../apis/ImageAPICalls';
 import { getAllCharacterInfo } from '../../apis/UserAPICalls';
 import searchIcon from '../selectCharacterList/images/icon.png';
 
@@ -40,6 +40,11 @@ function SelectCharacterList() {
         setSearchTerm(e.target.value);
     };
 
+    const handleCharacterSelect = (character) => {
+        // 선택된 캐릭터 chatCount 증가 처리
+        dispatch(updateCharacterChatCount(character.charNo)); // API 호출로 업데이트
+    };
+
     if (error) {
         return <div className="error">에러 발생: {error}</div>;
     }
@@ -65,7 +70,7 @@ function SelectCharacterList() {
 
             {/* 인기 캐릭터 섹션 */}
             <div className="popular-characters-section">
-                <div className="section-header-selectChar">주간 인기 캐릭터</div>
+                <div className="section-header-selectChar">인기 캐릭터</div>
                 <div className='line-sc'></div>
                 <div className="character-grid-selectChar">
                     {popularCharacters.map((character) => {
@@ -96,7 +101,11 @@ function SelectCharacterList() {
                         filteredCharacters.map((character) => {
                             const imageUrl = `http://localhost:8080/api/v1/character${character.profileImage}`;
                             return (
-                                <div key={character.charNo} className="character-item-selectChar">
+                                <div
+                                    key={character.charNo}
+                                    className="character-item-selectChar"
+                                    onClick={() => handleCharacterSelect(character)} // 캐릭터 선택 이벤트
+                                >
                                     <img src={imageUrl} alt={character.charName} />
                                     <div className="character-description-selectChar">
                                         <div className="charName-sc">{character.charName}</div>

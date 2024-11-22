@@ -96,6 +96,7 @@ body{
     height: 24vh;
     position: relative; 
     text-align: center; 
+    pointer-events: auto;
 }
 
 .character-item-selectChar img {
