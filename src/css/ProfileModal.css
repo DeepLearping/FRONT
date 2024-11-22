@@ -44,49 +44,75 @@
 }
 
 .profile-info {
-    margin-bottom: 20px;
+    margin: 0 auto;
 }
 
 .profile-item {
+    width: 270px;
+    position: relative;
+    left: 70px;
     margin-bottom: 10px;
 }
 
 .profile-label {
     font-weight: bold;
+    margin-bottom: 5px;
 }
 
-.nickname-input {
-    margin-left: 10px;
+.profile-box, .nickname-input {
+    width: 90%;
+    height: 20px;
+    margin-top: 5px;
+    margin-left: 6px;
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    font-size: 15px;
+}
+
+.nickname-input {
+    width: 72%;
 }
 
 .profile-buttons {
-    display: flex;
-    justify-content: space-between;
+    width: 160px;
+    position: relative;
+    margin-top: 20px;
+    left: 190px;
 }
 
-.save-button,
 .withdraw-button,
 .logout-button {
     padding: 10px 15px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 12px;
+    text-decoration: none
+}
+
+.withdraw-button:hover,
+.logout-button:hover {
+    text-decoration: underline;
 }
 
 .save-button {
-    background-color: #4CAF50; /* Green */
+    position: relative;
+    left: 10px;
+    height: 30px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    background-color: #1BAEF8; /* Green */
     color: white;
 }
 
 .withdraw-button {
-    background-color: #f44336; /* Red */
-    color: white;
+    background-color: white; /* Red */
+    color: black;
 }
 
 .logout-button {
-    background-color: #2196F3; /* Blue */
-    color: white;
+    background-color: white; /* Blue */
+    color: black;
 }
