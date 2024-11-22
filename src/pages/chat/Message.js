@@ -10,7 +10,6 @@ const Message = ({ role, content }) => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const allCharacter = useSelector(state => state.user.characters)
-  console.log("캐릭터 목록: {}",allCharacter)
   const charNo = searchParams.get("character_id");
 
   useEffect(() => {

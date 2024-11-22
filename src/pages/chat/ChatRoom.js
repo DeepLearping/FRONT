@@ -7,7 +7,7 @@ import { sendMessageToAI } from "../../apis/ChatAPICalls";
 import Message from "./Message";
 import voiceButton from "../chat/voice.png";
 
-const ChatRoom = ({ conversationId }) => {
+const ChatRoom = ({ userId, conversationId }) => {
   const [searchParams] = useSearchParams();
   const charNo = searchParams.get("character_id"); // URL에서 charNo 추출
   const [messages, setMessages] = useState([]);
@@ -36,7 +36,7 @@ const ChatRoom = ({ conversationId }) => {
   // 채팅 기록 로드
   useEffect(() => {
     const fetchChatHistory = async () => {
-      if (!conversationId) return; // conversationId가 없는 경우 처리 생략
+      // if (!conversationId) return;
       try {
         const response = await fetch(
           // `http://localhost:8000/chat_history/${conversationId}`
