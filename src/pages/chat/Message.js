@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams } from "react-router-dom";
 import '../../css/chat.css';
 import { getAllCharacterInfo } from '../../apis/UserAPICalls';
 
@@ -7,15 +8,18 @@ import { getAllCharacterInfo } from '../../apis/UserAPICalls';
 
 const Message = ({ role, content }) => {
   const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
   const allCharacter = useSelector(state => state.user.characters)
-  console.log("캐릭터 목록: {}",allCharacter)
+  const charNo = searchParams.get("character_id");
 
   useEffect(() => {
     dispatch(getAllCharacterInfo());
 
   }, [dispatch]);
 
-  const character = allCharacter && allCharacter.find(char => char.role === 'ai');
+  const character = allCharacter?.find(
+    (character) => String(character.charNo) === charNo
+  );
   const imageUrl =`http://localhost:8080/api/v1/character${character.profileImage}`;
   const charName = character ? character.charName : '';
   
