@@ -22,7 +22,7 @@ export const sendMessageToAI = async (question, characterId, characterName) => {
 
   const payload = {
     user_id: 1,
-    conversation_id: 2, 
+    conversation_id: 1, 
     question,
     character_id: characterId, 
     // character_name: characterName  // 한국어는 name에 들어가지 X (regex)
