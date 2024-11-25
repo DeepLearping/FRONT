@@ -21,7 +21,7 @@ function SelectCharacterList() {
     const [searchTerm, setSearchTerm] = useState('');
     const [error, setError] = useState(null); // 에러 상태 관리
     const [filteredCharacters, setFilteredCharacters] = useState([]);
-    // const characterImages = [cha1, cha2, cha3, cha4, cha5, cha6];
+
 
     useEffect(() => {
         dispatch(loadAllProfileImages());
