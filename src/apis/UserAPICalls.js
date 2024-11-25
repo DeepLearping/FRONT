@@ -1,5 +1,5 @@
 import { loginRequest, request } from "./Apis";
-import { loadAllCharacterInfo, login, updateUser} from "../modules/UserModule";
+import { clearMember, loadAllCharacterInfo, login, updateUser, updateUserNickname} from "../modules/UserModule";
 
 /* 로그인 정보 전달 받는 함수 */
 export function callLoginAPI(code) {
@@ -30,6 +30,7 @@ export function callLoginAPI(code) {
     }
 }
 
+// 카카오 로그인
 export function callKakaoLoginAPI(code) {
 
 
@@ -58,32 +59,34 @@ export function callKakaoLoginAPI(code) {
     }
 }
 
-// // 유저 정보 불러오기
-// export function getUserInfo(userId) {
+// 유저 닉네임 수정
+export function modifyUserNickname(memberNo, nickname) {
 
-//     console.log('유저 정보 불러오기...');
+    console.log('유저 닉네임 수정하기...');
 
-//     return async (dispatch) => {
+    return async (dispatch) => {
 
-//         try {
-//             const result = await request('GET', `/api/v1/user/${userId}`);
-//             console.log('result : ', result); // 서버에서 받아온 data 정보
+        try {
+            nickname = String(nickname);
+            const result = await request('PUT', `/member/${memberNo}`, JSON.stringify({ nickname }));
+            
+            console.log('nickname : ', nickname); // 서버에서 받아온 data 정보
+            console.log('result : ', result); // 서버에서 받아온 data 정보
 
-//             const data = result.results.user;
-//             console.log('data :', data);
+            const data = result.results.member;
 
-//             dispatch(loadUserInfo(data))
+            dispatch(updateUserNickname(data))
 
-//             return result; // 포장한 데이터를 반환해주기.
+            return result; // 포장한 데이터를 반환해주기.
 
 
-//         } catch (error) {
-//             console.error('API error:', error);
-//         }
-//     }
-// }
+        } catch (error) {
+            console.error('API error:', error);
+        }
+    }
+}
 
-// 유저 정보 불러오기
+// 캐릭터 정보 불러오기
 export function getAllCharacterInfo() {
 
     console.log('모든 캐릭터 정보 불러오기...');
@@ -101,6 +104,26 @@ export function getAllCharacterInfo() {
 
             return result; // 포장한 데이터를 반환해주기.
 
+
+        } catch (error) {
+            console.error('API error:', error);
+        }
+    }
+}
+
+// 유저 삭제
+export function deleteUser(memberNo) {
+
+    console.log('유저 삭제...');
+
+    return async (dispatch) => {
+
+        try {
+            const result = await request('DELETE', `/member/${memberNo}`);
+            console.log('result : ', result); // 서버에서 받아온 data 정보
+
+            dispatch(clearMember())
+            return result;
 
         } catch (error) {
             console.error('API error:', error);

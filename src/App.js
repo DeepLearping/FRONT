@@ -5,12 +5,7 @@ import TestPage from "./TestPage";
 import Login from "./pages/user/Login";
 import ChatRoom from "./pages/chat/ChatRoom";
 import SelectCharacterList from "./pages/selectCharacterList/selectCharacterList";
-
-
-// ProtectedRoute 컴포넌트 정의
-const ProtectedRoute = ({ element, token }) => {
-  return token ? element : <Navigate to="/login" />;
-};
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   const token = localStorage.getItem('token');
