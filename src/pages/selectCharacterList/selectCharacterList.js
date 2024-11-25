@@ -43,6 +43,9 @@ function SelectCharacterList() {
     const handleCharacterSelect = (character) => {
         // 선택된 캐릭터 chatCount 증가 처리
         dispatch(updateCharacterChatCount(character.charNo)); // API 호출로 업데이트
+
+        // 업데이트 후 인기 캐릭터 다시 로드
+        dispatch(getAllCharacterInfo());
     };
 
     if (error) {

@@ -29,7 +29,7 @@ export function updateCharacterChatCount(charNo) {
     return async (dispatch, getState) => {
         try {
             // 서버에 API 요청
-            const result = await request('PUT', '/api/v1/character/${charNo}/incrementChatCount', charNo);
+            const result = await request('PUT', `/api/v1/character/${charNo}/incrementChatCount`);
             console.log('result : ', result); // 서버에서 받아온 data 정보 
 
             // 받아온 데이터(result)안에 담긴 내용을 알맞게 포장하시면 됩니다. 
