@@ -39,13 +39,13 @@ const ChatRoom = ({ userId, conversationId }) => {
       // if (!conversationId) return;
       try {
         const response = await fetch(
-          // `http://localhost:8000/chat_history/${conversationId}`
-          `http://localhost:8000/chat_history/1`
+          // `http://localhost:8000/chat_message/${conversationId}`
+          `http://localhost:8000/chat_message/1`
         );
         const data = await response.json();
         setMessages(data.messages || []);
       } catch (error) {
-        console.error("Failed to fetch chat history:", error);
+        console.error("채팅 기록 로드 오류:", error);
       }
     };
 
@@ -55,16 +55,16 @@ const ChatRoom = ({ userId, conversationId }) => {
   // 메시지 전송
   const sendMessage = async () => {
     if (!input.trim()) return;
-
+  
     const userMessage = { role: "user", content: input };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
-
+  
     try {
-      const aiResponse = await sendMessageToAI(input);
+      const aiResponse = await sendMessageToAI(input, charNo, charName);
       const aiMessage = { role: "ai", content: aiResponse.answer };
       setMessages((prevMessages) => [...prevMessages, aiMessage]);
     } catch (error) {
-      console.error("Error sending message:", error);
+      console.error("메세지 전송 오류:", error);
     } finally {
       setInput(""); // 입력값 초기화
     }
