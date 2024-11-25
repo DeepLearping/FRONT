@@ -39,8 +39,8 @@ const ChatRoom = ({ userId, conversationId }) => {
       // if (!conversationId) return;
       try {
         const response = await fetch(
-          // `http://localhost:8000/chat_history/${conversationId}`
-          `http://localhost:8000/chat_history/2`
+          // `http://localhost:8000/chat_message/${conversationId}`
+          `http://localhost:8000/chat_message/1`
         );
         const data = await response.json();
         setMessages(data.messages || []);
