@@ -41,27 +41,31 @@ const ProfileModal = ({ isOpen, onClose }) => {
                 </div>
                 <div className="profile-info">
                     <div className="profile-item">
-                        <span className="profile-label">이름:</span>
-                        <span className="profile-value">{userInfo.name}</span>
+                        <span className="profile-label">이름</span>
+                        <div className='profile-box'>
+                            <span className="profile-value">{userInfo.name}</span>
+                        </div>
                     </div>
                     <div className="profile-item">
-                        <span className="profile-label">닉네임:</span>
+                        <span className="profile-label">닉네임:</span><br/>
                         <input
                             type="text"
                             value={nickname}
                             onChange={(e) => setNickname(e.target.value)}
                             className="nickname-input"
                         />
+                        <button className="save-button" onClick={handleSave}>변경</button>
                     </div>
                     <div className="profile-item">
                         <span className="profile-label">계정:</span>
-                        <span className="profile-value">{userInfo.email}</span>
+                        <div className='profile-box'>
+                            <span className="profile-value">{userInfo.email}</span>
+                        </div>
                     </div>
                 </div>
                 <div className="profile-buttons">
-                    <button className="save-button" onClick={handleSave}>수정하기</button>
-                    <button className="withdraw-button" onClick={handleWithdraw}>회원탈퇴</button>
-                    <button className="logout-button" onClick={handleLogout}>로그아웃</button>
+                    <span className="withdraw-button" onClick={handleWithdraw}>회원탈퇴</span>
+                    <span className="logout-button" onClick={handleLogout}>로그아웃</span>
                 </div>
             </div>
         </div>
