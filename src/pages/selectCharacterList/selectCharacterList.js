@@ -4,6 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loadAllProfileImages, updateCharacterChatCount } from '../../apis/ImageAPICalls';
 import { getAllCharacterInfo } from '../../apis/UserAPICalls';
 import searchIcon from '../selectCharacterList/images/icon.png';
+import { useNavigate } from 'react-router-dom';
+// import cha1 from '../selectCharacterList/images/cha1.png';
+// import cha2 from '../selectCharacterList/images/cha2.png';
+// import cha3 from '../selectCharacterList/images/cha3.png';
+// import cha4 from '../selectCharacterList/images/cha4.png';
+// import cha5 from '../selectCharacterList/images/cha5.png';
+// import cha6 from '../selectCharacterList/images/cha6.png';
+
 
 function SelectCharacterList() {
     const dispatch = useDispatch();
@@ -20,6 +28,13 @@ function SelectCharacterList() {
         dispatch(loadAllProfileImages());
         dispatch(getAllCharacterInfo());
     }, [dispatch]);
+
+    const navigate = useNavigate();
+
+    const handleCharacterClick = (charNo) => {
+        navigate(`/chat_room?character_id=${charNo}`);
+    };
+
 
     useEffect(() => {
         // 검색어에 따라 캐릭터 필터링
