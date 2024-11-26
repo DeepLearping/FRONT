@@ -5,36 +5,21 @@ import { loadAllProfileImages } from '../../apis/ImageAPICalls';
 import { getAllCharacterInfo } from '../../apis/UserAPICalls';
 import searchIcon from '../selectCharacterList/images/icon.png';
 import { useNavigate } from 'react-router-dom';
-// import cha1 from '../selectCharacterList/images/cha1.png';
-// import cha2 from '../selectCharacterList/images/cha2.png';
-// import cha3 from '../selectCharacterList/images/cha3.png';
-// import cha4 from '../selectCharacterList/images/cha4.png';
-// import cha5 from '../selectCharacterList/images/cha5.png';
-// import cha6 from '../selectCharacterList/images/cha6.png';
+import { enterChatRoom } from '../../apis/ChatAPICalls';
 
 
 function SelectCharacterList() {
     const dispatch = useDispatch();
-    const allCharacter = useSelector(state => state.user.characters)
-    console.log("캐릭터 목록: {}",allCharacter)
-
-    const [searchTerm, setSearchTerm] = useState('');
-    const [error, setError] = useState(null); // 에러 상태 관리
-    const [filteredCharacters, setFilteredCharacters] = useState([]);
-    // const characterImages = [cha1, cha2, cha3, cha4, cha5, cha6];
-
-    useEffect(() => {
-        dispatch(loadAllProfileImages());
-        dispatch(getAllCharacterInfo());
-
-    }, [dispatch]);
-
     const navigate = useNavigate();
 
-    const handleCharacterClick = (charNo) => {
-        navigate(`/chat_room?character_id=${charNo}`);
-    };
+    const userInfo = useSelector(state => state.user.userInfo)
+    const allCharacter = useSelector(state => state.user.characters)
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredCharacters, setFilteredCharacters] = useState([]);
 
+    // useEffect(() => {
+    //     dispatch(getAllCharacterInfo());
+    // }, [dispatch]);
 
     useEffect(() => {
         const filtered = allCharacter.filter((character) =>
@@ -43,13 +28,21 @@ function SelectCharacterList() {
         setFilteredCharacters(filtered);
     }, [searchTerm, allCharacter]);
 
+    const handleCharacterClick = (character) => {
+
+        const chatRoomInfo = {
+            charNo: character.charNo,
+            charName: character.charName,
+            memberNo: userInfo.memberNo
+        }
+        
+        dispatch(enterChatRoom(chatRoomInfo));
+        navigate(`/chat_room?character_id=${character.charNo}`,character);
+    };
+
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value); 
     };
-
-    if (error) {
-        return <div className="error">에러 발생: {error}</div>;
-    }
 
     return (
         <div className="container-selectChar">
@@ -81,7 +74,6 @@ function SelectCharacterList() {
                 ) : (
                     filteredCharacters.map((character) => {
                         const imageUrl =`http://localhost:8080/api/v1/character${character.profileImage}`;
-                        console.log("Image URL:", imageUrl); // 이미지 경로 로그 출력
 
                         return(
                         <div key={character.charNo} className="character-item-selectChar">
@@ -89,7 +81,7 @@ function SelectCharacterList() {
                                 src={imageUrl} 
                                 alt={character.charName}
                             />
-                            <div className="character-description-selectChar" onClick={() => handleCharacterClick(character.charNo)}>
+                            <div className="character-description-selectChar" onClick={() => handleCharacterClick(character)}>
                                 <div className="charName-sc">{character.charName}</div>
                                 <div className='character-description-sc'>{character.description}</div>
                             </div>

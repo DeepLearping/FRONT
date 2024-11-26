@@ -7,7 +7,7 @@ import { sendMessageToAI } from "../../apis/ChatAPICalls";
 import Message from "./Message";
 import voiceButton from "../chat/voice.png";
 
-const ChatRoom = ({ userId, conversationId }) => {
+const ChatRoom = ({ }) => {
   const [searchParams] = useSearchParams();
   const charNo = searchParams.get("character_id"); // URL에서 charNo 추출
   const [messages, setMessages] = useState([]);
@@ -17,9 +17,9 @@ const ChatRoom = ({ userId, conversationId }) => {
   const dispatch = useDispatch();
   const allCharacter = useSelector((state) => state.user.characters);
 
-  // 캐릭터 정보 로드
   useEffect(() => {
-    dispatch(getAllCharacterInfo());
+    // 채팅 히스토리 로드 
+    // dispatch();
   }, [dispatch]);
 
   // 현재 캐릭터 정보 추출
@@ -50,7 +50,7 @@ const ChatRoom = ({ userId, conversationId }) => {
     };
 
     fetchChatHistory();
-  }, [conversationId]);
+  }, []);
 
   // 메시지 전송
   const sendMessage = async () => {
