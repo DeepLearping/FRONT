@@ -5,7 +5,8 @@ import "../../css/chat.css";
 import { getAllCharacterInfo } from "../../apis/UserAPICalls";
 import { sendMessageToAI } from "../../apis/ChatAPICalls";
 import Message from "./Message";
-import voiceButton from "../chat/voice.png";
+import voiceButton from "../chat/images/voice.png";
+import Navbar from "../../components/commons/Navbar";
 
 const ChatRoom = ({ userId, conversationId }) => {
   const [searchParams] = useSearchParams();
@@ -39,8 +40,8 @@ const ChatRoom = ({ userId, conversationId }) => {
       // if (!conversationId) return;
       try {
         const response = await fetch(
-          // `http://localhost:8000/chat_message/${conversationId}`
-          `http://localhost:8000/chat_message/1`
+          `http://localhost:8000/chat_message/${conversationId}`
+          // `http://localhost:8000/chat_message/1`
         );
         const data = await response.json();
         setMessages(data.messages || []);
@@ -77,6 +78,7 @@ const ChatRoom = ({ userId, conversationId }) => {
 
   return (
     <div className="chat-room-chatRoom">
+    <Navbar/>
       <div className="chat-header-chatRoom">
         {character && (
           <>

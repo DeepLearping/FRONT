@@ -6,6 +6,7 @@ import { loadAllProfileImages, updateCharacterChatCount } from '../../apis/Image
 import { getAllCharacterInfo } from '../../apis/UserAPICalls';
 import searchIcon from '../selectCharacterList/images/icon.png';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../../components/commons/Navbar';
 
 function SelectCharacterList() {
     const dispatch = useDispatch();
@@ -61,7 +62,9 @@ function SelectCharacterList() {
     }
 
     return (
-        <div className="container-selectChar">
+        <div>
+            <Navbar/>
+        <div className="container-selectChar"> 
             <header className="header-selectChar">
                 <div className="title-selectChar">캐릭터 목록</div>
                 <div className="search-container-selectChar">
@@ -126,9 +129,10 @@ function SelectCharacterList() {
                             );
                         })
                     )}
-                </div>
+                </div>         
             </div>
         </div>
+    </div>
     );
 }
 
