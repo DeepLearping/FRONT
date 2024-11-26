@@ -28,7 +28,7 @@ const Message = ({ role, content }) => {
       <div>
         {role === 'ai' && (
           <div className="chat-charInfo-chatRoom">
-            <img className='charaImg-chatRoom' src={imageUrl} alt="캐릭터 이미지" />
+            <img className='charaImg-message-chatRoom' src={imageUrl} alt="캐릭터 이미지" />
             <p>{charName}</p>
             <img className='playButton-chatRoom' src={playbutton} alt="재생버튼"></img>
           </div>

@@ -24,9 +24,9 @@
   margin-left: 240px
 }
 
-.charaImg-chatRoom {
-  width: 10vh;
-  height: 10vh;
+.charaImg-message-chatRoom {
+  width: 3.4vh;
+  height: 3.4vh;
   border-radius: 50px;
 }
 
@@ -94,7 +94,7 @@
 }
 
 .chat-charInfo-chatRoom {
-  margin-left: 5vh;
+  margin-left: 300px;
   display: flex;
   align-items: center;
   gap: 2vh;
@@ -104,8 +104,8 @@
 }
 
 .charaImg-chatRoom {
-  width: 3.4vh;
-  height: 3.4vh;
+  width: 10vh;
+  height: 10vh;
   border-radius: 50%;
 }
 
