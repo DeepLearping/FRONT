@@ -62,8 +62,6 @@ function SelectCharacterList() {
     };
 
     return (
-        <div>
-            <Navbar/>
         <div className="container-selectChar"> 
             <header className="header-selectChar">
                 <div className="title-selectChar">캐릭터 목록</div>
@@ -131,7 +129,6 @@ function SelectCharacterList() {
                 </div>         
             </div>
         </div>
-    </div>
     );
 }
 

@@ -2,20 +2,18 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import "../../css/chat.css";
-import { getAllCharacterInfo } from "../../apis/UserAPICalls";
 import { sendMessageToAI } from "../../apis/ChatAPICalls";
 import Message from "./Message";
 import voiceButton from "./images/voice.png";
+import Navbar from "../../components/commons/Navbar";
 
 const ChatRoom = ({ }) => {
   const [searchParams] = useSearchParams();
-  const charNo = searchParams.get("character_id"); // URL에서 charNo 추출
+  const sessionId = searchParams.get("session_id"); // URL에서 charNo 추출
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isDescriptionVisible, setDescriptionVisible] = useState(false);
-
   const dispatch = useDispatch();
-  const allCharacter = useSelector((state) => state.user.characters);
 
   useEffect(() => {
     // 채팅 히스토리 로드 
@@ -23,9 +21,7 @@ const ChatRoom = ({ }) => {
   }, [dispatch]);
 
   // 현재 캐릭터 정보 추출
-  const character = allCharacter?.find(
-    (character) => String(character.charNo) === charNo
-  );
+  const character = useSelector(state => state.chat.currentRoom.character);
 
   const imageUrl = character
     ? `http://localhost:8080/api/v1/character${character.profileImage}`
@@ -39,8 +35,8 @@ const ChatRoom = ({ }) => {
       // if (!conversationId) return;
       try {
         const response = await fetch(
-          // `http://localhost:8000/chat_message/${conversationId}`
-          `http://localhost:8000/chat_message/1`
+          `http://localhost:8000/chat_message/${sessionId}`
+          // `http://localhost:8000/chat_message/1`
         );
         const data = await response.json();
         setMessages(data.messages || []);
@@ -60,7 +56,7 @@ const ChatRoom = ({ }) => {
     setMessages((prevMessages) => [...prevMessages, userMessage]);
   
     try {
-      const aiResponse = await sendMessageToAI(input, charNo, charName);
+      const aiResponse = await sendMessageToAI(input, character.charNo, charName);
       const aiMessage = { role: "ai", content: aiResponse.answer };
       setMessages((prevMessages) => [...prevMessages, aiMessage]);
     } catch (error) {
