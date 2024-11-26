@@ -5,12 +5,7 @@ import { loadAllProfileImages } from '../../apis/ImageAPICalls';
 import { getAllCharacterInfo } from '../../apis/UserAPICalls';
 import searchIcon from '../selectCharacterList/images/icon.png';
 import { useNavigate } from 'react-router-dom';
-// import cha1 from '../selectCharacterList/images/cha1.png';
-// import cha2 from '../selectCharacterList/images/cha2.png';
-// import cha3 from '../selectCharacterList/images/cha3.png';
-// import cha4 from '../selectCharacterList/images/cha4.png';
-// import cha5 from '../selectCharacterList/images/cha5.png';
-// import cha6 from '../selectCharacterList/images/cha6.png';
+import Navbar from '../../components/commons/Navbar';
 
 
 function SelectCharacterList() {
@@ -21,7 +16,6 @@ function SelectCharacterList() {
     const [searchTerm, setSearchTerm] = useState('');
     const [error, setError] = useState(null); // 에러 상태 관리
     const [filteredCharacters, setFilteredCharacters] = useState([]);
-    // const characterImages = [cha1, cha2, cha3, cha4, cha5, cha6];
 
     useEffect(() => {
         dispatch(loadAllProfileImages());
@@ -53,29 +47,33 @@ function SelectCharacterList() {
 
     return (
         <div className="container-selectChar">
-            <header className="header-selectChar">
-                <div className="title-selectChar">캐릭터 목록</div>
-                <div className="search-container-selectChar">
-                    <div className="search-bar-selectChar">
-                        <input
-                            type="text"
-                            placeholder="캐릭터 이름"
-                            value={searchTerm} 
-                            onChange={handleSearchChange} 
-                        />
-                        <button>
-                            <img src={searchIcon} alt="Search" />
-                        </button>
+            <div>
+                <Navbar/>         
+                <div className = "character-content">
+            
+                <header className="header-selectChar">
+                    <div className="title-selectChar">캐릭터 목록</div>
+                    <div className="search-container-selectChar">
+                        <div className="search-bar-selectChar">
+                          <input
+                               type="text"
+                               placeholder="캐릭터 이름"
+                               value={searchTerm} 
+                               onChange={handleSearchChange} 
+                          />
+                            <button>
+                              <img src={searchIcon} alt="Search" />
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div className='header-all-characterList'>
-                    <div className="section-header-selectChar">모든 캐릭터</div>
-                    <div className='line-sc'></div>
-                </div>
-            </header>
+                  <div className='header-all-characterList'>
+                        <div className="section-header-selectChar">모든 캐릭터</div>
+                        <div className='line-sc'></div>
+                  </div>
+                </header>
 
             
-            <div className="character-grid-selectChar">
+                <div className="character-grid-selectChar">
                 {filteredCharacters.length === 0 ? (
                     <div>검색된 캐릭터가 없습니다.</div> // 필터된 캐릭터가 없을 때 표시
                 ) : (
@@ -95,8 +93,10 @@ function SelectCharacterList() {
                             </div>
                         </div>
                         );
-                    })
-                )}
+                      })
+                    )}
+                    </div>
+                </div>
             </div>
         </div>
     );
