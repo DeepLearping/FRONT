@@ -5,8 +5,7 @@ import "../../css/chat.css";
 import { getAllCharacterInfo } from "../../apis/UserAPICalls";
 import { sendMessageToAI } from "../../apis/ChatAPICalls";
 import Message from "./Message";
-import voiceButton from "../chat/images/voice.png";
-import Navbar from "../../components/commons/Navbar";
+import voiceButton from "./images/voice.png";
 
 const ChatRoom = ({ }) => {
   const [searchParams] = useSearchParams();
@@ -78,7 +77,6 @@ const ChatRoom = ({ }) => {
 
   return (
     <div className="chat-room-chatRoom">
-    <Navbar/>
       <div className="chat-header-chatRoom">
         {character && (
           <>
