@@ -2,6 +2,7 @@
   font-family: Arial, sans-serif;
   background-color: #f9f9f9;
   overflow-y: auto;
+  margin:0;
 }
 
 .chat-room-chatRoom {
@@ -10,7 +11,7 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  height: 98vh;
+  height: 100vh;
 }
 
 .chat-header-chatRoom {
@@ -20,11 +21,12 @@
   font-size: 20px;
   color: #333;
   font-weight: bold;
+  margin-left: 240px
 }
 
-.charaImg-chatRoom {
-  width: 10vh;
-  height: 10vh;
+.charaImg-message-chatRoom {
+  width: 3.4vh;
+  height: 3.4vh;
   border-radius: 50px;
 }
 
@@ -58,6 +60,7 @@
 .message-chatRoom {
   display: flex;
   margin-bottom: 10px;
+  margin-left: 240px
 }
 
 .message-chatRoom.user {
@@ -91,7 +94,7 @@
 }
 
 .chat-charInfo-chatRoom {
-  margin-left: 5vh;
+  margin-left: 300px;
   display: flex;
   align-items: center;
   gap: 2vh;
@@ -100,10 +103,14 @@
   border-radius: 8px;
 }
 
-.chat-charInfo-chatRoom img {
-  width: 3.4vh;
-  height: 3.4vh;
+.charaImg-chatRoom {
+  width: 10vh;
+  height: 10vh;
   border-radius: 50%;
+}
+
+.playButton-chatRoom{
+  width: 2.0vh;
 }
 
 .chat-charInfo-chatRoom p {
@@ -120,6 +127,7 @@
   border-top: 1px solid #ddd;
   background-color: #ddd;
   padding: 10px 1vh;
+  margin-left: 240px
 }
 
 .chat-input-chatRoom input {
