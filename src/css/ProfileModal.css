@@ -1,0 +1,118 @@
+.profile-modal-overlay {
+    position: fixed;
+    top: -100px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.profile-modal-container {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.profile-image-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.profile-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-info {
+    margin: 0 auto;
+}
+
+.profile-item {
+    width: 270px;
+    position: relative;
+    left: 70px;
+    margin-bottom: 10px;
+}
+
+.profile-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.profile-box, .nickname-input {
+    width: 90%;
+    height: 20px;
+    margin-top: 5px;
+    margin-left: 6px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 15px;
+}
+
+.nickname-input {
+    width: 72%;
+}
+
+.profile-buttons {
+    width: 160px;
+    position: relative;
+    margin-top: 20px;
+    left: 190px;
+}
+
+.withdraw-button,
+.logout-button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    text-decoration: none
+}
+
+.withdraw-button:hover,
+.logout-button:hover {
+    text-decoration: underline;
+}
+
+.save-button {
+    position: relative;
+    left: 10px;
+    height: 30px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    background-color: #1BAEF8; /* Green */
+    color: white;
+}
+
+.withdraw-button {
+    background-color: white; /* Red */
+    color: black;
+}
+
+.logout-button {
+    background-color: white; /* Blue */
+    color: black;
+}
