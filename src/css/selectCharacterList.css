@@ -11,7 +11,7 @@ body{
 }
 
 .header-selectChar {
-    position: sticky; 
+    position: flex; 
     top: 0;
     z-index: 10; 
     padding: 16px;
