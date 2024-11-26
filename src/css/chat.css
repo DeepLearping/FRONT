@@ -10,7 +10,7 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  height: 98vh;
+  overflow-y: auto;
 }
 
 .chat-header-chatRoom {
@@ -100,10 +100,14 @@
   border-radius: 8px;
 }
 
-.chat-charInfo-chatRoom img {
+.charaImg-chatRoom {
   width: 3.4vh;
   height: 3.4vh;
   border-radius: 50%;
+}
+
+.playButton-chatRoom{
+  width: 2.0vh;
 }
 
 .chat-charInfo-chatRoom p {

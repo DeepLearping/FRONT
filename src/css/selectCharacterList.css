@@ -8,11 +8,10 @@ body{
     flex-direction: column;
     width: 160vh;
     height: 100vh;
-    overflow: hidden;
 }
 
 .header-selectChar {
-    position: sticky; 
+    position: flex; 
     top: 0;
     z-index: 10; 
     padding: 16px;
