@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loadAllProfileImages, updateCharacterChatCount } from '../../apis/ImageAPICalls';
 import { getAllCharacterInfo } from '../../apis/UserAPICalls';
 import searchIcon from '../selectCharacterList/images/icon.png';
+import { useNavigate } from 'react-router-dom';
 
 function SelectCharacterList() {
     const dispatch = useDispatch();
@@ -36,6 +37,12 @@ function SelectCharacterList() {
             .slice(0, 3); // 3위까지 선정
         setPopularCharacters(popular);
     }, [searchTerm, allCharacter]);
+
+
+    const navigate = useNavigate();
+    const handleCharacterClick = (charNo) => {
+        navigate(`/chat_room?character_id=${charNo}`);
+    };
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
@@ -82,7 +89,7 @@ function SelectCharacterList() {
                         return (
                             <div key={character.charNo} className="character-item-selectChar">
                                 <img src={imageUrl} alt={character.charName} />
-                                <div className="character-description-selectChar">
+                                <div className="character-description-selectChar" onClick={() => handleCharacterClick(character.charNo)}>
                                     <div className="charName-sc">{character.charName}</div>
                                     <div className='character-description-sc'>
                                         선택 횟수: {character.chatCount}
@@ -111,7 +118,7 @@ function SelectCharacterList() {
                                     onClick={() => handleCharacterSelect(character)} // 캐릭터 선택 이벤트
                                 >
                                     <img src={imageUrl} alt={character.charName} />
-                                    <div className="character-description-selectChar">
+                                    <div className="character-description-selectChar" onClick={() => handleCharacterClick(character.charNo)}>
                                         <div className="charName-sc">{character.charName}</div>
                                         <div className='character-description-sc'>{character.description}</div>
                                     </div>
