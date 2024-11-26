@@ -100,10 +100,14 @@
   border-radius: 8px;
 }
 
-.chat-charInfo-chatRoom img {
+.charaImg-chatRoom {
   width: 3.4vh;
   height: 3.4vh;
   border-radius: 50%;
+}
+
+.playButton-chatRoom{
+  width: 2.0vh;
 }
 
 .chat-charInfo-chatRoom p {
