@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from "react-router-dom";
 import '../../css/chat.css';
 import { getAllCharacterInfo } from '../../apis/UserAPICalls';
-import playbutton from '../chat/Button Play.png'
+import playbutton from '../chat/images/Button Play.png'
 
 
 
