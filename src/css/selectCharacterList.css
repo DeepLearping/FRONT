@@ -6,7 +6,7 @@ body{
 }
 
 .container-selectChar {
-    
+    margin-left: 35vh;
     display: flex;
     flex-direction: column;
     width: 180vh;
