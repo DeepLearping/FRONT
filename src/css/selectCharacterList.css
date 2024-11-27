@@ -1,24 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Gasoek+One&family=Noto+Sans+KR:wght@100..900&display=swap');
+
 body{
     background-color: #f2f2f2;
+    margin:0;
 }
 
 .container-selectChar {
     margin-left: 35vh;
     display: flex;
     flex-direction: column;
-    width: 160vh;
+    width: 180vh;
     height: 100vh;
-    overflow: hidden;
+}
+
+.nav-bar{
+    margin-right: 5vh;
+}
+
+.character-content {
+    margin-left: 30vh;
+    font-family: "noto-sans-kr", serif;
 }
 
 .header-selectChar {
-    position: sticky; 
+    position: flex; 
     top: 0;
     z-index: 10; 
     padding: 16px;
 }
-
-
 
 .title-selectChar {
     margin-top: 1%;
@@ -63,6 +72,7 @@ body{
     display: flex; 
     align-items: center; 
     gap: 10px; 
+    
 }
 
 .section-header-selectChar {
@@ -70,12 +80,13 @@ body{
     font-size: 1.4rem;
     font-weight: bold;
     margin-left: 8vh; 
+    font-family: "noto-sans-kr", serif;
 }
 
 .line-sc {
     flex: 0.95; 
     height: 1vh;
-    border-bottom: 7px solid #ffd2d2;
+    border-bottom: 7px solid #EFC2C2;
 }
 
 

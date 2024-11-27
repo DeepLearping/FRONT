@@ -2,30 +2,21 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import "../../css/chat.css";
-import { getAllCharacterInfo } from "../../apis/UserAPICalls";
-import { sendMessageToAI } from "../../apis/ChatAPICalls";
+import { fetchChatHistory, sendMessageToAI } from "../../apis/ChatAPICalls";
 import Message from "./Message";
-import voiceButton from "../chat/voice.png";
+import voiceButton from "./images/voice.png";
 
-const ChatRoom = ({ userId, conversationId }) => {
+const ChatRoom = ({ }) => {
   const [searchParams] = useSearchParams();
-  const charNo = searchParams.get("character_id"); // URL에서 charNo 추출
+  const sessionId = searchParams.get("session_id"); // URL에서 charNo 추출
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isDescriptionVisible, setDescriptionVisible] = useState(false);
-
   const dispatch = useDispatch();
-  const allCharacter = useSelector((state) => state.user.characters);
-
-  // 캐릭터 정보 로드
-  useEffect(() => {
-    dispatch(getAllCharacterInfo());
-  }, [dispatch]);
 
   // 현재 캐릭터 정보 추출
-  const character = allCharacter?.find(
-    (character) => String(character.charNo) === charNo
-  );
+  const character = useSelector(state => state.chat.currentRoom.character);
+  const chatUser = useSelector(state => state.chat.currentRoom.member);
 
   const imageUrl = character
     ? `http://localhost:8080/api/v1/character${character.profileImage}`
@@ -39,10 +30,10 @@ const ChatRoom = ({ userId, conversationId }) => {
       // if (!conversationId) return;
       try {
         const response = await fetch(
-          // `http://localhost:8000/chat_message/${conversationId}`
-          `http://localhost:8000/chat_message/1`
+          `http://localhost:8000/chat_message/${sessionId}`
         );
         const data = await response.json();
+        console.log("채팅기록 : ",data);
         setMessages(data.messages || []);
       } catch (error) {
         console.error("채팅 기록 로드 오류:", error);
@@ -50,7 +41,7 @@ const ChatRoom = ({ userId, conversationId }) => {
     };
 
     fetchChatHistory();
-  }, [conversationId]);
+  }, []);
 
   // 메시지 전송
   const sendMessage = async () => {
@@ -59,9 +50,16 @@ const ChatRoom = ({ userId, conversationId }) => {
     const userMessage = { role: "user", content: input };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
   
+    const messageInfo = {
+      question: input,
+      sessionId: sessionId,
+      charNo: character.charNo,
+      userId: chatUser.memberNo
+    }
+
     try {
-      const aiResponse = await sendMessageToAI(input, charNo, charName);
-      const aiMessage = { role: "ai", content: aiResponse.answer };
+      const aiResponse = await sendMessageToAI(messageInfo);
+      const aiMessage = { role: "ai", content: aiResponse };
       setMessages((prevMessages) => [...prevMessages, aiMessage]);
     } catch (error) {
       console.error("메세지 전송 오류:", error);
