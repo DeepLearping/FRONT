@@ -14,11 +14,6 @@ const ChatRoom = ({ }) => {
   const [isDescriptionVisible, setDescriptionVisible] = useState(false);
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   // 채팅 히스토리 로드 
-  //   dispatch(fetchChatHistory(sessionId));
-  // }, [dispatch]);
-
   // 현재 캐릭터 정보 추출
   const character = useSelector(state => state.chat.currentRoom.character);
   const chatUser = useSelector(state => state.chat.currentRoom.member);
@@ -36,7 +31,6 @@ const ChatRoom = ({ }) => {
       try {
         const response = await fetch(
           `http://localhost:8000/chat_message/${sessionId}`
-          // `http://localhost:8000/chat_message/1`
         );
         const data = await response.json();
         console.log("채팅기록 : ",data);
@@ -65,7 +59,7 @@ const ChatRoom = ({ }) => {
 
     try {
       const aiResponse = await sendMessageToAI(messageInfo);
-      const aiMessage = { role: "ai", content: aiResponse.answer };
+      const aiMessage = { role: "ai", content: aiResponse };
       setMessages((prevMessages) => [...prevMessages, aiMessage]);
     } catch (error) {
       console.error("메세지 전송 오류:", error);
