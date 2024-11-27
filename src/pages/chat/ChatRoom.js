@@ -14,6 +14,7 @@ const ChatRoom = ({ userId, conversationId }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isDescriptionVisible, setDescriptionVisible] = useState(false);
+  const [audioFile, setAudioFile] = useState(null); // 음성 파일 상태 추가(이득규)
 
   const dispatch = useDispatch();
   const allCharacter = useSelector((state) => state.user.characters);

@@ -23,6 +23,17 @@ const Message = ({ role, content }) => {
   );
   const imageUrl =`http://localhost:8080/api/v1/character${character.profileImage}`;
   const charName = character ? character.charName : '';
+
+  // 음성 재생 함수(이득규)
+const playVoice = () => {
+  if (!content) return; // 내용이 없으면 재생하지 않음
+
+  const speech = new SpeechSynthesisUtterance(content); // 읽을 텍스트 설정
+  speech.lang = 'ko-KR'; // 한국어 설정
+  speech.pitch = 1.0; // 음조 설정
+  speech.rate = 1.0; // 읽기 속도 설정
+  window.speechSynthesis.speak(speech); // 텍스트 음성 출력
+};
   
     return (
       <div>
@@ -30,7 +41,7 @@ const Message = ({ role, content }) => {
           <div className="chat-charInfo-chatRoom">
             <img className='charaImg-message-chatRoom' src={imageUrl} alt="캐릭터 이미지" />
             <p>{charName}</p>
-            <img className='playButton-chatRoom' src={playbutton} alt="재생버튼"></img>
+            <img className='playButton-chatRoom' src={playbutton} alt="재생버튼" onClick={playVoice}></img>
           </div>
         )}
         <div className={`message-chatRoom ${role}`}>
