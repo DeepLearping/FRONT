@@ -40,18 +40,18 @@ const Navbar = () => {
             <h1 className="title"> 캐 톡</h1>
             <ul className="nav-list">
                 <li className="nav-item">
-                    <NavLink to="/selectCharacterList" activateClassName="active">캐릭터 목록</NavLink>
+                    <NavLink to="/selectCharacterList">캐릭터 목록</NavLink>
                 </li>
                 <li className="nav-item">
-                    <NavLink to="/balance-game" activateClassName="activate">밸런스 게임</NavLink>
+                    <NavLink to="/balance-game">밸런스 게임</NavLink>
                 </li>
                 <li className="nav-item">
-                    <NavLink to="/character-guiz" activateClassName="activate">캐릭터 퀴즈</NavLink>
+                    <NavLink to="/character-guiz">캐릭터 퀴즈</NavLink>
                 </li>
             </ul> 
 
             {/* 마이페이지 */}
-            <div class="image-container">
+            <div className="image-container">
                 <img 
                     src = {mypageIcon} 
                     alt="마이페이지" 

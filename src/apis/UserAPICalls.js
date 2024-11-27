@@ -152,7 +152,3 @@ export function allHospitalAPI() {
         }
     }
 }
-
-function updateLocalStorage() {
-
-}

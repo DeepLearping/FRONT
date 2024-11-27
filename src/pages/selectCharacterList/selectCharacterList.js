@@ -6,22 +6,22 @@ import { loadAllProfileImages, updateCharacterChatCount } from '../../apis/Image
 import { getAllCharacterInfo } from '../../apis/UserAPICalls';
 import searchIcon from '../selectCharacterList/images/icon.png';
 import { useNavigate } from 'react-router-dom';
+import { enterChatRoom } from '../../apis/ChatAPICalls';
 import Navbar from '../../components/commons/Navbar';
 
 function SelectCharacterList() {
     const dispatch = useDispatch();
-    const allCharacter = useSelector(state => state.user.characters);
-    console.log("캐릭터 목록: {}", allCharacter);
+    const navigate = useNavigate();
 
+    const userInfo = useSelector(state => state.user.userInfo)
+    const allCharacter = useSelector(state => state.user.characters)
     const [searchTerm, setSearchTerm] = useState('');
-    const [error, setError] = useState(null); // 에러 상태 관리
     const [filteredCharacters, setFilteredCharacters] = useState([]);
     const [popularCharacters, setPopularCharacters] = useState([]);
 
     useEffect(() => {
-        // 모든 캐릭터 데이터 및 프로필 이미지 불러오기
-        dispatch(loadAllProfileImages());
         dispatch(getAllCharacterInfo());
+
     }, [dispatch]);
 
     useEffect(() => {
@@ -39,31 +39,29 @@ function SelectCharacterList() {
         setPopularCharacters(popular);
     }, [searchTerm, allCharacter]);
 
+    async function handleCharacterClick(character) {
 
-    const navigate = useNavigate();
-    const handleCharacterClick = (charNo) => {
-        navigate(`/chat_room?character_id=${charNo}`);
+        // 선택된 캐릭터 chatCount 증가 처리
+        dispatch(updateCharacterChatCount(character.charNo));
+
+        const chatRoomInfo = {
+            charNo: character.charNo,
+            charName: character.charName,
+            memberNo: userInfo.memberNo
+        }
+        
+        // 채팅방 생성 및 입장
+        const chatRoom = await dispatch(enterChatRoom(chatRoomInfo));
+        console.log("채팅방 정보:",chatRoom);
+
+        navigate(`/chat_room?session_id=${chatRoom.sessionId}`,character);
     };
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
     };
 
-    const handleCharacterSelect = (character) => {
-        // 선택된 캐릭터 chatCount 증가 처리
-        dispatch(updateCharacterChatCount(character.charNo)); // API 호출로 업데이트
-
-        // 업데이트 후 인기 캐릭터 다시 로드
-        dispatch(getAllCharacterInfo());
-    };
-
-    if (error) {
-        return <div className="error">에러 발생: {error}</div>;
-    }
-
     return (
-        <div>
-            <Navbar/>
         <div className="container-selectChar"> 
             <header className="header-selectChar">
                 <div className="title-selectChar">캐릭터 목록</div>
@@ -92,7 +90,7 @@ function SelectCharacterList() {
                         return (
                             <div key={character.charNo} className="character-item-selectChar">
                                 <img src={imageUrl} alt={character.charName} />
-                                <div className="character-description-selectChar" onClick={() => handleCharacterClick(character.charNo)}>
+                                <div className="character-description-selectChar" onClick={() => handleCharacterClick(character)}>
                                     <div className="charName-sc">{character.charName}</div>
                                     <div className='character-description-sc'>
                                         선택 횟수: {character.chatCount}
@@ -118,10 +116,9 @@ function SelectCharacterList() {
                                 <div
                                     key={character.charNo}
                                     className="character-item-selectChar"
-                                    onClick={() => handleCharacterSelect(character)} // 캐릭터 선택 이벤트
                                 >
                                     <img src={imageUrl} alt={character.charName} />
-                                    <div className="character-description-selectChar" onClick={() => handleCharacterClick(character.charNo)}>
+                                    <div className="character-description-selectChar" onClick={() => handleCharacterClick(character)}>
                                         <div className="charName-sc">{character.charName}</div>
                                         <div className='character-description-sc'>{character.description}</div>
                                     </div>
@@ -132,7 +129,6 @@ function SelectCharacterList() {
                 </div>         
             </div>
         </div>
-    </div>
     );
 }
 

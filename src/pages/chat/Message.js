@@ -13,10 +13,10 @@ const Message = ({ role, content }) => {
   const allCharacter = useSelector(state => state.user.characters)
   const charNo = searchParams.get("character_id");
 
-  useEffect(() => {
-    dispatch(getAllCharacterInfo());
+  // useEffect(() => {
+  //   dispatch(getAllCharacterInfo());
 
-  }, [dispatch]);
+  // }, [dispatch]);
 
   const character = allCharacter?.find(
     (character) => String(character.charNo) === charNo
