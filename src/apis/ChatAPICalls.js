@@ -4,13 +4,13 @@ import { loadChatRoom } from '../modules/ChatModule';
 
 const API_URL = "http://localhost:8080/chatMessage/sendQuestion"; // FastAPI URL
 
-export const sendMessageToAI = async (question, characterId, characterName) => {
+export const sendMessageToAI = async (messageInfo) => {
   // TODO: 생성된 채팅방의 session_id를 받아와서 conversation_id에 넣기
   const payload = {
-    user_id: 1,
-    conversation_id: 1, 
-    question,
-    character_id: characterId
+    user_id: messageInfo.userId,
+    conversation_id: messageInfo.sessionId, 
+    question: messageInfo.question,
+    character_id: messageInfo.charNo, 
   };
 
   const response = await axios.post(API_URL, payload);
@@ -30,7 +30,7 @@ export function enterChatRoom(chatRoomInfo) {
           const data = result.results.chatRoom;
           console.log('data : ', data);
 
-          dispatch(loadChatRoom(data))
+          dispatch(loadChatRoom(data));
 
           return data; // 포장한 데이터를 반환해주기.
       } catch (error) {
@@ -39,7 +39,7 @@ export function enterChatRoom(chatRoomInfo) {
   }
 }
 
-export function fetchChatHistory() {
+export function fetchChatHistory(sessionId) {
 
   console.log('채팅 내역을 불러옵니다...');
 
