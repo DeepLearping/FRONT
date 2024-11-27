@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import "../../css/chat.css";
-import { sendMessageToAI } from "../../apis/ChatAPICalls";
+import { fetchChatHistory, sendMessageToAI } from "../../apis/ChatAPICalls";
 import Message from "./Message";
 import voiceButton from "./images/voice.png";
-import Navbar from "../../components/commons/Navbar";
 
 const ChatRoom = ({ }) => {
   const [searchParams] = useSearchParams();
@@ -15,13 +14,14 @@ const ChatRoom = ({ }) => {
   const [isDescriptionVisible, setDescriptionVisible] = useState(false);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    // 채팅 히스토리 로드 
-    // dispatch();
-  }, [dispatch]);
+  // useEffect(() => {
+  //   // 채팅 히스토리 로드 
+  //   dispatch(fetchChatHistory(sessionId));
+  // }, [dispatch]);
 
   // 현재 캐릭터 정보 추출
   const character = useSelector(state => state.chat.currentRoom.character);
+  const chatUser = useSelector(state => state.chat.currentRoom.member);
 
   const imageUrl = character
     ? `http://localhost:8080/api/v1/character${character.profileImage}`
@@ -39,6 +39,7 @@ const ChatRoom = ({ }) => {
           // `http://localhost:8000/chat_message/1`
         );
         const data = await response.json();
+        console.log("채팅기록 : ",data);
         setMessages(data.messages || []);
       } catch (error) {
         console.error("채팅 기록 로드 오류:", error);
@@ -55,8 +56,15 @@ const ChatRoom = ({ }) => {
     const userMessage = { role: "user", content: input };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
   
+    const messageInfo = {
+      question: input,
+      sessionId: sessionId,
+      charNo: character.charNo,
+      userId: chatUser.memberNo
+    }
+
     try {
-      const aiResponse = await sendMessageToAI(input, character.charNo, charName);
+      const aiResponse = await sendMessageToAI(messageInfo);
       const aiMessage = { role: "ai", content: aiResponse.answer };
       setMessages((prevMessages) => [...prevMessages, aiMessage]);
     } catch (error) {

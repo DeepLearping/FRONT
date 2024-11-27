@@ -7,7 +7,6 @@ import { getAllCharacterInfo } from '../../apis/UserAPICalls';
 import searchIcon from '../selectCharacterList/images/icon.png';
 import { useNavigate } from 'react-router-dom';
 import { enterChatRoom } from '../../apis/ChatAPICalls';
-import Navbar from '../../components/commons/Navbar';
 
 function SelectCharacterList() {
     const dispatch = useDispatch();
