@@ -10,17 +10,15 @@ import playbutton from '../chat/images/Button Play.png'
 const Message = ({ role, content }) => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
-  const allCharacter = useSelector(state => state.user.characters)
-  const charNo = searchParams.get("character_id");
+  const character = useSelector(state => state.chat.currentRoom.character)
+  const charNo = character.charNo
 
-  useEffect(() => {
-    dispatch(getAllCharacterInfo());
+  // useEffect(() => {
+  //   dispatch(getAllCharacterInfo());
 
-  }, [dispatch]);
+  // }, [dispatch]);
 
-  const character = allCharacter?.find(
-    (character) => String(character.charNo) === charNo
-  );
+  
   const imageUrl =`http://localhost:8080/api/v1/character${character.profileImage}`;
   const charName = character ? character.charName : '';
   

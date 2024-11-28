@@ -41,10 +41,11 @@
 }
 
 .chat-chara-description-chatRoom {
-  display: flex;
+  /* display: flex; */
   justify-content: center;
   align-items: center;
-  margin: 0 auto;
+  margin: auto;
+  margin-left: 42.5%;
   width: 50vh;
   height: auto;
   background-color: #f9f9f9;
