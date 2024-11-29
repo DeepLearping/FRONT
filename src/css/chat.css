@@ -30,6 +30,7 @@
   border-radius: 50px;
 }
 
+
 .chat-header-chatRoom button {
   background-color: #f9f9f9;
   border: none;
@@ -94,6 +95,9 @@
   text-align: left;
 }
 
+
+
+
 .chat-charInfo-chatRoom {
   margin-left: 300px;
   display: flex;
@@ -122,14 +126,18 @@
 
 
 .chat-input-chatRoom {
+  position: fixed;
   display: flex;
   align-items: center;
-  /* 요소를 세로 가운데 정렬 */
+  justify-content: space-between;
   border-top: 1px solid #ddd;
   background-color: #ddd;
   padding: 10px 1vh;
-  margin-left: 240px
+  left: 240px; 
+  bottom: 0;
+  width: calc(100% - 240px); 
 }
+
 
 .chat-input-chatRoom input {
   flex: 1;
