@@ -2,25 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from "react-router-dom";
 import '../../css/chat.css';
-import { getAllCharacterInfo } from '../../apis/UserAPICalls';
 import playbutton from '../chat/images/Button Play.png'
 
-
-
-const Message = ({ role, content }) => {
+const Message = ({ role, content, msgImgUrl }) => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const character = useSelector(state => state.chat.currentRoom.character)
   const charNo = character.charNo
-
-  // useEffect(() => {
-  //   dispatch(getAllCharacterInfo());
-
-  // }, [dispatch]);
-
+  // const [savedMsgImgUrl, setSavedMsgImgUrl] = useState(msgImgUrl)
   
   const imageUrl =`http://localhost:8080/api/v1/character${character.profileImage}`;
   const charName = character ? character.charName : '';
+
+  // if(msgImgUrl){
+  //   console.log("🎃🎉🎃msgImgUrl: ", msgImgUrl)
+  // }
   
     return (
       <div>
@@ -35,6 +31,9 @@ const Message = ({ role, content }) => {
           <div className={`message-bubble-chatRoom ${role}`}>
             {content}
           </div>
+          {role === 'ai' && msgImgUrl !== "" && (
+                <img src={msgImgUrl} alt="메세지 감정 이미지" style={{width:"100px"}}/>
+            )}
         </div>
       </div>
     );
