@@ -1,8 +1,5 @@
-import axios from 'axios';
 import { request } from './Apis';
 import { loadChatRoom } from '../modules/ChatModule';
-
-const API_URL = "http://localhost:8080/chatMessage/sendQuestion"; // FastAPI URL
 
 export const sendMessageToAI = async (messageInfo) => {
   const payload = {
