@@ -56,8 +56,11 @@
 .chat-messages-chatRoom {
   flex: 1;
   padding: 15px;
+  padding-bottom: 10vh; 
   background-color: #f9f9f9;
+  scroll-padding-bottom: 10vh;
 }
+
 
 .message-chatRoom {
   display: flex;
