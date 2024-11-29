@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import "../../css/chat.css";
@@ -6,17 +6,17 @@ import { fetchChatHistory, getMsgImg, sendMessageToAI } from "../../apis/ChatAPI
 import Message from "./Message";
 import voiceButton from "./images/voice.png";
 
-const ChatRoom = ({ }) => {
+const ChatRoom = () => {
   const [searchParams] = useSearchParams();
-  const sessionId = searchParams.get("session_id"); // URL에서 charNo 추출
+  const sessionId = searchParams.get("session_id");
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isDescriptionVisible, setDescriptionVisible] = useState(false);
   const dispatch = useDispatch();
+  const messageEndRef = useRef(null); // 마지막 메시지 스크롤 참조
 
-  // 현재 캐릭터 정보 추출
-  const character = useSelector(state => state.chat.currentRoom.character);
-  const chatUser = useSelector(state => state.chat.currentRoom.member);
+  const character = useSelector((state) => state.chat.currentRoom.character);
+  const chatUser = useSelector((state) => state.chat.currentRoom.member);
 
   const imageUrl = character
     ? `http://localhost:8080/api/v1/character${character.profileImage}`
@@ -32,7 +32,7 @@ const ChatRoom = ({ }) => {
           `http://localhost:8000/chat_message/${sessionId}`
         );
         const data = await response.json();
-        // console.log("🎀채팅기록 : ",data);
+        console.log("채팅기록 : ",data);
         setMessages(data.messages || []);
       } catch (error) {
         console.error("채팅 기록 로드 오류:", error);
@@ -40,7 +40,7 @@ const ChatRoom = ({ }) => {
     };
 
     fetchChatHistory();
-  }, []);
+  }, [sessionId]);
 
   // 메시지 전송
   const sendMessage = async () => {
@@ -50,13 +50,13 @@ const ChatRoom = ({ }) => {
 
     const userMessage = { role: "user", content: input };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
-  
+
     const messageInfo = {
       question: input,
-      sessionId: sessionId,
+      sessionId,
       charNo: character.charNo,
-      userId: chatUser.memberNo
-    }
+      userId: chatUser.memberNo,
+    };
 
     try {
       const aiResponse = await sendMessageToAI(messageInfo);
@@ -68,6 +68,13 @@ const ChatRoom = ({ }) => {
     }
   };
 
+  // 메시지 추가 시 마지막으로 스크롤
+  useEffect(() => {
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
   // 캐릭터 설명 토글
   const toggleDescription = () => {
     setDescriptionVisible(!isDescriptionVisible);
@@ -75,28 +82,35 @@ const ChatRoom = ({ }) => {
 
   return (
     <div className="chat-room-chatRoom">
-      <div className="chat-header-chatRoom">
-        {character && (
-          <>
-            <img className="charaImg-chatRoom" src={imageUrl} alt="캐릭터 이미지" />
-            <p>
-              {charName}
-              <button onClick={toggleDescription}>
-                {isDescriptionVisible ? "▲" : "▼"}
-              </button>
-            </p>
-          </>
-        )}
-      </div>
-      {isDescriptionVisible && (
-        <div className="chat-chara-description-chatRoom">
-          <p>{description}</p>
+      <div className="chat-scroll-container-chatRoom">
+        <div className="chat-header-chatRoom">
+          {character && (
+            <>
+              <img
+                className="charaImg-chatRoom"
+                src={imageUrl}
+                alt="캐릭터 이미지"
+              />
+              <p>
+                {charName}
+                <button onClick={toggleDescription}>
+                  {isDescriptionVisible ? "▲" : "▼"}
+                </button>
+              </p>
+            </>
+          )}
         </div>
-      )}
-      <div className="chat-messages-chatRoom">
-        {messages.map((msg, index) => (
-          <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl}/>
-        ))}
+        {isDescriptionVisible && (
+          <div className="chat-chara-description-chatRoom">
+            <p>{description}</p>
+          </div>
+        )}
+        <div className="chat-messages-chatRoom">
+          {messages.map((msg, index) => (
+            <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl} />
+          ))}
+          <div ref={messageEndRef} />
+        </div>
       </div>
       <div className="chat-input-chatRoom">
         <input

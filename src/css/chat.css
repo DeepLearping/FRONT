@@ -30,6 +30,7 @@
   border-radius: 50px;
 }
 
+
 .chat-header-chatRoom button {
   background-color: #f9f9f9;
   border: none;
@@ -41,7 +42,6 @@
 }
 
 .chat-chara-description-chatRoom {
-  /* display: flex; */
   justify-content: center;
   align-items: center;
   margin: auto;
@@ -55,25 +55,31 @@
 .chat-messages-chatRoom {
   flex: 1;
   padding: 15px;
+  padding-bottom: 10vh; 
   background-color: #f9f9f9;
+  scroll-padding-bottom: 10vh;
 }
 
+
 .message-chatRoom {
+  margin-top: 5px;
+  margin-left: 18%;
+  margin-right: 2%;
   display: flex;
+  flex-direction: column;
   margin-bottom: 10px;
-  margin-left: 240px
 }
 
 .message-chatRoom.user {
-  justify-content: flex-end;
+  align-items: flex-end;
 }
 
 .message-chatRoom.ai {
-  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .message-bubble-chatRoom {
-  margin-bottom: 3vh;
+  margin-bottom: 10px;
   padding: 10px 15px;
   border-radius: 15px;
   max-width: 70%;
@@ -81,18 +87,29 @@
 }
 
 .message-bubble-chatRoom.user {
-  margin-right: 10vh;
   background-color: #f5c0c0;
   color: #333;
   text-align: right;
 }
 
 .message-bubble-chatRoom.ai {
-  margin-left: 10vh;
   background-color: #ffec99;
   color: #333;
   text-align: left;
 }
+
+.message-img-chatRoom {
+  text-align: center;
+}
+
+.message-img-chatRoom img {
+  width: 18vh;
+  height: 18vh;
+  border-radius: 10px;
+  display: inline-block; 
+}
+
+
 
 .chat-charInfo-chatRoom {
   margin-left: 300px;
@@ -122,14 +139,18 @@
 
 
 .chat-input-chatRoom {
+  position: fixed;
   display: flex;
   align-items: center;
-  /* 요소를 세로 가운데 정렬 */
+  justify-content: space-between;
   border-top: 1px solid #ddd;
   background-color: #ddd;
   padding: 10px 1vh;
-  margin-left: 240px
+  left: 240px; 
+  bottom: 0;
+  width: calc(100% - 240px); 
 }
+
 
 .chat-input-chatRoom input {
   flex: 1;
