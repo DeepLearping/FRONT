@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Gasoek+One&family=Noto+Sans+KR:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dongle&family=Gasoek+One&family=Jua&family=Noto+Sans+KR:wght@100..900&display=swap');
 
 body{
     background-color: #f2f2f2;
@@ -19,7 +19,7 @@ body{
 
 .character-content {
     margin-left: 30vh;
-    font-family: "noto-sans-kr", serif;
+    font-family: "Jua", sans-serif;
 }
 
 .header-selectChar {
@@ -27,12 +27,13 @@ body{
     top: 0;
     z-index: 10; 
     padding: 16px;
+    font-family: "Jua", sans-serif;
 }
 
 .title-selectChar {
     margin-top: 1%;
-    font-size: 1.6rem;
-    font-weight: bold;
+    font-size: 2.5rem;
+    font-weight: 500;
     margin-bottom: 10px;
 }
 
@@ -46,6 +47,9 @@ body{
     display: flex;
     width: 40%;
     margin-left: auto;
+        font-size: 2.5rem;
+    font-weight: 500;
+    font-family: "Jua", sans-serif;
 }
 
 .search-bar-selectChar input {
@@ -54,6 +58,9 @@ body{
     padding-left: 18px; 
     border: 1px solid #ccc;
     border-radius: 30px; 
+    font-size: 1.25rem;
+    font-weight: 200;
+    font-family: "Jua", sans-serif;
 }
 
 
@@ -73,14 +80,14 @@ body{
     align-items: center; 
     gap: 10px; 
     
+    
 }
 
 .section-header-selectChar {
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 1.4rem;
-    font-weight: bold;
+    font-size: 2rem;
+    font-weight: 200;
+    font-family: "Jua", sans-serif;
     margin-left: 8vh; 
-    font-family: "noto-sans-kr", serif;
 }
 
 .line-sc {
