@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Gasoek+One&family=Noto+Sans+KR:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dongle&family=Gasoek+One&family=Jua&family=Noto+Sans+KR:wght@100..900&display=swap');
 
 body{
     background-color: #f2f2f2;
@@ -9,7 +9,7 @@ body{
     margin-left: 35vh;
     display: flex;
     flex-direction: column;
-    width: 180vh;
+    width: 150vh;
     height: 100vh;
 }
 
@@ -19,7 +19,7 @@ body{
 
 .character-content {
     margin-left: 30vh;
-    font-family: "noto-sans-kr", serif;
+    font-family: "Jua", sans-serif;
 }
 
 .header-selectChar {
@@ -27,18 +27,18 @@ body{
     top: 0;
     z-index: 10; 
     padding: 16px;
+    font-family: "Jua", sans-serif;
 }
 
 .title-selectChar {
     margin-top: 1%;
-    font-size: 1.6rem;
-    font-weight: bold;
+    font-size: 2.5rem;
+    font-weight: 500;
     margin-bottom: 10px;
 }
 
 .search-container-selectChar {
     display: flex;
-    margin-bottom: 10px;
 }
 
 .search-bar-selectChar {
@@ -46,6 +46,9 @@ body{
     display: flex;
     width: 40%;
     margin-left: auto;
+        font-size: 2.5rem;
+    font-weight: 500;
+    font-family: "Jua", sans-serif;
 }
 
 .search-bar-selectChar input {
@@ -54,6 +57,9 @@ body{
     padding-left: 18px; 
     border: 1px solid #ccc;
     border-radius: 30px; 
+    font-size: 1.25rem;
+    font-weight: 200;
+    font-family: "Jua", sans-serif;
 }
 
 
@@ -73,14 +79,16 @@ body{
     align-items: center; 
     gap: 10px; 
     
+    
 }
 
+
 .section-header-selectChar {
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 1.4rem;
-    font-weight: bold;
+    margin-top: 3vh;
+    font-size: 2rem;
+    font-weight: 200;
+    font-family: "Jua", sans-serif;
     margin-left: 8vh; 
-    font-family: "noto-sans-kr", serif;
 }
 
 .line-sc {
@@ -105,45 +113,56 @@ body{
 .character-item-selectChar {
     width: 32vh;
     height: 24vh;
-    position: relative; 
-    text-align: center; 
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+    border-radius: 23px;
+    transition: transform 0.3s ease;
 }
 
 .character-item-selectChar img {
-    width: 32vh;
-    height: 24vh;
+    width: 100%;
+    height: 100%;
     border-radius: 23px;
-    transition: opacity 0.3s ease, transform 0.3s ease; 
+    transition: transform 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.character-item-selectChar:hover {
+    transform: scale(1.1); 
 }
 
 .character-item-selectChar:hover img {
-    opacity: 0.7; 
     transform: scale(1.1); 
 }
 
 .character-description-selectChar {
     position: absolute;
-    top: -5%;
-    left: -5%;
-    width: 104%;
-    height: 102%; 
-    background-color: rgba(158, 158, 158, 0.8); 
-    color: white; 
-    display: flex; 
-    flex-direction: column; 
-    align-items: flex-start; 
-    justify-content: center; 
-    padding: 10px; 
-    font-size: 1rem; 
-    text-align: left; 
-    border-radius: 24px; 
-    opacity: 0; 
-    transition: opacity 0.3s ease; 
+    top: 0;
+    left: 0;
+    width: 95%;
+    height: 100%;
+    background-color: rgba(158, 158, 158, 0.8);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 10px;
+    font-size: 1rem;
+    text-align: left;
+    border-radius: 23px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 2;
 }
 
 .character-item-selectChar:hover .character-description-selectChar {
     opacity: 1; 
+    transform: none; 
 }
+
 
 .charName-sc {
     font-size: 1.25rem;
@@ -152,8 +171,7 @@ body{
 }
 
 .character-description-sc {
-    font-size: 1.1rem;
-    margin-bottom: 2px; 
+    font-size: 1rem;
+    overflow-wrap: break-word;
+    white-space: normal;
 }
-
-

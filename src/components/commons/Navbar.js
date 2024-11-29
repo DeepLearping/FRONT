@@ -50,6 +50,10 @@ const Navbar = () => {
                 </li>
             </ul> 
 
+            <div className='recent-title'>
+                {/* <NavLink to= "/"/></NavLink> */}
+                <div className='recent-charater'></div>
+            </div>
             {/* 마이페이지 */}
             <div className="image-container">
                 <img 
