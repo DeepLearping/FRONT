@@ -107,9 +107,9 @@ const ChatRoom = () => {
         )}
         <div className="chat-messages-chatRoom">
           {messages.map((msg, index) => (
-            <Message key={index} role={msg.role} content={msg.content} />
+            <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl} />
           ))}
-          <div ref={messageEndRef} /> {/* 스크롤 참조 요소 */}
+          <div ref={messageEndRef} />
         </div>
       </div>
       <div className="chat-input-chatRoom">
