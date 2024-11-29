@@ -33,7 +33,6 @@
     display: flex; /* 플렉스 박스 활성화 */
     align-items: center; /* 수직 중앙 정렬 */
     justify-content: center; /* 수평 중앙 정렬 */
-    
     width: 15vh;
     padding: 10px 15px;
     cursor: pointer;
@@ -59,22 +58,10 @@
     text-decoration: none;
 }
 
-
-.recent-title{
-    margin-top: 30px;
-    margin-bottom: 10px;
-    font-size: 18px;
-    font-family: "noto-sans-kr", serif;
-}
-
-.recent-characters{
-    display: flex;
-    gap: 10px;
-}
-
-.recent-characters{
-    width: 40px;
-    height: auto;
+.recent-chats{
+    font-family: "Jua", sans-serif;
+    font-size: 1.8rem;
+    font-weight: 100;
 }
 
 .profile-container {
@@ -98,7 +85,6 @@
     border-radius: 50%; 
     border: 5px solid black;
     margin-right: 2cqb;  
-
     width: 30px; 
     height: 30px; 
     cursor: pointer;
