@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import "../../css/chat.css";
-import { sendMessageToAI } from "../../apis/ChatAPICalls";
+import { fetchChatHistory, getMsgImg, sendMessageToAI } from "../../apis/ChatAPICalls";
 import Message from "./Message";
 import voiceButton from "./images/voice.png";
 
@@ -32,6 +32,7 @@ const ChatRoom = () => {
           `http://localhost:8000/chat_message/${sessionId}`
         );
         const data = await response.json();
+        console.log("채팅기록 : ",data);
         setMessages(data.messages || []);
       } catch (error) {
         console.error("채팅 기록 로드 오류:", error);
@@ -44,6 +45,8 @@ const ChatRoom = () => {
   // 메시지 전송
   const sendMessage = async () => {
     if (!input.trim()) return;
+  
+    setInput(""); // 입력값 초기화
 
     const userMessage = { role: "user", content: input };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
@@ -57,12 +60,11 @@ const ChatRoom = () => {
 
     try {
       const aiResponse = await sendMessageToAI(messageInfo);
-      const aiMessage = { role: "ai", content: aiResponse };
+      const aiMessage = {role: "ai", content: aiResponse.answer, msgImgUrl: aiResponse.msgImg > 0 ? `http://localhost:8080/chatMessage/getMsgImg/${character.charNo}/${aiResponse.msgImg}.jpg` : ""}
+
       setMessages((prevMessages) => [...prevMessages, aiMessage]);
     } catch (error) {
       console.error("메세지 전송 오류:", error);
-    } finally {
-      setInput(""); // 입력값 초기화
     }
   };
 
