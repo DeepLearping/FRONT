@@ -36,6 +36,10 @@ const Navbar = () => {
         }
     };
 
+    const handleGroupChatModule = () => {
+        
+    }
+
     return(
         <div className = "nav-bar">
             <h2 className="title"> 캐릭터와의 대화</h2>
@@ -44,9 +48,9 @@ const Navbar = () => {
                 <li className="nav-item">
                     <NavLink to="/selectCharacterList">캐릭터 목록</NavLink>
                 </li>
-                {/* <li className="nav-item">
-                    <NavLink to="/balance-game">단체 채팅</NavLink>
-                </li> */}
+                <li className="nav-item" onClick={handleGroupChatModule}>
+                    단체 채팅
+                </li>
                 <li className="nav-item">
                     <NavLink to="/balance-game">밸런스 게임</NavLink>
                 </li>
