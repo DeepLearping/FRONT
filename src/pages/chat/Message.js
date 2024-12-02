@@ -10,8 +10,7 @@ import playbutton from '../chat/images/Button Play.png'
 const Message = ({ role, content }) => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
-  const character = useSelector(state => state.chat.currentRoom.character)
-  const charNo = character.charNo
+  const character = useSelector(state => state.chat.currentRoom.characters[0])
 
   // useEffect(() => {
   //   dispatch(getAllCharacterInfo());

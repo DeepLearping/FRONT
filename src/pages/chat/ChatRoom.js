@@ -15,14 +15,15 @@ const ChatRoom = ({ }) => {
   const dispatch = useDispatch();
 
   // 현재 캐릭터 정보 추출
-  const character = useSelector(state => state.chat.currentRoom.character);
+  const roomInfo = useSelector(state => state.chat.currentRoom);
+  const characters = useSelector(state => state.chat.currentRoom.characters);
   const chatUser = useSelector(state => state.chat.currentRoom.member);
 
-  const imageUrl = character
-    ? `http://localhost:8080/api/v1/character${character.profileImage}`
+  const imageUrl = characters[0]
+    ? `http://localhost:8080/api/v1/character${characters[0].profileImage}`
     : "";
-  const charName = character ? character.charName : "알 수 없음";
-  const description = character ? character.description : "";
+  const roomName = roomInfo ? roomInfo.roomName : "알 수 없음";
+  const description = roomInfo ? roomInfo.description : "";
 
   // 채팅 기록 로드
   useEffect(() => {
@@ -49,11 +50,14 @@ const ChatRoom = ({ }) => {
   
     const userMessage = { role: "user", content: input };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
+
+    // characters의 각 인덱스의 charNo를 리스트로 담기
+    const charNos = characters.map(character => character.charNo);
   
     const messageInfo = {
       question: input,
       sessionId: sessionId,
-      charNo: character.charNo,
+      charNo: charNos,
       userId: chatUser.memberNo
     }
 
@@ -76,11 +80,11 @@ const ChatRoom = ({ }) => {
   return (
     <div className="chat-room-chatRoom">
       <div className="chat-header-chatRoom">
-        {character && (
+        {roomInfo && (
           <>
             <img className="charaImg-chatRoom" src={imageUrl} alt="캐릭터 이미지" />
             <p>
-              {charName}
+              {roomName}
               <button onClick={toggleDescription}>
                 {isDescriptionVisible ? "▲" : "▼"}
               </button>

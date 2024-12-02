@@ -22,11 +22,23 @@ const GroupChatFormModal = ({ isOpen, onClose }) => {
     };
 
     const handleSubmit = () => {
+        // groupName이 비어있을 경우 경고 메시지
+        if (!groupName) {
+            alert('채팅방 이름을 작성해 주세요.'); 
+            return; 
+        } else if (selectedCharacters.length === 0) {
+            alert('참여할 캐릭터를 선택해주세요.');
+            return; 
+        } else if (selectedCharacters.length === 1) {
+            alert('단체 채팅방은 2명 이상부터 가능합니다!');
+            return; 
+        }
         console.log('Group Name:', groupName);
         console.log('Group Description:', groupDescription);
         console.log('Selected Characters:', selectedCharacters);
         // 예: dispatch(createGroupChat({ groupName, groupDescription, selectedCharacters }));
-        onClose(); // 모달 닫기
+        onClose(); 
+
     };
 
     return (
