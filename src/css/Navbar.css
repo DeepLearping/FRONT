@@ -67,8 +67,8 @@
 
 
 .recent-title{
+    height: 25vh;
     margin-top: 30px;
-    margin-bottom: 10px;
     font-size: 18px;
     font-family: "noto-sans-kr", serif;
 }
@@ -76,9 +76,6 @@
 .recent-characters{
     display: flex;
     gap: 10px;
-}
-
-.recent-characters{
     width: 40px;
     height: auto;
 }
