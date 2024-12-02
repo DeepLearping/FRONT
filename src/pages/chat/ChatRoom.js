@@ -5,7 +5,12 @@ import "../../css/chat.css";
 import { fetchChatHistory, getMsgImg, sendMessageToAI } from "../../apis/ChatAPICalls";
 import Message from "./Message";
 import voiceButton from "./images/voice.png";
-import loading from "./images/loading2.gif";
+import loading1 from "./images/loading1.gif";
+import loading2 from "./images/loading2.gif";
+import loading3 from "./images/loading3.gif";
+import loading4 from "./images/loading4.gif";
+import loading5 from "./images/loading5.gif";
+import loading6 from "./images/loading6.gif";
 import playbutton from '../chat/images/Button Play.png'
 
 
@@ -18,6 +23,8 @@ const ChatRoom = () => {
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태
   const dispatch = useDispatch();
   const messageEndRef = useRef(null);
+  const [loadingImage, setLoadingImage] = useState(null);
+
 
   const character = useSelector((state) => state.chat.currentRoom.character);
   const chatUser = useSelector((state) => state.chat.currentRoom.member);
@@ -54,6 +61,9 @@ const ChatRoom = () => {
 
     const userMessage = { role: "user", content: input };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
+
+    const loadingImages = [loading1, loading2, loading3, loading4, loading5, loading6];
+    setLoadingImage(loadingImages[Math.floor(Math.random() * loadingImages.length)]);
 
     setIsLoading(true); // 로딩 상태 시작
 
@@ -126,11 +136,12 @@ const ChatRoom = () => {
               </div>
               <div className="message-chatRoom ai">
                 <div className="message-bubble-chatRoom ai">
-                  <img src={loading} alt="로딩 중" style={{ width: "18vh" }} />
+                  <img src={loadingImage} alt="로딩 중" style={{ width: "18vh" }} />
                 </div>
               </div>
             </>
           )}
+
 
           <div ref={messageEndRef} />
         </div>
