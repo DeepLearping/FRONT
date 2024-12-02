@@ -4,10 +4,11 @@ import { useSearchParams } from "react-router-dom";
 import '../../css/chat.css';
 import playbutton from '../chat/images/Button Play.png'
 
-const Message = ({ role, content, msgImgUrl }) => {
+const Message = ({ role, content, msgImgUrl, characterId }) => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const character = useSelector(state => state.chat.currentRoom.characters[0])
+  console.log(characterId);
   // const [savedMsgImgUrl, setSavedMsgImgUrl] = useState(msgImgUrl)
 
   const imageUrl = `http://localhost:8080/api/v1/character${character.profileImage}`;

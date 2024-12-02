@@ -88,7 +88,7 @@ const ChatRoom = () => {
 
     try {
       const aiResponse = await sendMessageToAI(messageInfo);
-      const aiMessage = { role: "ai", content: aiResponse.answer, msgImgUrl: aiResponse.msgImg > 0 ? `http://localhost:8080/chatMessage/getMsgImg/${character.charNo}/${aiResponse.msgImg}.jpg` : "" };
+      const aiMessage = { role: "ai", content: aiResponse.answer, msgImgUrl: aiResponse.msgImg > 0 ? `http://localhost:8080/chatMessage/getMsgImg/${characters[0].charNo}/${aiResponse.msgImg}.jpg` : "" };
   
       setIsLoading(false); // 로딩 상태 종료
       setMessages((prevMessages) => [...prevMessages, aiMessage]);
@@ -138,13 +138,13 @@ const ChatRoom = () => {
         )}
         <div className="chat-messages-chatRoom">
           {messages.map((msg, index) => (
-            <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl} />
+            <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl} characterId={msg.characterId} />
           ))}
           {isLoading && (
             <>
               <div className="chat-charInfo-chatRoom">
                 <img className='charaImg-message-chatRoom' src={imageUrl} alt="캐릭터 이미지" />
-                <p>{charName}</p>
+                <p>{roomName}</p>
                 <img className='playButton-chatRoom' src={playbutton} alt="재생버튼"></img>
               </div>
               <div className="message-chatRoom ai">

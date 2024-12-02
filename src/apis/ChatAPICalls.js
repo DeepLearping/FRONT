@@ -35,18 +35,22 @@ export function enterChatRoom(chatRoomInfo) {
   }
 }
 
-export function fetchChatHistory(sessionId) {
+export function enterGroupChatRoom(chatRoomInfo) {
 
-  console.log('채팅 내역을 불러옵니다...');
+  console.log('단체 채팅방 입장...');
 
+  /* redux-thunk(미들 웨어)를 이용한 비동기 처리 */
   return async (dispatch, getState) => {
       try {
-          const result = await request('GET', '/api/v1/hospital');
+          const result = await request('POST', '/api/v1/chatRoom/create/groupChat', chatRoomInfo);
           console.log('result : ', result); // 서버에서 받아온 data 정보 
 
-          // 받아온 데이터(result)안에 담긴 내용을 알맞게 포장하시면 됩니다. 
+          const data = result.results.chatRoom;
+          console.log('data : ', data);
 
-          return result; // 포장한 데이터를 반환해주기.
+          dispatch(loadChatRoom(data));
+
+          return data; // 포장한 데이터를 반환해주기.
       } catch (error) {
           console.error('API error:', error);
       }

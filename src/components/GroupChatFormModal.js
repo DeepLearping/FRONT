@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import '../css/GroupChatFormModal.css'; // 모달 스타일을 위한 CSS 파일
 import { useDispatch, useSelector } from 'react-redux';
+import { enterGroupChatRoom } from '../apis/ChatAPICalls';
+import { useNavigate } from 'react-router-dom';
 
 const GroupChatFormModal = ({ isOpen, onClose }) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    
     const userInfo = useSelector(state => state.user.userInfo);
     const allCharacters = useSelector(state => state.user.characters);
-
     const [groupName, setGroupName] = useState('');
     const [groupDescription, setGroupDescription] = useState('');
     const [selectedCharacters, setSelectedCharacters] = useState([]);
@@ -21,7 +24,7 @@ const GroupChatFormModal = ({ isOpen, onClose }) => {
         }
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         // groupName이 비어있을 경우 경고 메시지
         if (!groupName) {
             alert('채팅방 이름을 작성해 주세요.'); 
@@ -36,9 +39,21 @@ const GroupChatFormModal = ({ isOpen, onClose }) => {
         console.log('Group Name:', groupName);
         console.log('Group Description:', groupDescription);
         console.log('Selected Characters:', selectedCharacters);
-        // 예: dispatch(createGroupChat({ groupName, groupDescription, selectedCharacters }));
-        onClose(); 
+        const charNos = selectedCharacters.map(character => character.charNo);
 
+        const groupChatRoomInfo = {
+            groupName: groupName,
+            groupDescription: groupDescription,
+            memberNo: userInfo.memberNo,
+            charNo: charNos
+        }
+
+        const chatRoom = await dispatch(enterGroupChatRoom(groupChatRoomInfo));
+        console.log("채팅방 정보:",chatRoom);
+
+        navigate(`/chat_room?session_id=${chatRoom.sessionId}`);
+
+        onClose(); 
     };
 
     return (
