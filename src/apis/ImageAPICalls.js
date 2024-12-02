@@ -32,8 +32,6 @@ export function updateCharacterChatCount(charNo) {
             const result = await request('PUT', `/api/v1/character/${charNo}/incrementChatCount`);
             console.log('result : ', result); // 서버에서 받아온 data 정보 
 
-            // 받아온 데이터(result)안에 담긴 내용을 알맞게 포장하시면 됩니다. 
-
             return result; // 포장한 데이터를 반환해주기.
         } catch (error) {
             console.error('API error:', error);
