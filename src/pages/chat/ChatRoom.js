@@ -56,28 +56,29 @@ const ChatRoom = () => {
   // 메시지 전송
   const sendMessage = async () => {
     if (!input.trim()) return;
-
+  
     setInput(""); // 입력값 초기화
-
+  
     const userMessage = { role: "user", content: input };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
-
-    const loadingImages = [loading1, loading2, loading3, loading4, loading5, loading6];
+  
+    // 랜덤 로딩 이미지 설정
+    const loadingImages = [loading1, loading2, loading3, loading4, loading5];
     setLoadingImage(loadingImages[Math.floor(Math.random() * loadingImages.length)]);
-
+  
     setIsLoading(true); // 로딩 상태 시작
-
+  
     const messageInfo = {
       question: input,
       sessionId,
       charNo: character.charNo,
       userId: chatUser.memberNo,
     };
-
+  
     try {
       const aiResponse = await sendMessageToAI(messageInfo);
-      const aiMessage = { role: "ai", content: aiResponse.answer, msgImgUrl: aiResponse.msgImg > 0 ? `http://localhost:8080/chatMessage/getMsgImg/${character.charNo}/${aiResponse.msgImg}.jpg` : "" }
-
+      const aiMessage = { role: "ai", content: aiResponse.answer, msgImgUrl: aiResponse.msgImg > 0 ? `http://localhost:8080/chatMessage/getMsgImg/${character.charNo}/${aiResponse.msgImg}.jpg` : "" };
+  
       setIsLoading(false); // 로딩 상태 종료
       setMessages((prevMessages) => [...prevMessages, aiMessage]);
     } catch (error) {
@@ -85,6 +86,7 @@ const ChatRoom = () => {
       setIsLoading(false); // 로딩 상태 종료
     }
   };
+  
 
   // 메시지 추가 시 마지막으로 스크롤
   useEffect(() => {
