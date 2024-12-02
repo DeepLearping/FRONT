@@ -69,7 +69,7 @@ const ChatRoom = () => {
     setMessages((prevMessages) => [...prevMessages, userMessage]);
   
     // 랜덤 로딩 이미지 설정
-    const loadingImages = [loading1, loading2, loading3, loading4, loading5];
+    const loadingImages = [loading1, loading2, loading3, loading4, loading5, loading6];
     setLoadingImage(loadingImages[Math.floor(Math.random() * loadingImages.length)]);
   
     setIsLoading(true); // 로딩 상태 시작
