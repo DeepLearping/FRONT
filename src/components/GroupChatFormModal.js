@@ -22,7 +22,6 @@ const GroupChatFormModal = ({ isOpen, onClose }) => {
     };
 
     const handleSubmit = () => {
-        // 여기에 제출 로직을 추가하세요
         console.log('Group Name:', groupName);
         console.log('Group Description:', groupDescription);
         console.log('Selected Characters:', selectedCharacters);
