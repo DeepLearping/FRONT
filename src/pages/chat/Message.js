@@ -14,10 +14,6 @@ const Message = ({ role, content, msgImgUrl }) => {
   const imageUrl = `http://localhost:8080/api/v1/character${character.profileImage}`;
   const charName = character ? character.charName : '';
 
-  if (msgImgUrl) {
-    console.log("🎃🎉🎃msgImgUrl: ", msgImgUrl)
-  }
-
   return (
     <div>
       {role === 'ai' && (
