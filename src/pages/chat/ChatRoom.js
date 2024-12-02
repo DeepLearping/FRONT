@@ -5,6 +5,7 @@ import "../../css/chat.css";
 import { fetchChatHistory, getMsgImg, sendMessageToAI } from "../../apis/ChatAPICalls";
 import Message from "./Message";
 import voiceButton from "./images/voice.png";
+import { request } from '../../apis/Apis';
 import loading1 from "./images/loading1.gif";
 import loading2 from "./images/loading2.gif";
 import loading3 from "./images/loading3.gif";
@@ -39,14 +40,19 @@ const ChatRoom = () => {
   useEffect(() => {
     const fetchChatHistory = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8000/chat_message/${sessionId}`
-        );
-        const data = await response.json();
-        console.log("채팅기록 : ", data);
-        setMessages(data.messages || []);
+        const response = await request("GET",`/chatMessage/history/${sessionId}`);
+        
+        const parsedMessages = response.map((chat) => ({
+          role: chat.role,
+          content: JSON.parse(chat.message)?.data?.content || "",
+          msgImgUrl: chat.msgImgUrl ? `http://localhost:8080/chatMessage/getMsgImg${chat.msgImgUrl}` : "",
+          characterId: chat.characterId,
+      }));
+
+        // console.log("채팅기록 : ", parsedMessages);
+        setMessages(parsedMessages || []);
       } catch (error) {
-        console.error("채팅 기록 로드 오류:", error);
+        console.error("채팅 기록 로드 오류: ", error);
       }
     };
 
@@ -63,7 +69,7 @@ const ChatRoom = () => {
     setMessages((prevMessages) => [...prevMessages, userMessage]);
   
     // 랜덤 로딩 이미지 설정
-    const loadingImages = [loading1, loading2, loading3, loading4, loading5];
+    const loadingImages = [loading1, loading2, loading3, loading4, loading5, loading6];
     setLoadingImage(loadingImages[Math.floor(Math.random() * loadingImages.length)]);
   
     setIsLoading(true); // 로딩 상태 시작
