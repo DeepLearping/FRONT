@@ -65,7 +65,7 @@ function SelectCharacterList() {
         const chatRoom = await dispatch(enterChatRoom(chatRoomInfo));
         console.log("채팅방 정보:", chatRoom);
 
-        navigate(`/chat_room?session_id=${chatRoom.sessionId}`, character);
+        navigate(`/chat_room?session_id=${chatRoom.sessionId}`);
     };
 
     const handleSearchChange = (e) => {

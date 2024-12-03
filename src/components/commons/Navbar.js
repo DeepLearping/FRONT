@@ -1,19 +1,22 @@
 import React, {useState} from 'react';
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import '../../css/Navbar.css';
 import mypageIcon from '../../images/mypage.png';
 import ProfileModal from "../ProfileModal";
 import LoginModal from '../LoginModal';
 import { useSelector } from 'react-redux';
 import BalanceGame from '../../pages/balanceGame/balanceGame';
-
+import GroupChatFormModal from '../GroupChatFormModal';
 
 const Navbar = () => {
     const [isModalOpen, setModalOpen] = useState(false); 
     const [isProfileModalOpen, setProfileModalOpen] = useState(false);
+    const [isGroupChatFormModalOpen, setGroupChatFormModalOpen] = useState(false);
     const token = localStorage.getItem('token');
     const userInfo = useSelector(state => state.user.userInfo)
+    const navigate = useNavigate();
 
+    // 🟨 로그인 모달 창 관리
     const openLoginModal = () => {
         setModalOpen(true);
     };
@@ -22,6 +25,7 @@ const Navbar = () => {
         setModalOpen(false);
     };
 
+    // 🟩 프로필 모달창 관리
     const openProfileModal = () => {
         setProfileModalOpen(true);
     };
@@ -38,18 +42,23 @@ const Navbar = () => {
         }
     };
 
-    const handleGroupChatModule = () => {
-        
-    }
+    // 🟦 단체방 모달 창 관리
+    const openGroupChatFormModal = () => {
+        setGroupChatFormModalOpen(true);
+    };
+
+    const closeGroupChatFormModal = () => {
+        setGroupChatFormModalOpen(false);
+    };
 
     return(
         <div className = "nav-bar">
-            <h1 className="title"> 캐 톡</h1>
+            <h1 className="title"><NavLink to="/">캐톡</NavLink></h1>
             <ul className="nav-list">
                 <li className="nav-item">
-                    <NavLink to="/selectCharacterList">캐릭터 목록</NavLink>
+                    <NavLink to="/selectCharacterLis">캐릭터 목록</NavLink>
                 </li>
-                <li className="nav-item" onClick={handleGroupChatModule}>
+                <li className="nav-item" onClick={openGroupChatFormModal}>
                     단체 채팅
                 </li>
                 <li className="nav-item">
@@ -80,6 +89,7 @@ const Navbar = () => {
             </div>
             <LoginModal isOpen={isModalOpen} onClose={closeModal} />
             <ProfileModal isOpen={isProfileModalOpen} onClose={closeProfileModal} />
+            <GroupChatFormModal isOpen={isGroupChatFormModalOpen} onClose={closeGroupChatFormModal} />
         </div>
     );
 };
