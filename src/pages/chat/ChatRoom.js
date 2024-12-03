@@ -71,6 +71,7 @@ const ChatRoom = ({ }) => {
 
     // characters의 각 인덱스의 charNo를 리스트로 담기
     const charNos = characters.map(character => character.charNo);
+    console.log("charNos:",charNos)
   
     // 랜덤 로딩 이미지 설정
     const loadingImages = [loading1, loading2, loading3, loading4, loading5, loading6];
@@ -84,7 +85,8 @@ const ChatRoom = ({ }) => {
       question: input
     }
     
-    // const whoToSend = dispatch(matchCharacter(charNos, sessionId, question));
+    const whoToSend = await dispatch(matchCharacter(matchCharacterInfo));
+    console.log("whoToSend:",whoToSend);
   
     // TODO: messageInfo.charNo 및 aiMessage.characterId를 whoToSend에서 받아온 녀석으로 대체해줘야함
     // for문 써서 whoToSend에 담긴 charNo 만큼 메시지 보내기
