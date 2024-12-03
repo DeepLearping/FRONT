@@ -65,6 +65,7 @@ const GroupChatFormModal = ({ isOpen, onClose }) => {
                         <label className='groupChat-label'>단체방 이름</label>
                         <input
                             type="text"
+                            className='groupChat-text'
                             value={groupName}
                             onChange={(e) => setGroupName(e.target.value)}
                             required
@@ -73,6 +74,7 @@ const GroupChatFormModal = ({ isOpen, onClose }) => {
                     <div className='group-description'>
                         <label className='groupChat-label'>단체방 설명</label>
                         <textarea
+                            className='groupChat-textarea'
                             value={groupDescription}
                             onChange={(e) => setGroupDescription(e.target.value)}
                             required

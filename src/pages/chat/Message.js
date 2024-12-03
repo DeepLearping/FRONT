@@ -17,7 +17,6 @@ const Message = ({ role, content, msgImgUrl, characterId }) => {
     : null;
   const charName = selectedCharacter ? selectedCharacter.charName : '';
 
-
   // // 이모지 제거 함수(이득규)
   // const removeEmojis = (text) => {
   //   const emojiPattern = /[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{02500}-\u{02BEF}\u{02702}-\u{027B0}\u{024C2}-\u{1F251}]/gu;
