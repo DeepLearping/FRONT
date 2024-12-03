@@ -4,16 +4,21 @@ import { useSearchParams } from "react-router-dom";
 import '../../css/chat.css';
 import playbutton from '../chat/images/Button Play.png'
 
-const Message = ({ role, content, msgImgUrl, characterId }) => {
+const Message = ({ role, content, msgImgUrl, characterId, profileImg }) => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
-  const character = useSelector(state => state.chat.currentRoom.characters[0])
+  const characters = useSelector(state => state.chat.currentRoom.characters)
+  const selectedCharacter = characters.find(character => character.charNo === characterId);
   console.log(characterId);
   // const [savedMsgImgUrl, setSavedMsgImgUrl] = useState(msgImgUrl)
 
-  const imageUrl = `http://localhost:8080/api/v1/character${character.profileImage}`;
-  const charName = character ? character.charName : '';
+  const imageUrl = profileImg 
+  ? profileImg
+  : (selectedCharacter && selectedCharacter.profileImage 
+      ? `http://localhost:8080/api/v1/character${selectedCharacter.profileImage}` 
+      : null);
 
+  const charName = selectedCharacter ? selectedCharacter.charName : '';
 
   // // 이모지 제거 함수(이득규)
   // const removeEmojis = (text) => {
@@ -33,8 +38,6 @@ const Message = ({ role, content, msgImgUrl, characterId }) => {
       // 이모지 제거
       // const filteredText = cleanText(removeEmojis(text));
       // console.log("Filtered Text: ", filteredText); //로그 찍어보기
-
-      
       
       const response = await fetch(`http://localhost:8000/chat/stream_audio?text=${encodeURIComponent(text)}`, {
         method: "GET",
@@ -77,33 +80,11 @@ const Message = ({ role, content, msgImgUrl, characterId }) => {
             {content}
           </div>
           {role === 'ai' && msgImgUrl !== "" && (
-                <img src={msgImgUrl} alt="메세지 감정 이미지" style={{width:"100px"}}/>
+                <img src={msgImgUrl} alt="메세지 감정 이미지" style={{width:"50vh"}}/>
             )}
         </div>
       </div>
     );
-
-  return (
-    <div>
-      {role === 'ai' && (
-        <div className="chat-charInfo-chatRoom">
-          <img className='charaImg-message-chatRoom' src={imageUrl} alt="캐릭터 이미지" />
-          <p>{charName}</p>
-          <img className='playButton-chatRoom' src={playbutton} alt="재생버튼"></img>
-        </div>
-      )}
-      <div className={`message-chatRoom ${role}`}>
-        <div className={`message-bubble-chatRoom ${role}`}>
-          {content}
-        </div>
-        {role === 'ai' && msgImgUrl !== "" && (
-          <div className='message-img-chatRoom'>
-            <img src={msgImgUrl} alt="메세지 감정 이미지" />
-          </div>
-        )}
-      </div>
-    </div>
-  );
 };
 
 export default Message;
