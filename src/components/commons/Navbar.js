@@ -5,6 +5,7 @@ import mypageIcon from '../../images/mypage.png';
 import ProfileModal from "../ProfileModal";
 import LoginModal from '../LoginModal';
 import { useSelector } from 'react-redux';
+import BalanceGame from '../../pages/balanceGame/balanceGame';
 import GroupChatFormModal from '../GroupChatFormModal';
 
 const Navbar = () => {
@@ -61,7 +62,7 @@ const Navbar = () => {
                     단체 채팅
                 </li>
                 <li className="nav-item">
-                    <NavLink to="/balance-game">밸런스 게임</NavLink>
+                    <NavLink to="/balanceGame">밸런스 게임</NavLink>
                 </li>
             </ul> 
 
