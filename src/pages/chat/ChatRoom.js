@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import "../../css/chat.css";
-import { fetchChatHistory, getMsgImg, sendMessageToAI } from "../../apis/ChatAPICalls";
+import { fetchChatHistory, getMsgImg, matchCharacter, sendMessageToAI } from "../../apis/ChatAPICalls";
 import Message from "./Message";
 import voiceButton from "./images/voice.png";
 import { request } from '../../apis/Apis';
@@ -38,7 +38,7 @@ const ChatRoom = () => {
   const roomName = roomInfo ? roomInfo.roomName : "알 수 없음";
   const description = roomInfo ? roomInfo.description : "";
 
-  // 채팅 기록 로드
+  // 채팅 기록 로드 & 채팅방 정보 불러오기
   useEffect(() => {
     const fetchChatHistory = async () => {
       try {
@@ -57,8 +57,9 @@ const ChatRoom = () => {
         console.error("채팅 기록 로드 오류: ", error);
       }
     };
-
     fetchChatHistory();
+
+    // dispatch(loadChatRoomInfo(sessionId));
   }, [sessionId]);
 
   // 메시지 전송
@@ -78,11 +79,13 @@ const ChatRoom = () => {
     setLoadingImage(loadingImages[Math.floor(Math.random() * loadingImages.length)]);
   
     setIsLoading(true); // 로딩 상태 시작
+    
+    // dispatch(matchCharacter(charNos, sessionId, question));
   
     const messageInfo = {
       question: input,
       sessionId: sessionId,
-      charNo: charNos,
+      charNo: charNos[0],
       userId: chatUser.memberNo
     }
 
