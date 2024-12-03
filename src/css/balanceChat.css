@@ -15,7 +15,12 @@
     height: 100vh;
 }
 
+.chat-scroll-container-bg{
+    display: inline;
+}
+
 .chat-header-bg {
+    margin-top: -17.5vh;
     background-color: #f9f9f9;
     padding-top: 15px;
     text-align: right;
@@ -27,7 +32,7 @@
 }
 
 .header-text-bg{
-    margin-right: -10px;
+    margin-right: -20px;
     font-size: 1.3rem;
     font-weight: 600;
     font-family: "Jua", sans-serif;
@@ -110,7 +115,7 @@
     border-radius: 8px;
 }
 
-.charaImg-bg {
+.contextLetter-bg {
     width: 10vh;
     height: 10vh;
     border-radius: 50%;
@@ -118,7 +123,7 @@
     cursor: pointer;
 }
 
-.charaImg-bg:hover {
+.contextLetter-bg:hover {
     animation: rotate-alternate 0.7s infinite alternate;
 }
 

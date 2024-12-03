@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useLocation } from "react-router-dom";
 import "../../css/balanceChat.css";
 import { useNavigate } from 'react-router-dom';
 import { fetchChatHistory, getMsgImg, sendMessageToAI } from "../../apis/ChatAPICalls";
@@ -18,24 +18,25 @@ import context1 from './images/상황1.png';
 
 
 const BalanceChat = () => {
-    const [searchParams] = useSearchParams();
-    const sessionId = searchParams.get("session_id");
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
-    const [isDescriptionVisible, setDescriptionVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false); // 로딩 상태
     const dispatch = useDispatch();
     const messageEndRef = useRef(null);
     const [loadingImage, setLoadingImage] = useState(null);
     const [isModalOpen, setModalOpen] = useState(false);
+    const location = useLocation();
+    const chatRoomInfo = location.state;
 
-    const character = useSelector((state) => state.chat.currentRoom.character);
+    const roomInfo = useSelector((state) => state.chat.currentRoom);
+    const sessionId = roomInfo.sessionId;
+    const character = useSelector((state) => state.user.characters[0]);
     const chatUser = useSelector((state) => state.chat.currentRoom.member);
 
-    const imageUrl = character
-        ? `http://localhost:8080/api/v1/character${character.profileImage}`
-        : "";
+    const imageUrl = chatRoomInfo.imgUrl;
     const charName = character ? character.charName : "알 수 없음";
+
+    console.log("$$$",chatRoomInfo)
 
     // 메시지 전송
     const sendMessage = async () => {
@@ -55,13 +56,18 @@ const BalanceChat = () => {
         const messageInfo = {
             question: input,
             sessionId,
-            charNo: character.charNo,
+            charNo: chatRoomInfo.characterId,
             userId: chatUser.memberNo,
         };
 
         try {
             const aiResponse = await sendMessageToAI(messageInfo);
-            const aiMessage = { role: "ai", content: aiResponse.answer, msgImgUrl: aiResponse.msgImg > 0 ? `http://localhost:8080/chatMessage/getMsgImg/${character.charNo}/${aiResponse.msgImg}.jpg` : "" };
+            const aiMessage = { 
+                role: "ai", 
+                content: aiResponse.answer, 
+                msgImgUrl: aiResponse.msgImg > 0 ? `http://localhost:8080/chatMessage/getMsgImg/${character.charNo}/${aiResponse.msgImg}.jpg` : "",
+                characterId: character.charNo
+            };
 
             setIsLoading(false); // 로딩 상태 종료
             setMessages((prevMessages) => [...prevMessages, aiMessage]);
@@ -83,17 +89,30 @@ const BalanceChat = () => {
         <div className="chat-room-bg">
             {/* 채팅 스크롤 컨테이너 */}
             <div className="chat-scroll-container-bg">
-
-                {/* 채팅 헤더 */}
-                <div className="chat-header-bg">
-                    <img
-                        className="charaImg-bg"
-                        src={contextBg}
-                        alt="상황부여 이미지"
-                        onClick={() => setModalOpen(true)}
-                    />
-                    <div className="header-text-bg">상황 부여하기</div>
+                <div className="chat-header-chatRoom">
+                    {roomInfo && (
+                        <>
+                            <img
+                                className="charaImg-chatRoom"
+                                src={chatRoomInfo.imgUrl}
+                                alt="캐릭터 이미지"
+                            />
+                            <p>
+                                {roomInfo.roomName}
+                            </p>
+                        </>
+                    )}
+                    <div className="chat-header-bg">
+                        <img
+                            className="contextLetter-bg"
+                            src={contextBg}
+                            alt="상황부여 이미지"
+                            onClick={() => setModalOpen(true)}
+                        />
+                        <div className="header-text-bg">상황 부여하기</div>
+                    </div>
                 </div>
+
 
                 {/* 채팅 메시지 영역 */}
                 <div className="chat-messages-bg">
@@ -112,7 +131,7 @@ const BalanceChat = () => {
                             <div className="chat-charInfo-bg">
                                 <img
                                     className="charaImg-message-bg"
-                                    src={imageUrl}
+                                    src={chatRoomInfo.imgUrl}
                                     alt="캐릭터 이미지"
                                 />
                                 <p>{charName}</p>

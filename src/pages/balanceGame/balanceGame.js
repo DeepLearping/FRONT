@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import '../../css/balanceGame.css';
 import { callKakaoLoginAPI, callLoginAPI, getAllCharacterInfo } from '../../apis/UserAPICalls';
 import image1 from './images/플랑크톤.jpg';
@@ -10,14 +10,15 @@ import image5 from './images/리바이.webp';
 import image6 from './images/김전일.jpg';
 import random from './images/Refresh.png';
 import { useNavigate } from 'react-router-dom';
+import { enterBalanceChatRoom } from '../../apis/ChatAPICalls';
 
 const characters = [
-    { name: '플랑크톤', img: image1 },
-    { name: '스폰지밥', img: image2 },
-    { name: '에스카노르', img: image3 },
-    { name: '버즈', img: image4 },
-    { name: '리바이', img: image5 },
-    { name: '김전일', img: image6 },
+    { name: '플랑크톤', img: image1, charNo:5 },
+    { name: '스폰지밥', img: image2, charNo:6 },
+    { name: '에스카노르', img: image3, charNo:2 },
+    { name: '버즈', img: image4, charNo:1 },
+    { name: '리바이', img: image5, charNo:3 },
+    { name: '김전일', img: image6, charNo:4 },
 ];
 
 const modifiers = ['집착 심한', '난폭한', '바보같은', '우울한', '애교쟁이', '찌질한', '열혈'];
@@ -27,19 +28,10 @@ const BalanceGame = () => {
     const [pair, setPair] = useState({});
     const [randomColor1, setRandomColor1] = useState('');
     const [randomColor2, setRandomColor2] = useState('');
+    const userInfo = useSelector(state => state.user.userInfo);
+    const [selectedLeftCharacter,setSelectedLeftCharacter] = useState('')
+    const [selectedRightCharacter,setSelectedRightCharacter] = useState('')
     const navigate = useNavigate();
-
-    useEffect(() => {
-        const searchParams = new URLSearchParams(window.location.search);
-        const code = searchParams.get('code');
-
-        if (code) {
-            dispatch(callLoginAPI(code));
-            dispatch(callKakaoLoginAPI(code));
-        }
-
-        dispatch(getAllCharacterInfo());
-    }, [dispatch]);
 
     const generateRandomPair = () => {
         const colors = [
@@ -77,20 +69,44 @@ const BalanceGame = () => {
                 text: `${shuffledModifiers[1]} ${rightCharacter.name}`,
             },
         });
+        
+        setSelectedLeftCharacter(shuffledCharacters[0].charNo);
+        setSelectedRightCharacter(shuffledCharacters[1].charNo);
+        
     };
 
     useEffect(() => {
         generateRandomPair();
     }, []);
 
-    const handleCardClick = () => {
+    const handleLeftCardClick = () => {
         
-        navigate('/balanceChat');
+        // 채팅방 생성
+        const enterChatRoomInfo = {
+            charNo: selectedLeftCharacter,
+            charName: pair.left?.text,
+            memberNo: userInfo.memberNo
+        }
+
+        dispatch(enterBalanceChatRoom(enterChatRoomInfo))
+
+        // 생성된 채팅방의 정보를 
+        const chatRoomInfo = {
+            imgUrl: pair.left?.img,
+            text: pair.left?.text,
+            charaterId: selectedLeftCharacter
+        }
+
+        console.log("chatRoomInfo :",chatRoomInfo);
+
+        navigate('/balanceChat', { state:chatRoomInfo });
     };
+
+    
 
     return (
         <div className="card-container-bg">
-            <div className="card-bg" onClick={handleCardClick}>
+            <div className="card-bg" onClick={handleLeftCardClick}>
                 <img src={pair.left?.img} alt="캐릭터" className="card-image-bg" />
                 <div className="card-text-bg">
                     <span className="change-text1-bg" style={{ color: randomColor1 }}>
