@@ -52,10 +52,10 @@ const Navbar = () => {
 
     return(
         <div className = "nav-bar">
-            <h1 className="title"><NavLink to="/selectCharacterList">캐톡</NavLink></h1>
+            <h1 className="title"><NavLink to="/">캐톡</NavLink></h1>
             <ul className="nav-list">
                 <li className="nav-item">
-                    <NavLink to="/selectCharacterList">캐릭터 목록</NavLink>
+                    <NavLink to="/selectCharacterLis">캐릭터 목록</NavLink>
                 </li>
                 <li className="nav-item" onClick={openGroupChatFormModal}>
                     단체 채팅
