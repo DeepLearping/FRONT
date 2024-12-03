@@ -205,8 +205,8 @@ const BalanceChat = () => {
                         </div>
 
                         <div className="modal-buttons-bg">
-                            <button className="modal-button-bg" onClick={() => setModalOpen(false)}>닫기</button>
                             <button className="modal-button-bg" onClick={() => setModalOpen(false)}>적용</button>
+                            <button className="modal-button-bg" onClick={() => setModalOpen(false)}>닫기</button>
                         </div>
                     </div>
                 </div>

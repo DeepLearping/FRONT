@@ -80,7 +80,7 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg }) => {
             {content}
           </div>
           {role === 'ai' && msgImgUrl !== "" && (
-                <img src={msgImgUrl} alt="메세지 감정 이미지" style={{width:"100px"}}/>
+                <img src={msgImgUrl} alt="메세지 감정 이미지" style={{width:"50vh"}}/>
             )}
         </div>
       </div>
