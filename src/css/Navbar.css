@@ -19,6 +19,12 @@
     font-weight: 500;
     font-family: "Jua", sans-serif;
     margin-bottom: 30px;
+    text-decoration: none;
+}
+
+.title a {
+    color: inherit;
+    text-decoration: none;
 }
 
 .nav-list{

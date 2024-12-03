@@ -1,10 +1,18 @@
-import React, { useState, useEffect } from "react";
+import "../../css/chat.css";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
-import "../../css/chat.css";
-import { fetchChatHistory, getMsgImg, sendMessageToAI } from "../../apis/ChatAPICalls";
+import { fetchChatHistory, getMsgImg, matchCharacter, sendMessageToAI } from "../../apis/ChatAPICalls";
+import { request } from "../../apis/Apis";
 import Message from "./Message";
 import voiceButton from "./images/voice.png";
+import playbutton from '../chat/images/Button Play.png'
+import loading1 from "./images/loading1.gif";
+import loading2 from "./images/loading2.gif";
+import loading3 from "./images/loading3.gif";
+import loading4 from "./images/loading4.gif";
+import loading5 from "./images/loading5.gif";
+import loading6 from "./images/loading6.gif";
 
 const ChatRoom = ({ }) => {
   const [searchParams] = useSearchParams();
@@ -12,35 +20,46 @@ const ChatRoom = ({ }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isDescriptionVisible, setDescriptionVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // 로딩 상태
   const dispatch = useDispatch();
+  const messageEndRef = useRef(null);
+  const [loadingImage, setLoadingImage] = useState(null);
+
 
   // 현재 캐릭터 정보 추출
-  const character = useSelector(state => state.chat.currentRoom.character);
+  const roomInfo = useSelector(state => state.chat.currentRoom);
+  const characters = useSelector(state => state.chat.currentRoom.characters);
   const chatUser = useSelector(state => state.chat.currentRoom.member);
 
-  const imageUrl = character
-    ? `http://localhost:8080/api/v1/character${character.profileImage}`
+  const imageUrl = characters[0]
+    ? `http://localhost:8080/api/v1/character${characters[0].profileImage}`
     : "";
-  const charName = character ? character.charName : "알 수 없음";
-  const description = character ? character.description : "";
+  const roomName = roomInfo ? roomInfo.roomName : "알 수 없음";
+  const description = roomInfo ? roomInfo.description : "";
 
-  // 채팅 기록 로드
-  useEffect(() => {
-    const fetchChatHistory = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:8000/chat_message/${sessionId}`
-        );
-        const data = await response.json();
-        // console.log("🎀채팅기록 : ",data);
-        setMessages(data.messages || []);
-      } catch (error) {
-        console.error("채팅 기록 로드 오류:", error);
-      }
-    };
+ // 채팅 기록 로드 & 채팅방 정보 불러오기
+ useEffect(() => {
+  const fetchChatHistory = async () => {
+    try {
+      const response = await request("GET",`/chatMessage/history/${sessionId}`);
+      
+      const parsedMessages = response.map((chat) => ({
+        role: chat.role,
+        content: JSON.parse(chat.message)?.data?.content || "",
+        msgImgUrl: chat.msgImgUrl ? `http://localhost:8080/chatMessage/getMsgImg${chat.msgImgUrl}` : "",
+        characterId: chat.characterId,
+    }));
 
-    fetchChatHistory();
-  }, []);
+      // console.log("채팅기록 : ", parsedMessages);
+      setMessages(parsedMessages || []);
+    } catch (error) {
+      console.error("채팅 기록 로드 오류: ", error);
+    }
+  };
+  fetchChatHistory();
+
+  // dispatch(loadChatRoomInfo(sessionId));
+}, [sessionId]);
 
   // 메시지 전송
   const sendMessage = async () => {
@@ -50,21 +69,42 @@ const ChatRoom = ({ }) => {
     const userMessage = { role: "user", content: input };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
 
+    // characters의 각 인덱스의 charNo를 리스트로 담기
+    const charNos = characters.map(character => character.charNo);
+  
+    // 랜덤 로딩 이미지 설정
+    const loadingImages = [loading1, loading2, loading3, loading4, loading5, loading6];
+    setLoadingImage(loadingImages[Math.floor(Math.random() * loadingImages.length)]);
+  
+    setIsLoading(true); // 로딩 상태 시작
+    
+    // dispatch(matchCharacter(charNos, sessionId, question));
+  
     const messageInfo = {
       question: input,
       sessionId: sessionId,
-      charNo: character.charNo,
+      charNo: charNos[0],
       userId: chatUser.memberNo
     }
 
     try {
       const aiResponse = await sendMessageToAI(messageInfo);
-      const aiMessage = {role: "ai", content: aiResponse.answer, msgImgUrl: aiResponse.msgImg > 0 ? `http://localhost:8080/chatMessage/getMsgImg/${character.charNo}/${aiResponse.msgImg}.jpg` : ""}
+      const aiMessage = { role: "ai", content: aiResponse.answer, msgImgUrl: aiResponse.msgImg > 0 ? `http://localhost:8080/chatMessage/getMsgImg/${characters[0].charNo}/${aiResponse.msgImg}.jpg` : "" };
+  
+      setIsLoading(false); // 로딩 상태 종료
       setMessages((prevMessages) => [...prevMessages, aiMessage]);
     } catch (error) {
       console.error("메세지 전송 오류:", error);
+      setIsLoading(false); // 로딩 상태 종료
     }
   };
+
+  // 메시지 추가 시 마지막으로 스크롤
+  useEffect(() => {
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   // 캐릭터 설명 토글
   const toggleDescription = () => {
@@ -73,28 +113,51 @@ const ChatRoom = ({ }) => {
 
   return (
     <div className="chat-room-chatRoom">
-      <div className="chat-header-chatRoom">
-        {character && (
-          <>
-            <img className="charaImg-chatRoom" src={imageUrl} alt="캐릭터 이미지" />
-            <p>
-              {charName}
-              <button onClick={toggleDescription}>
-                {isDescriptionVisible ? "▲" : "▼"}
-              </button>
-            </p>
-          </>
-        )}
-      </div>
-      {isDescriptionVisible && (
-        <div className="chat-chara-description-chatRoom">
-          <p>{description}</p>
+      <div className="chat-scroll-container-chatRoom">
+        <div className="chat-header-chatRoom">
+          {roomInfo && (
+            <>
+              <img
+                className="charaImg-chatRoom"
+                src={imageUrl}
+                alt="캐릭터 이미지"
+              />
+              <p>
+                {roomName}
+                <button onClick={toggleDescription}>
+                  {isDescriptionVisible ? "▲" : "▼"}
+                </button>
+              </p>
+            </>
+          )}
         </div>
-      )}
-      <div className="chat-messages-chatRoom">
-        {messages.map((msg, index) => (
-          <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl}/>
-        ))}
+        {isDescriptionVisible && (
+          <div className="chat-chara-description-chatRoom">
+            <p>{description}</p>
+          </div>
+        )}
+        <div className="chat-messages-chatRoom">
+          {messages.map((msg, index) => (
+            <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl} characterId={msg.characterId} />
+          ))}
+          {isLoading && (
+            <>
+              <div className="chat-charInfo-chatRoom">
+                <img className='charaImg-message-chatRoom' src={imageUrl} alt="캐릭터 이미지" />
+                <p>{roomName}</p>
+                <img className='playButton-chatRoom' src={playbutton} alt="재생버튼"></img>
+              </div>
+              <div className="message-chatRoom ai">
+                <div className="message-bubble-chatRoom ai">
+                  <img src={loadingImage} alt="로딩 중" style={{ width: "18vh" }} />
+                </div>
+              </div>
+            </>
+          )}
+
+
+          <div ref={messageEndRef} />
+        </div>
       </div>
       <div className="chat-input-chatRoom">
         <input

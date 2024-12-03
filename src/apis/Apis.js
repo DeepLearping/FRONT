@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const DOMAIN = 'http://localhost:8080';
+const DOMAIN2 = 'http://localhost:8000'
 
 export const request = async (method, url, data) => {
 
@@ -34,5 +35,23 @@ export const loginRequest = async (method, url, data) => {
     .catch(error => {
         console.log(error);
         throw error; 
+    });
+};
+
+export const fastAPIrequest = async (method, url, data) => {
+
+    return await axios({
+        method,
+        url: `${DOMAIN2}${url}`,
+        data,
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        
+    })
+    .then(res => res.data)
+    .catch(error => {
+        console.log(error);
+        throw error; // 에러를 다시 던져서 호출한 곳에서 처리할 수 있도록
     });
 };
