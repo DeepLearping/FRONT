@@ -77,19 +77,32 @@ const ChatRoom = ({ }) => {
     setLoadingImage(loadingImages[Math.floor(Math.random() * loadingImages.length)]);
   
     setIsLoading(true); // 로딩 상태 시작
+
+    const matchCharacterInfo = {
+      charIdList: charNos,
+      conversationId: sessionId,
+      question: input
+    }
     
-    // dispatch(matchCharacter(charNos, sessionId, question));
+    // const whoToSend = dispatch(matchCharacter(charNos, sessionId, question));
   
+    // TODO: messageInfo.charNo 및 aiMessage.characterId를 whoToSend에서 받아온 녀석으로 대체해줘야함
+    // for문 써서 whoToSend에 담긴 charNo 만큼 메시지 보내기
     const messageInfo = {
       question: input,
       sessionId: sessionId,
-      charNo: charNos[0],
+      charNo: charNos[0], // whoToSend
       userId: chatUser.memberNo
     }
 
     try {
       const aiResponse = await sendMessageToAI(messageInfo);
-      const aiMessage = { role: "ai", content: aiResponse.answer, msgImgUrl: aiResponse.msgImg > 0 ? `http://localhost:8080/chatMessage/getMsgImg/${characters[0].charNo}/${aiResponse.msgImg}.jpg` : "" };
+      const aiMessage = { 
+        role: "ai", 
+        content: aiResponse.answer, 
+        msgImgUrl: aiResponse.msgImg > 0 ? `http://localhost:8080/chatMessage/getMsgImg/${characters[0].charNo}/${aiResponse.msgImg}.jpg` : "",
+        characterId: charNos[0]
+      };
   
       setIsLoading(false); // 로딩 상태 종료
       setMessages((prevMessages) => [...prevMessages, aiMessage]);

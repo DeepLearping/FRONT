@@ -97,16 +97,14 @@ export function enterGroupChatRoom(chatRoomInfo) {
   }
 }
 
-export function matchCharacter() {
+export function matchCharacter(messageInfo) {
 
   console.log('대답할 캐릭터 정보 불러오기...');
 
   return async (dispatch, getState) => {
       try {
-          // 서버에 API 요청
-          const result = await request('POST', '/character/match');
+          const result = await request('POST', '/chatMessage/selectCharacterIdList', messageInfo);
           console.log('result : ', result); // 서버에서 받아온 data 정보 
-
 
           return result; // 포장한 데이터를 반환해주기.
       } catch (error) {
