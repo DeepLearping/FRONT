@@ -1,17 +1,18 @@
+import "../../css/chat.css";
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
-import "../../css/chat.css";
 import { fetchChatHistory, getMsgImg, matchCharacter, sendMessageToAI } from "../../apis/ChatAPICalls";
+import { request } from "../../apis/Apis";
 import Message from "./Message";
 import voiceButton from "./images/voice.png";
+import playbutton from '../chat/images/Button Play.png'
 import loading1 from "./images/loading1.gif";
 import loading2 from "./images/loading2.gif";
 import loading3 from "./images/loading3.gif";
 import loading4 from "./images/loading4.gif";
 import loading5 from "./images/loading5.gif";
 import loading6 from "./images/loading6.gif";
-import playbutton from '../chat/images/Button Play.png'
 
 const ChatRoom = ({ }) => {
   const [searchParams] = useSearchParams();
@@ -104,7 +105,7 @@ const ChatRoom = ({ }) => {
       messageEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
-  
+
   // 캐릭터 설명 토글
   const toggleDescription = () => {
     setDescriptionVisible(!isDescriptionVisible);
