@@ -5,6 +5,7 @@ import mypageIcon from '../../images/mypage.png';
 import ProfileModal from "../ProfileModal";
 import LoginModal from '../LoginModal';
 import { useSelector } from 'react-redux';
+import BalanceGame from '../../pages/balanceGame/balanceGame';
 import GroupChatFormModal from '../GroupChatFormModal';
 
 const Navbar = () => {
@@ -55,13 +56,13 @@ const Navbar = () => {
             <h1 className="title"><NavLink to="/">캐톡</NavLink></h1>
             <ul className="nav-list">
                 <li className="nav-item">
-                    <NavLink to="/selectCharacterLis">캐릭터 목록</NavLink>
+                    <NavLink to="/selectCharacterList">캐릭터 목록</NavLink>
                 </li>
                 <li className="nav-item" onClick={openGroupChatFormModal}>
                     단체 채팅
                 </li>
                 <li className="nav-item">
-                    <NavLink to="/balance-game">밸런스 게임</NavLink>
+                    <NavLink to="/balanceGame">밸런스 게임</NavLink>
                 </li>
             </ul> 
 

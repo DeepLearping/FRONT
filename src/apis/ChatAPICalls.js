@@ -54,6 +54,27 @@ export function enterChatRoom(chatRoomInfo) {
   }
 }
 
+export function enterBalanceChatRoom(enterChatRoomInfo) {
+
+  console.log('밸런스 채팅방 입장...');
+
+  return async (dispatch, getState) => {
+      try {
+          const result = await request('POST', '/api/v1/chatRoom/create/balanceChatRoom', enterChatRoomInfo);
+          console.log('result : ', result); // 서버에서 받아온 data 정보 
+
+          const data = result.results.chatRoom;
+          console.log('data : ', data);
+
+          dispatch(loadChatRoom(data));
+
+          return data; // 포장한 데이터를 반환해주기.
+      } catch (error) {
+          console.error('API error:', error);
+      }
+  }
+}
+
 export function enterGroupChatRoom(chatRoomInfo) {
 
   console.log('단체 채팅방 입장...');
