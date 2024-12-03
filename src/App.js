@@ -14,7 +14,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<UserLayout />}>
-          <Route index element={<UserMain />} />
+          <Route index element={<SelectCharacterList />} />
           <Route path="/login" element={<Login />} />
           <Route path="/test" element={<ProtectedRoute element={<TestPage />} token={token} />} />
           <Route path="/chat_room" element={<ProtectedRoute element={<ChatRoom />} token={token} />} />

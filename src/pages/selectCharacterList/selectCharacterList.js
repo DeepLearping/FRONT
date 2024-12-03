@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import '../../css/selectCharacterList.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadAllProfileImages, updateCharacterChatCount } from '../../apis/ImageAPICalls';
-import { getAllCharacterInfo } from '../../apis/UserAPICalls';
+import { callKakaoLoginAPI, callLoginAPI, getAllCharacterInfo } from '../../apis/UserAPICalls';
 import searchIcon from '../selectCharacterList/images/icon.png';
 import { useNavigate } from 'react-router-dom';
 import { enterChatRoom } from '../../apis/ChatAPICalls';
@@ -19,6 +19,16 @@ function SelectCharacterList() {
     const [popularCharacters, setPopularCharacters] = useState([]);
 
     useEffect(() => {
+
+        const searchParams = new URLSearchParams(window.location.search);
+        const code = searchParams.get('code'); // 쿼리 파라미터에서 code 추출
+
+        if (code) {
+          // 백엔드에 code 전송하여 액세스 토큰 요청
+          dispatch(callLoginAPI(code))
+          dispatch(callKakaoLoginAPI(code))
+        }
+
         dispatch(getAllCharacterInfo());
 
     }, [dispatch]);
@@ -53,7 +63,7 @@ function SelectCharacterList() {
         const chatRoom = await dispatch(enterChatRoom(chatRoomInfo));
         console.log("채팅방 정보:",chatRoom);
 
-        navigate(`/chat_room?session_id=${chatRoom.sessionId}`,character);
+        navigate(`/chat_room?session_id=${chatRoom.sessionId}`);
     };
 
     const handleSearchChange = (e) => {

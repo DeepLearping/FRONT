@@ -1,7 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Gasoek+One&family=Noto+Sans+KR:wght@100..900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Dongle&family=Gasoek+One&family=Jua&family=Noto+Sans+KR:wght@100..900&display=swap');
 .noto-sans-kr {
-    font-family: "Noto Sans KR", sans-serif;
+    font-family: "Jua", sans-serif;
     font-optical-sizing: auto;
 }
 
@@ -16,48 +15,60 @@
 }
 
 .title {
-    font-size: 24px;
-    font-weight: bold;
+    font-size: 2.5rem;
+    font-weight: 500;
+    font-family: "Jua", sans-serif;
     margin-bottom: 30px;
-    font-family: "noto-sans-kr", serif;
+    text-decoration: none;
+}
+
+.title a {
+    color: inherit;
+    text-decoration: none;
 }
 
 .nav-list{
     list-style-type: none;
-    padding: 0;
-    font-family: "noto-sans-kr", serif;
+    padding: 10px;
+    font-family: "Jua", sans-serif;
+    font-size: 1.5rem;
     
 }
 
 .nav-item {
+    display: flex; /* 플렉스 박스 활성화 */
+    align-items: center; /* 수직 중앙 정렬 */
+    justify-content: center; /* 수평 중앙 정렬 */
+    
+    width: 15vh;
     padding: 10px 15px;
     cursor: pointer;
     transition: background-color 0.3s;
-    text-decoration: none; 
-    color: inherit; 
+    text-decoration: none;
+    color: inherit;
 }
+
 
 .nav-item a {
     text-decoration: none; 
     color: inherit; 
-}
-
-
-.nav-item:active {
-    background-color: transparent; 
-    color: inherit; 
+    width: 15vh;
+    display: block;
+    text-align: center;
 }
 
 .nav-item .active {
+    display: block; /* 활성화된 요소가 블록 전체를 차지 */
+    width: 100%;    /* 부모의 크기와 동일하게 */
     background-color: #FCA8A8;
-    font-weight: bold;
-    text-decoration: none; 
+    font-weight: 400;
+    text-decoration: none;
 }
 
 
 .recent-title{
+    height: 25vh;
     margin-top: 30px;
-    margin-bottom: 10px;
     font-size: 18px;
     font-family: "noto-sans-kr", serif;
 }
@@ -65,30 +76,46 @@
 .recent-characters{
     display: flex;
     gap: 10px;
-}
-
-.recent-characters{
     width: 40px;
     height: auto;
 }
 
+.profile-container {
+    position: inherit;
+    bottom: 30px;
+    left: 30px;
+    width: 210px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.profile-container:hover{
+    text-decoration: underline;
+}
+
 .image-container {
-    background-color: #E9DADA; 
+    
     display: block; 
     padding: 10px; 
     border-radius: 50%; 
     border: 5px solid black;
-    margin: auto; 
-    margin-top: 50vh; 
-    margin-bottom: 10px; 
-    width: 40px; 
-    height: 40px; 
+    margin-right: 2cqb;  
+
+    width: 30px; 
+    height: 30px; 
+    cursor: pointer;
     
 }
 
 .mypage-icon {
     display: flex; 
     border-radius: 20%; 
-    width: 40px; 
-    height: 40px; 
+    width: 30px; 
+    height: 30px; 
+}
+
+.profile-description {
+    font-size: 20px;
+    font-weight: 600 ;
 }
