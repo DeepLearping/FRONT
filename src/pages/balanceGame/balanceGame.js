@@ -94,7 +94,7 @@ const BalanceGame = () => {
         const chatRoomInfo = {
             imgUrl: pair.left?.img,
             text: pair.left?.text,
-            charaterId: selectedLeftCharacter
+            characterId: selectedLeftCharacter
         }
 
         console.log("chatRoomInfo :",chatRoomInfo);

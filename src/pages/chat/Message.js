@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import '../../css/chat.css';
 import playbutton from '../chat/images/Button Play.png'
 
-const Message = ({ role, content, msgImgUrl, characterId }) => {
+const Message = ({ role, content, msgImgUrl, characterId, profileImg }) => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const characters = useSelector(state => state.chat.currentRoom.characters)
@@ -12,9 +12,12 @@ const Message = ({ role, content, msgImgUrl, characterId }) => {
   console.log(characterId);
   // const [savedMsgImgUrl, setSavedMsgImgUrl] = useState(msgImgUrl)
 
-  const imageUrl = selectedCharacter && selectedCharacter.profileImage 
-    ? `http://localhost:8080/api/v1/character${selectedCharacter.profileImage}` 
-    : null;
+  const imageUrl = profileImg 
+  ? profileImg
+  : (selectedCharacter && selectedCharacter.profileImage 
+      ? `http://localhost:8080/api/v1/character${selectedCharacter.profileImage}` 
+      : null);
+
   const charName = selectedCharacter ? selectedCharacter.charName : '';
 
 

@@ -30,7 +30,8 @@ const BalanceChat = () => {
 
     const roomInfo = useSelector((state) => state.chat.currentRoom);
     const sessionId = roomInfo.sessionId;
-    const character = useSelector((state) => state.user.characters[0]);
+    const allCharacter = useSelector((state) => state.user.characters);
+    const character = allCharacter.find(character => character.charNo === chatRoomInfo.characterId);
     const chatUser = useSelector((state) => state.chat.currentRoom.member);
 
     const imageUrl = chatRoomInfo.imgUrl;
@@ -115,13 +116,15 @@ const BalanceChat = () => {
 
 
                 {/* 채팅 메시지 영역 */}
-                <div className="chat-messages-bg">
+                <div className="chat-messages-chatRoom">
                     {messages.map((msg, index) => (
                         <Message
                             key={index}
                             role={msg.role}
                             content={msg.content}
                             msgImgUrl={msg.msgImgUrl}
+                            characterId={character.charNo}
+                            profileImg={imageUrl}
                         />
                     ))}
 
