@@ -5,7 +5,6 @@ import "../../css/chat.css";
 import { fetchChatHistory, getMsgImg, matchCharacter, sendMessageToAI } from "../../apis/ChatAPICalls";
 import Message from "./Message";
 import voiceButton from "./images/voice.png";
-import { request } from '../../apis/Apis';
 import loading1 from "./images/loading1.gif";
 import loading2 from "./images/loading2.gif";
 import loading3 from "./images/loading3.gif";
@@ -14,10 +13,9 @@ import loading5 from "./images/loading5.gif";
 import loading6 from "./images/loading6.gif";
 import playbutton from '../chat/images/Button Play.png'
 
-
-const ChatRoom = () => {
+const ChatRoom = ({ }) => {
   const [searchParams] = useSearchParams();
-  const sessionId = searchParams.get("session_id");
+  const sessionId = searchParams.get("session_id"); // URL에서 charNo 추출
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isDescriptionVisible, setDescriptionVisible] = useState(false);
@@ -38,36 +36,35 @@ const ChatRoom = () => {
   const roomName = roomInfo ? roomInfo.roomName : "알 수 없음";
   const description = roomInfo ? roomInfo.description : "";
 
-  // 채팅 기록 로드 & 채팅방 정보 불러오기
-  useEffect(() => {
-    const fetchChatHistory = async () => {
-      try {
-        const response = await request("GET",`/chatMessage/history/${sessionId}`);
-        
-        const parsedMessages = response.map((chat) => ({
-          role: chat.role,
-          content: JSON.parse(chat.message)?.data?.content || "",
-          msgImgUrl: chat.msgImgUrl ? `http://localhost:8080/chatMessage/getMsgImg${chat.msgImgUrl}` : "",
-          characterId: chat.characterId,
-      }));
+ // 채팅 기록 로드 & 채팅방 정보 불러오기
+ useEffect(() => {
+  const fetchChatHistory = async () => {
+    try {
+      const response = await request("GET",`/chatMessage/history/${sessionId}`);
+      
+      const parsedMessages = response.map((chat) => ({
+        role: chat.role,
+        content: JSON.parse(chat.message)?.data?.content || "",
+        msgImgUrl: chat.msgImgUrl ? `http://localhost:8080/chatMessage/getMsgImg${chat.msgImgUrl}` : "",
+        characterId: chat.characterId,
+    }));
 
-        // console.log("채팅기록 : ", parsedMessages);
-        setMessages(parsedMessages || []);
-      } catch (error) {
-        console.error("채팅 기록 로드 오류: ", error);
-      }
-    };
-    fetchChatHistory();
+      // console.log("채팅기록 : ", parsedMessages);
+      setMessages(parsedMessages || []);
+    } catch (error) {
+      console.error("채팅 기록 로드 오류: ", error);
+    }
+  };
+  fetchChatHistory();
 
-    // dispatch(loadChatRoomInfo(sessionId));
-  }, [sessionId]);
+  // dispatch(loadChatRoomInfo(sessionId));
+}, [sessionId]);
 
   // 메시지 전송
   const sendMessage = async () => {
     if (!input.trim()) return;
-  
+
     setInput(""); // 입력값 초기화
-  
     const userMessage = { role: "user", content: input };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
 
@@ -100,7 +97,6 @@ const ChatRoom = () => {
       setIsLoading(false); // 로딩 상태 종료
     }
   };
-  
 
   // 메시지 추가 시 마지막으로 스크롤
   useEffect(() => {
@@ -108,7 +104,7 @@ const ChatRoom = () => {
       messageEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
-
+  
   // 캐릭터 설명 토글
   const toggleDescription = () => {
     setDescriptionVisible(!isDescriptionVisible);
