@@ -17,6 +17,8 @@ function SelectCharacterList() {
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredCharacters, setFilteredCharacters] = useState([]);
     const [popularCharacters, setPopularCharacters] = useState([]);
+    const [isSearching, setIsSearching] = useState(false);
+
 
     useEffect(() => {
 
@@ -24,9 +26,9 @@ function SelectCharacterList() {
         const code = searchParams.get('code'); // 쿼리 파라미터에서 code 추출
 
         if (code) {
-          // 백엔드에 code 전송하여 액세스 토큰 요청
-          dispatch(callLoginAPI(code))
-          dispatch(callKakaoLoginAPI(code))
+            // 백엔드에 code 전송하여 액세스 토큰 요청
+            dispatch(callLoginAPI(code))
+            dispatch(callKakaoLoginAPI(code))
         }
 
         dispatch(getAllCharacterInfo());
@@ -58,12 +60,12 @@ function SelectCharacterList() {
             charName: character.charName,
             memberNo: userInfo.memberNo
         }
-        
+
         // 채팅방 생성 및 입장
         const chatRoom = await dispatch(enterChatRoom(chatRoomInfo));
-        console.log("채팅방 정보:",chatRoom);
+        console.log("채팅방 정보:", chatRoom);
 
-        navigate(`/chat_room?session_id=${chatRoom.sessionId}`,character);
+        navigate(`/chat_room?session_id=${chatRoom.sessionId}`, character);
     };
 
     const handleSearchChange = (e) => {
@@ -71,7 +73,7 @@ function SelectCharacterList() {
     };
 
     return (
-        <div className="container-selectChar"> 
+        <div className="container-selectChar">
             <header className="header-selectChar">
                 <div className="title-selectChar">캐릭터 목록</div>
                 <div className="search-container-selectChar">
@@ -90,34 +92,42 @@ function SelectCharacterList() {
             </header>
 
             {/* 인기 캐릭터 섹션 */}
-            <div className="popular-characters-section">
-                <div className="section-header-selectChar">인기 캐릭터</div>
-                <div className='line-sc'></div>
-                <div className="character-grid-selectChar">
-                    {popularCharacters.map((character) => {
-                        const imageUrl = `http://localhost:8080/api/v1/character${character.profileImage}`;
-                        return (
-                            <div key={character.charNo} className="character-item-selectChar">
-                                <img src={imageUrl} alt={character.charName} />
-                                <div className="character-description-selectChar" onClick={() => handleCharacterClick(character)}>
-                                    <div className="charName-sc">{character.charName}</div>
-                                    <div className='character-description-sc'>
-                                        선택 횟수: {character.chatCount}
+            {searchTerm === '' && (
+                <div className="popular-characters-section">
+                    <div className="section-header-selectChar">인기 캐릭터</div>
+                    <div className='line-sc'></div>
+                    <div className="character-grid-selectChar">
+                        {popularCharacters.map((character) => {
+                            const imageUrl = `http://localhost:8080/api/v1/character${character.profileImage}`;
+                            return (
+                                <div key={character.charNo} className="character-item-selectChar">
+                                    <img src={imageUrl} alt={character.charName} />
+                                    <div className="character-description-selectChar" onClick={() => handleCharacterClick(character)}>
+                                        <div className="charName-sc">{character.charName}</div>
+                                        <div className='character-description-sc'>
+                                            선택 횟수: {character.chatCount}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        );
-                    })}
+                            );
+                        })}
+                    </div>
                 </div>
-            </div>
+            )}
 
             {/* 모든 캐릭터 섹션 */}
             <div className="all-characters-section">
-                <div className="section-header-selectChar">모든 캐릭터</div>
-                <div className='line-sc'></div>
+                <div className="section-header-selectChar">
+                    {searchTerm && filteredCharacters.length > 0 ? "검색 결과" : "모든 캐릭터"}
+                </div>
+                <div className="line-sc"></div>
                 <div className="character-grid-selectChar">
                     {filteredCharacters.length === 0 ? (
-                        <div>검색된 캐릭터가 없습니다.</div>
+                        searchTerm ? (
+                            <div>검색된 캐릭터가 없습니다.</div>
+                        ) : (
+                            <div>모든 캐릭터가 없습니다.</div>
+                        )
                     ) : (
                         filteredCharacters.map((character) => {
                             const imageUrl = `http://localhost:8080/api/v1/character${character.profileImage}`;
@@ -127,16 +137,26 @@ function SelectCharacterList() {
                                     className="character-item-selectChar"
                                 >
                                     <img src={imageUrl} alt={character.charName} />
-                                    <div className="character-description-selectChar" onClick={() => handleCharacterClick(character)}>
+                                    <div
+                                        className="character-description-selectChar"
+                                        onClick={() => handleCharacterClick(character)}
+                                    >
                                         <div className="charName-sc">{character.charName}</div>
-                                        <div className='character-description-sc'>{character.description}</div>
+                                        <div className="character-description-sc">
+                                            {character.description}
+                                        </div>
                                     </div>
                                 </div>
                             );
                         })
                     )}
-                </div>         
+                </div>
             </div>
+
+
+
+
+
         </div>
     );
 }

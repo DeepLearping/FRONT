@@ -64,6 +64,7 @@ const BalanceGame = () => {
         const shuffledModifiers = [...modifiers].sort(() => Math.random() - 0.5);
 
         const leftCharacter = shuffledCharacters[0];
+        console.log("@@@",leftCharacter);
         const rightCharacter = shuffledCharacters[1];
 
         setPair({
@@ -83,6 +84,7 @@ const BalanceGame = () => {
     }, []);
 
     const handleCardClick = () => {
+        
         navigate('/balanceChat');
     };
 

@@ -81,68 +81,117 @@ const BalanceChat = () => {
 
     return (
         <div className="chat-room-bg">
+            {/* 채팅 스크롤 컨테이너 */}
             <div className="chat-scroll-container-bg">
+
+                {/* 채팅 헤더 */}
                 <div className="chat-header-bg">
-                    <img className="charaImg-bg"
+                    <img
+                        className="charaImg-bg"
                         src={contextBg}
                         alt="상황부여 이미지"
                         onClick={() => setModalOpen(true)}
                     />
                     <div className="header-text-bg">상황 부여하기</div>
                 </div>
+
+                {/* 채팅 메시지 영역 */}
                 <div className="chat-messages-bg">
                     {messages.map((msg, index) => (
-                        <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl} />
+                        <Message
+                            key={index}
+                            role={msg.role}
+                            content={msg.content}
+                            msgImgUrl={msg.msgImgUrl}
+                        />
                     ))}
+
                     {isLoading && (
                         <>
+                            {/* 캐릭터 정보 영역 */}
                             <div className="chat-charInfo-bg">
-                                <img className='charaImg-message-bg' src={imageUrl} alt="캐릭터 이미지" />
+                                <img
+                                    className="charaImg-message-bg"
+                                    src={imageUrl}
+                                    alt="캐릭터 이미지"
+                                />
                                 <p>{charName}</p>
-                                <img className='playButton-bg' src={playbutton} alt="재생버튼"></img>
+                                <img
+                                    className="playButton-bg"
+                                    src={playbutton}
+                                    alt="재생버튼"
+                                />
                             </div>
+
+                            {/* 로딩 중 메시지 */}
                             <div className="message-bg ai">
                                 <div className="message-bubble-bg ai">
-                                    <img src={loadingImage} alt="로딩 중" style={{ width: "18vh" }} />
+                                    <img
+                                        src={loadingImage}
+                                        alt="로딩 중"
+                                        style={{ width: "18vh" }}
+                                    />
                                 </div>
                             </div>
                         </>
                     )}
+                    {/* 메시지 끝으로 스크롤 */}
                     <div ref={messageEndRef} />
                 </div>
-            </div>
-            <div className="chat-input-bg">
-                <input
-                    type="text"
-                    placeholder="캐릭터에게 메세지를 보내보세요!"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                />
-                <button onClick={sendMessage}>보내기</button>
-                <div className="voice-button-bg">
-                    <div className="back-voiceButton-bg">
-                        <img src={voiceButton} alt="Voice Button" />
+
+                {/* 채팅 입력창 */}
+                <div className="chat-input-bg">
+                    <input
+                        type="text"
+                        placeholder="캐릭터에게 메세지를 보내보세요!"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                    />
+                    <button onClick={sendMessage}>보내기</button>
+
+                    {/* 음성 버튼 */}
+                    <div className="voice-button-bg">
+                        <div className="back-voiceButton-bg">
+                            <img src={voiceButton} alt="Voice Button" />
+                        </div>
                     </div>
                 </div>
-                {isModalOpen && (
+            </div>
+
+            {/* 모달 창 */}
+            {isModalOpen && (
                 <div className="modal-bg">
                     <div className="modal-content-bg">
-                        <h2>당신은 난폭한 스폰지밥과 집게사장 가게에서  
-                        게살버거를 먹다가 핑핑이를 만났습니다 </h2>
-                        <img
-                            src={context1}
-                            alt="캐릭터 이미지"
-                            className="modal-image-bg"
-                        />
-                        <button onClick={() => setModalOpen(false)}>닫기</button>
-                        <button onClick={() => setModalOpen(false)}>적용</button>
+                        <div className="modal-title-bg">상황 부여하기</div>
+
+                        {/* 이미지와 입력창을 수평으로 정렬 */}
+                        <div className="modal-input-container-bg">
+                            <img
+                                src={context1}
+                                alt="캐릭터 이미지"
+                                className="modal-image-bg"
+                                style={{ width: "400px", height: "350px" }}
+                            />
+                            <textarea
+                                type="text"
+                                className="modal-description-input-bg"
+                                placeholder="상황을 부여해보세요."
+                            // value={modalDescription}
+                            // onChange={(e) => setModalDescription(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="modal-buttons-bg">
+                            <button className="modal-button-bg" onClick={() => setModalOpen(false)}>닫기</button>
+                            <button className="modal-button-bg" onClick={() => setModalOpen(false)}>적용</button>
+                        </div>
                     </div>
                 </div>
             )}
-            </div>
+
         </div>
     );
-};
+}
 
 export default BalanceChat;
