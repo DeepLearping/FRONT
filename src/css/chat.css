@@ -148,7 +148,7 @@
   padding: 10px 1vh;
   left: 240px; 
   bottom: 0;
-  width: calc(100% - 240px); 
+  width: calc(100% - 240px);
 }
 
 
@@ -161,7 +161,7 @@
   height: 3vh;
   margin-left: 50px;
   width: auto;
-  /* 가로 크기 조정 가능 */
+  height: 5vh;
 }
 
 .chat-input-chatRoom button {

@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Dongle&family=Gasoek+One&family=Jua&family=Noto+Sans+KR:wght@100..900&display=swap');
+.card-container-bg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    left: 50%;
+    margin-left: 210px;
+    width: 90%;
+    height: 100%;
+}
+
+.card-bg {
+    margin-top: 25px;
+    margin-left: 50px;
+    margin-right: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid #ccc;
+    border-radius: 45px;
+    width: 600px;
+    height: 850px;
+    text-align: center;
+    background-color: #f9f9f9;
+    overflow: hidden;
+}
+
+.card-image-bg {
+    width: 650px;
+    height: 850px;
+    margin-bottom: 10px;
+    opacity: 0.3;
+    transition: opacity 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.card-image-bg:hover {
+    opacity: 1;
+}
+
+.card-text-bg {
+    margin-top: -730px;
+    font-family: "Jua", sans-serif;
+    font-size: 2.5rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+    z-index: 3;
+}
+
+
+.card-button-bg {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4caf50;
+    color: white;
+    cursor: pointer;
+    z-index: 3;
+}
+
+.card-button-bg:hover {
+    background-color: #45a049;
+}
+
+.middle-bg{
+    margin-top: 400px;
+}
+
+.vs-bg {
+    margin-left: 10px;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.random-button-bg {
+    background-color: rgb(255, 179, 169);
+    width: 60px;
+    height: 60px;
+    margin-top: 300px;
+    cursor: pointer;
+    border-radius: 20px;
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+}
+
+.random-button-bg img {
+    width: 30px;
+    transition: transform 0.5s ease;
+}
+
+.random-button-bg:hover img {
+    transform: rotate(180deg); 
+}

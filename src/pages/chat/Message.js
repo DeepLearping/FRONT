@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import '../../css/chat.css';
 import playbutton from '../chat/images/Button Play.png'
 
-const Message = ({ role, content, msgImgUrl, characterId }) => {
+const Message = ({ role, content, msgImgUrl, characterId, profileImg }) => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const characters = useSelector(state => state.chat.currentRoom.characters)
@@ -12,9 +12,12 @@ const Message = ({ role, content, msgImgUrl, characterId }) => {
   console.log(characterId);
   // const [savedMsgImgUrl, setSavedMsgImgUrl] = useState(msgImgUrl)
 
-  const imageUrl = selectedCharacter && selectedCharacter.profileImage 
-    ? `http://localhost:8080/api/v1/character${selectedCharacter.profileImage}` 
-    : null;
+  const imageUrl = profileImg 
+  ? profileImg
+  : (selectedCharacter && selectedCharacter.profileImage 
+      ? `http://localhost:8080/api/v1/character${selectedCharacter.profileImage}` 
+      : null);
+
   const charName = selectedCharacter ? selectedCharacter.charName : '';
 
   // // 이모지 제거 함수(이득규)
@@ -77,7 +80,7 @@ const Message = ({ role, content, msgImgUrl, characterId }) => {
             {content}
           </div>
           {role === 'ai' && msgImgUrl !== "" && (
-                <img src={msgImgUrl} alt="메세지 감정 이미지" style={{width:"100px"}}/>
+                <img src={msgImgUrl} alt="메세지 감정 이미지" style={{width:"50vh"}}/>
             )}
         </div>
       </div>

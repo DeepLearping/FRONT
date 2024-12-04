@@ -9,11 +9,13 @@ const initialState = {
 /* 액션 타입 설정 */
 export const LOAD_CHAT_ROOM = 'chat/LOAD_CHAT_ROOM';
 export const LOG_OUT = 'chat/LOG_OUT';
+export const LOAD_USER_CHAT_ROOMS = 'chat/LOAD_USER_CHAT_ROOMS';
 
 /* 유저 관련 액션 함수 */
-export const { chat : { loadChatRoom, logOut }} = createActions({
+export const { chat : { loadChatRoom, logOut, loadUserChatRooms }} = createActions({
     [LOAD_CHAT_ROOM]: (data) => (data),
     [LOG_OUT]: () => ({ }),
+    [LOAD_USER_CHAT_ROOMS]: (data) => (data),
 
 });
 
@@ -30,7 +32,13 @@ const chatReducer = handleActions(
         [LOG_OUT]: () => {
             return initialState;
         },
-        
+        [LOAD_USER_CHAT_ROOMS]: (state, data) => {
+
+            return {
+                ...state,
+                chatRooms: data.payload
+            } 
+        },
     },
     initialState
 );
