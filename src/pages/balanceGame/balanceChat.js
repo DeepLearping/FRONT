@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams, useLocation } from "react-router-dom";
 import "../../css/balanceChat.css";
 import { useNavigate } from 'react-router-dom';
-import { fetchChatHistory, getMsgImg, sendMessageToAI } from "../../apis/ChatAPICalls";
+import { getMsgImg, sendBalanceMessageToAI, sendMessageToAI } from "../../apis/ChatAPICalls";
 import Message from "../chat/Message";
 import voiceButton from "../chat/images/voice.png";
 import loading1 from "../chat/images/loading1.gif";
@@ -20,7 +20,7 @@ import context1 from './images/상황1.png';
 const BalanceChat = () => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
-    const [isLoading, setIsLoading] = useState(false); // 로딩 상태
+    const [isLoading, setIsLoading] = useState(false);
     const dispatch = useDispatch();
     const messageEndRef = useRef(null);
     const [loadingImage, setLoadingImage] = useState(null);
@@ -36,6 +36,7 @@ const BalanceChat = () => {
 
     const imageUrl = chatRoomInfo.imgUrl;
     const charName = character ? character.charName : "알 수 없음";
+    const keyword = chatRoomInfo.keyword;
 
     console.log("$$$",chatRoomInfo)
 
@@ -59,10 +60,11 @@ const BalanceChat = () => {
             sessionId,
             charNo: chatRoomInfo.characterId,
             userId: chatUser.memberNo,
+            keyword: chatRoomInfo.keyword
         };
 
         try {
-            const aiResponse = await sendMessageToAI(messageInfo);
+            const aiResponse = await sendBalanceMessageToAI(messageInfo);
             const aiMessage = { 
                 role: "ai", 
                 content: aiResponse.answer, 
@@ -125,6 +127,7 @@ const BalanceChat = () => {
                             msgImgUrl={msg.msgImgUrl}
                             characterId={character.charNo}
                             profileImg={imageUrl}
+                            keyword={keyword}
                         />
                     ))}
 

@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useLocation } from "react-router-dom";
 import '../../css/chat.css';
 import playbutton from '../chat/images/Button Play.png'
 
-const Message = ({ role, content, msgImgUrl, characterId, profileImg }) => {
+const Message = ({ role, content, msgImgUrl, characterId, profileImg, keyword }) => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const characters = useSelector(state => state.chat.currentRoom.characters)
   const selectedCharacter = characters.find(character => character.charNo === characterId);
   // const [savedMsgImgUrl, setSavedMsgImgUrl] = useState(msgImgUrl)
+  const location = useLocation();
+  const chatRoomInfo = location.state;
 
   const imageUrl = profileImg 
   ? profileImg
@@ -18,6 +20,8 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg }) => {
       : null);
 
   const charName = selectedCharacter ? selectedCharacter.charName : '';
+
+  // const keyword = chatRoomInfo.keyword;
 
   // // 이모지 제거 함수(이득규)
   // const removeEmojis = (text) => {
@@ -60,6 +64,7 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg }) => {
   // if(msgImgUrl){
   //   console.log("🎃🎉🎃msgImgUrl: ", msgImgUrl)
   // }
+
   
     return (
       <div>
