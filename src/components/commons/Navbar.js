@@ -4,10 +4,11 @@ import '../../css/Navbar.css';
 import mypageIcon from '../../images/mypage.png';
 import ProfileModal from "../ProfileModal";
 import LoginModal from '../LoginModal';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import BalanceGame from '../../pages/balanceGame/balanceGame';
 import GroupChatFormModal from '../GroupChatFormModal';
-import { enterChatRoom } from '../../apis/ChatAPICalls';
+import { enterChatRoom, fetchRecentChats } from '../../apis/ChatAPICalls';
+import { loadUserChatRooms } from '../../modules/ChatModule';
 
 const Navbar = () => {
     const [isModalOpen, setModalOpen] = useState(false); 
@@ -15,38 +16,14 @@ const Navbar = () => {
     const [isGroupChatFormModalOpen, setGroupChatFormModalOpen] = useState(false);
     const token = localStorage.getItem('token');
     const userInfo = useSelector(state => state.user.userInfo)
-    const [recentChats, setRecentChats] = useState([]);
+    const recentChats = useSelector(state => state.chat.chatRooms);
+    const currentRoom = useSelector(state => state.chat.currentRoom);
     const navigate = useNavigate();
-
-    // 최근 챗팅방 기록을 불러오는 함수
-    const fetchRecentChats = async () => {
-        try{
-            const response = await fetch(`http://localhost:8080/api/v1/chatRoom/${userInfo.memberNo}`);
-            
-            if(!response.ok){
-                throw new Error('네트워크 응답이 옳바르지 않습니다.');
-            }
-            const data = await response.json();
-            const chatRooms = data.results.chatRooms;
-
-            if(Array.isArray(chatRooms)){
-                const sortedChats = chatRooms.sort((a,b) => new Date(b.last_modified_date) - new Date(a.last_modified_date));
-                const topThreeChats = sortedChats.slice(0,3);
-                setRecentChats(topThreeChats);
-            }else{
-                console.error("chatRooms 가 배열이 아닙니다:", chatRooms);
-            }
-        }catch(error){
-            console.error("최근 챗팅 기록을 불러 올 수 없습니다:",error);
-        }
-    };
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        // 토큰 바뀌면 유저 정보 변경
-        if (token && userInfo.memberNo){
-            fetchRecentChats();
-        }
-    }, [token, userInfo.memberNo]); 
+        dispatch(fetchRecentChats(userInfo.memberNo));
+    }, [currentRoom]); 
 
     // 🟨 로그인 모달 창 관리
     const openLoginModal = () => {
@@ -84,12 +61,7 @@ const Navbar = () => {
     };
 
     const handleRecentChatClick = async(sessionId) => {
-        try{
-            await enterChatRoom(sessionId);
-            navigate(`/chat_room?session_id=${sessionId}`);
-        } catch(error){
-            console.error("챗팅방에 들어가는 중 오류 발생:", error)
-        }
+        navigate(`/chat_room?session_id=${sessionId}`);
     }
 
     return(

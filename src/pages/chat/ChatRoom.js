@@ -2,7 +2,7 @@ import "../../css/chat.css";
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
-import { fetchChatHistory, getMsgImg, matchCharacter, sendMessageToAI } from "../../apis/ChatAPICalls";
+import { fetchChatHistory, getMsgImg, loadChatRoomInfo, matchCharacter, sendMessageToAI } from "../../apis/ChatAPICalls";
 import { request } from "../../apis/Apis";
 import Message from "./Message";
 import voiceButton from "./images/voice.png";
@@ -58,7 +58,7 @@ const ChatRoom = ({ }) => {
     };
     fetchChatHistory();
 
-    // dispatch(loadChatRoomInfo(sessionId));
+    dispatch(loadChatRoomInfo(chatUser.memberNo,sessionId));
   }, [sessionId]);
 
   // 메시지 전송
@@ -126,8 +126,6 @@ useEffect(() => {
     return () => clearInterval(interval); 
   }
 }, [messages, isLoading]);
-
-
 
 
 

@@ -1,5 +1,5 @@
 import { fastAPIrequest, request } from './Apis';
-import { loadChatRoom } from '../modules/ChatModule';
+import { loadChatRoom, loadUserChatRooms } from '../modules/ChatModule';
 
 export const sendMessageToAI = async (messageInfo) => {
   const payload = {
@@ -13,17 +13,21 @@ export const sendMessageToAI = async (messageInfo) => {
   return response;
 };
 
-export function loadChatRoomInfo(sessionId) {
+export function loadChatRoomInfo(memberNo,sessionId) {
 
   console.log('채팅방 불러오기...');
+
+  console.log("memberNo",memberNo)
+  console.log("sessionId",sessionId)
 
   /* redux-thunk(미들 웨어)를 이용한 비동기 처리 */
   return async (dispatch, getState) => {
       try {
-          const result = await request('GET', `/api/v1/chatRoom/select/${sessionId}`);
+          const result = await request('GET', `/api/v1/chatRoom/${memberNo}/${sessionId}`);
           console.log('result : ', result); // 서버에서 받아온 data 정보 
 
-          // dispatch(loadChatRoom(data));
+          const data = result.results.chatRooms[0];
+          dispatch(loadChatRoom(data));
 
           return result; // 포장한 데이터를 반환해주기.
       } catch (error) {
@@ -112,6 +116,27 @@ export function matchCharacter(messageInfo) {
       }
   }
 }
+
+export function fetchRecentChats(memberNo) {
+
+    console.log('최근 채팅방 불러오기...');
+  
+    /* redux-thunk(미들 웨어)를 이용한 비동기 처리 */
+    return async (dispatch, getState) => {
+        try {
+            // 서버에 API 요청
+            const result = await request('GET', `/api/v1/chatRoom/${memberNo}`);
+            console.log('result : ', result); // 서버에서 받아온 data 정보 
+
+            const chatRooms = result.results.chatRooms;
+            dispatch(loadUserChatRooms(chatRooms))
+  
+            return result; // 포장한 데이터를 반환해주기.
+        } catch (error) {
+            console.error('API error:', error);
+        }
+    }
+  }
 
 
 // ✨함수 정의 예시✨
