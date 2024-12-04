@@ -2,7 +2,7 @@ import "../../css/chat.css";
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
-import { deleteHumanQuestions, fetchChatHistory, getMsgImg, loadChatInfo, loadChatRoomInfo, matchCharacter, sendMessageToAI } from "../../apis/ChatAPICalls";
+import { deleteHumanQuestions, getMsgImg, loadChatInfo, loadChatRoomInfo, matchCharacter, sendMessageToAI } from "../../apis/ChatAPICalls";
 import { request } from "../../apis/Apis";
 import Message from "./Message";
 import voiceButton from "./images/voice.png";
@@ -60,7 +60,7 @@ const ChatRoom = ({ }) => {
     fetchChatHistory();
 
     // 채팅방 정보 state(currentRoom) 반영 
-    dispatch(loadChatRoomInfo(sessionId));
+    dispatch(loadChatRoomInfo(chatUser.memberNo,sessionId));
 
     // 현재 채팅방 맴버에게 메시지 전송시 inference에 필요한 데이터 미리 로드시켜주기
     const requestDataForFastAPI = {
@@ -146,7 +146,6 @@ useEffect(() => {
     return () => clearInterval(interval); 
   }
 }, [messages, isLoading]);
-
 
   // 캐릭터 설명 토글
   const toggleDescription = () => {

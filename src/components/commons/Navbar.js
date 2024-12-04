@@ -1,12 +1,14 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { NavLink, useNavigate } from "react-router-dom";
 import '../../css/Navbar.css';
 import mypageIcon from '../../images/mypage.png';
 import ProfileModal from "../ProfileModal";
 import LoginModal from '../LoginModal';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import BalanceGame from '../../pages/balanceGame/balanceGame';
 import GroupChatFormModal from '../GroupChatFormModal';
+import { enterChatRoom, fetchRecentChats } from '../../apis/ChatAPICalls';
+import { loadUserChatRooms } from '../../modules/ChatModule';
 
 const Navbar = () => {
     const [isModalOpen, setModalOpen] = useState(false); 
@@ -14,7 +16,14 @@ const Navbar = () => {
     const [isGroupChatFormModalOpen, setGroupChatFormModalOpen] = useState(false);
     const token = localStorage.getItem('token');
     const userInfo = useSelector(state => state.user.userInfo)
+    const recentChats = useSelector(state => state.chat.chatRooms);
+    const currentRoom = useSelector(state => state.chat.currentRoom);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchRecentChats(userInfo.memberNo));
+    }, [currentRoom]); 
 
     // 🟨 로그인 모달 창 관리
     const openLoginModal = () => {
@@ -51,6 +60,10 @@ const Navbar = () => {
         setGroupChatFormModalOpen(false);
     };
 
+    const handleRecentChatClick = async(sessionId) => {
+        navigate(`/chat_room?session_id=${sessionId}`);
+    }
+
     return(
         <div className = "nav-bar">
             <h1 className="title"><NavLink to="/">캐톡</NavLink></h1>
@@ -66,10 +79,20 @@ const Navbar = () => {
                 </li>
             </ul> 
 
+            {/* 챗팅 최근 기록 */}
             <div className='recent-title'>
-                {/* <NavLink to= "/"/></NavLink> */}
+            <h3> 최근 기록 </h3>
+                <ul>
+                    {recentChats.map((chat) => (
+                        <li key = {chat.sessionId} onClick= {() =>
+                            handleRecentChatClick(chat.sessionId)} style={{cursor:'pointer'}}>
+                                {chat.roomName}
+                        </li>  
+                    ))}
+                </ul>
                 <div className='recent-charater'></div>
             </div>
+
             {/* 마이페이지 */}
             <div className='profile-container' onClick={handleProfileClick}>
                 <div className="image-container">
