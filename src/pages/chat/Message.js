@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useSearchParams } from "react-router-dom";
 import '../../css/chat.css';
 import playbutton from '../chat/images/Button Play.png'
 
 const Message = ({ role, content, msgImgUrl, characterId, profileImg }) => {
   const dispatch = useDispatch();
-  const [searchParams] = useSearchParams();
   const characters = useSelector(state => state.chat.currentRoom.characters)
   const selectedCharacter = characters.find(character => character.charNo === characterId);
   // const [savedMsgImgUrl, setSavedMsgImgUrl] = useState(msgImgUrl)
@@ -18,6 +16,9 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg }) => {
       : null);
 
   const charName = selectedCharacter ? selectedCharacter.charName : '';
+
+  // 캐릭터 이름과 콜론 제거
+  const cleanContent = content.replace(/^[^:]+:\s*/, '');
 
   // // 이모지 제거 함수(이득규)
   // const removeEmojis = (text) => {
@@ -71,12 +72,12 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg }) => {
             className='playButton-chatRoom' 
             src={playbutton} 
             alt="재생버튼" 
-            onClick={() => playAudio(content)}></img>
+            onClick={() => playAudio(cleanContent)}></img>
           </div>
         )}
         <div className={`message-chatRoom ${role}`}>
           <div className={`message-bubble-chatRoom ${role}`}>
-            {content}
+            {cleanContent}
           </div>
           {role === 'ai' && msgImgUrl !== "" && (
                 <img src={msgImgUrl} alt="메세지 감정 이미지" style={{width:"50vh"}}/>
