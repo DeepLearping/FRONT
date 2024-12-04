@@ -9,7 +9,6 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg }) => {
   const [searchParams] = useSearchParams();
   const characters = useSelector(state => state.chat.currentRoom.characters)
   const selectedCharacter = characters.find(character => character.charNo === characterId);
-  console.log(characterId);
   // const [savedMsgImgUrl, setSavedMsgImgUrl] = useState(msgImgUrl)
 
   const imageUrl = profileImg 
