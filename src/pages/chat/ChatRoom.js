@@ -2,7 +2,7 @@ import "../../css/chat.css";
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
-import { fetchChatHistory, getMsgImg, matchCharacter, sendMessageToAI } from "../../apis/ChatAPICalls";
+import { deleteHumanQuestions, fetchChatHistory, getMsgImg, loadChatInfo, loadChatRoomInfo, matchCharacter, sendMessageToAI } from "../../apis/ChatAPICalls";
 import { request } from "../../apis/Apis";
 import Message from "./Message";
 import voiceButton from "./images/voice.png";
@@ -30,6 +30,7 @@ const ChatRoom = ({ }) => {
   const roomInfo = useSelector(state => state.chat.currentRoom);
   const characters = useSelector(state => state.chat.currentRoom.characters);
   const chatUser = useSelector(state => state.chat.currentRoom.member);
+  const charNos = characters.map(character => character.charNo);
 
   const imageUrl = characters[0]
     ? `http://localhost:8080/api/v1/character${characters[0].profileImage}`
@@ -58,7 +59,14 @@ const ChatRoom = ({ }) => {
     };
     fetchChatHistory();
 
-    // dispatch(loadChatRoomInfo(sessionId));
+    // 채팅방 정보 state(currentRoom) 반영 
+    dispatch(loadChatRoomInfo(sessionId));
+
+    // 현재 채팅방 맴버에게 메시지 전송시 inference에 필요한 데이터 미리 로드시켜주기
+    const requestDataForFastAPI = {
+      char_id_list: charNos
+    }
+    dispatch(loadChatInfo(requestDataForFastAPI))
   }, [sessionId]);
 
   // 메시지 전송
@@ -69,49 +77,59 @@ const ChatRoom = ({ }) => {
     const userMessage = { role: "user", content: input };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
 
-    // characters의 각 인덱스의 charNo를 리스트로 담기
-    const charNos = characters.map(character => character.charNo);
-    console.log("charNos:",charNos)
-  
-    // 랜덤 로딩 이미지 설정
-    const loadingImages = [loading1, loading2, loading3, loading4, loading5, loading6];
-    setLoadingImage(loadingImages[Math.floor(Math.random() * loadingImages.length)]);
-
-    setIsLoading(true); // 로딩 상태 시작
-
     const matchCharacterInfo = {
       charIdList: charNos,
       conversationId: sessionId,
       question: input
     }
+    console.log("matchCharacterInfo: ",matchCharacterInfo)
     
     const whoToSend = await dispatch(matchCharacter(matchCharacterInfo));
     console.log("whoToSend:",whoToSend);
   
-    // TODO: messageInfo.charNo 및 aiMessage.characterId를 whoToSend에서 받아온 녀석으로 대체해줘야함
     // for문 써서 whoToSend에 담긴 charNo 만큼 메시지 보내기
-    const messageInfo = {
-      question: input,
-      sessionId: sessionId,
-      charNo: charNos[0], // whoToSend
-      userId: chatUser.memberNo
-    }
+    for (const charNo of whoToSend) {
+      // 랜덤 로딩 이미지 설정
+      const loadingImages = [loading1, loading2, loading3, loading4, loading5, loading6];
+      setLoadingImage(loadingImages[Math.floor(Math.random() * loadingImages.length)]);
 
-    try {
-      const aiResponse = await sendMessageToAI(messageInfo);
-      const aiMessage = {
-        role: "ai",
-        content: aiResponse.answer,
-        msgImgUrl: aiResponse.msgImg > 0 ? `http://localhost:8080/chatMessage/getMsgImg/${characters[0].charNo}/${aiResponse.msgImg}.jpg` : "",
-        characterId: charNos[0]
+      setIsLoading(true); // 로딩 상태 시작
+      console.log("character:",charNo);
+      const messageInfo = {
+        question: input,
+        sessionId: sessionId,
+        charNo: charNo, // whoToSend에서 받은 charNo
+        userId: chatUser.memberNo
       };
+  
+      try {
+        const aiResponse = await sendMessageToAI(messageInfo);
+        const aiMessage = {
+          role: "ai",
+          content: aiResponse.answer,
+          msgImgUrl: aiResponse.msgImg > 0 ? `http://localhost:8080/chatMessage/getMsgImg/${charNo}/${aiResponse.msgImg}.jpg` : "",
+          characterId: charNo
+        };
+  
+        // 각 메시지 전송 후 상태 업데이트
+        setMessages((prevMessages) => [...prevMessages, aiMessage]);
+        setIsLoading(false); // 로딩 상태 종료
 
-      setIsLoading(false); // 로딩 상태 종료
-      setMessages((prevMessages) => [...prevMessages, aiMessage]);
-    } catch (error) {
-      console.error("메세지 전송 오류:", error);
-      setIsLoading(false); // 로딩 상태 종료
+      } catch (error) {
+        console.error("메세지 전송 오류:", error);
+      }
     }
+
+    console.log("whoToSend길이:",whoToSend.length-1);
+
+    if (whoToSend.length-1 != 0) {
+      const DeleteUserMessageRequest = {
+        conversationId:sessionId,
+        numToBeDeleted:whoToSend.length-1
+      }
+      dispatch(deleteHumanQuestions(DeleteUserMessageRequest))
+    }
+    
   };
 
 useEffect(() => {
@@ -128,9 +146,6 @@ useEffect(() => {
     return () => clearInterval(interval); 
   }
 }, [messages, isLoading]);
-
-
-
 
 
   // 캐릭터 설명 토글

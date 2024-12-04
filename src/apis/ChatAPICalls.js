@@ -23,7 +23,9 @@ export function loadChatRoomInfo(sessionId) {
           const result = await request('GET', `/api/v1/chatRoom/select/${sessionId}`);
           console.log('result : ', result); // 서버에서 받아온 data 정보 
 
-          // dispatch(loadChatRoom(data));
+          const data = result.results.chatRoom;
+
+        //   dispatch(loadChatRoom(data));
 
           return result; // 포장한 데이터를 반환해주기.
       } catch (error) {
@@ -113,6 +115,40 @@ export function matchCharacter(messageInfo) {
   }
 }
 
+// ✨함수 정의 예시✨
+export function deleteHumanQuestions(DeleteUserMessageRequest) {
+
+    console.log('유저 채팅 기록 중복 삭제...');
+  
+    return async (dispatch, getState) => {
+        try {
+            // 서버에 API 요청
+            const result = await request('POST', '/chatMessage/deleteHumanQuestions',DeleteUserMessageRequest);
+            console.log('result : ', result); // 서버에서 받아온 data 정보 
+  
+            return result; // 포장한 데이터를 반환해주기.
+        } catch (error) {
+            console.error('API error:', error);
+        }
+    }
+}
+
+export function loadChatInfo(requestDataForFastAPI) {
+
+    console.log('캐릭터 inference에 필요한 데이터 미리 로드하기...');
+  
+    return async (dispatch, getState) => {
+        try {
+            // 서버에 API 요청
+            const result = await fastAPIrequest('POST', '/load_info', requestDataForFastAPI);
+            console.log('result : ', result); // 서버에서 받아온 data 정보 
+  
+            return result; // 포장한 데이터를 반환해주기.
+        } catch (error) {
+            console.error('API error:', error);
+        }
+    }
+  }
 
 // ✨함수 정의 예시✨
 export function allHospitalAPI() {
