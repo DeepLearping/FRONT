@@ -2,7 +2,7 @@ import "../../css/chat.css";
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
-import { deleteHumanQuestions, getMsgImg, loadChatInfo, loadChatRoomInfo, matchCharacter, sendMessageToAI } from "../../apis/ChatAPICalls";
+import { deleteHumanQuestions, getMsgImg, loadChatRoomInfo, matchCharacter, sendMessageToAI } from "../../apis/ChatAPICalls";
 import { request } from "../../apis/Apis";
 import Message from "./Message";
 import voiceButton from "./images/voice.png";
@@ -62,11 +62,11 @@ const ChatRoom = ({ }) => {
     // 채팅방 정보 state(currentRoom) 반영 
     dispatch(loadChatRoomInfo(chatUser.memberNo,sessionId));
 
-    // 현재 채팅방 맴버에게 메시지 전송시 inference에 필요한 데이터 미리 로드시켜주기
-    const requestDataForFastAPI = {
-      char_id_list: charNos
-    }
-    dispatch(loadChatInfo(requestDataForFastAPI))
+    // 현재 채팅방 맴버에게 메시지 전송시 inference에 필요한 데이터 미리 로드시켜주기 => FAST API 실행 시 모든 캐릭터 데이터 로드하는 걸로 변경
+    // const requestDataForFastAPI = {
+    //   char_id_list: charNos
+    // }
+    // dispatch(loadChatInfo(requestDataForFastAPI))
   }, [sessionId]);
 
   // 메시지 전송
@@ -84,7 +84,11 @@ const ChatRoom = ({ }) => {
     }
     console.log("matchCharacterInfo: ",matchCharacterInfo)
     
-    const whoToSend = await dispatch(matchCharacter(matchCharacterInfo));
+    let whoToSend = charNos
+    if (charNos.length > 1) {
+      whoToSend = await dispatch(matchCharacter(matchCharacterInfo));
+    }
+    
     console.log("whoToSend:",whoToSend);
   
     // for문 써서 whoToSend에 담긴 charNo 만큼 메시지 보내기
@@ -183,11 +187,6 @@ useEffect(() => {
           ))}
           {isLoading && (
             <>
-              <div className="chat-charInfo-chatRoom">
-                <img className='charaImg-message-chatRoom' src={imageUrl} alt="캐릭터 이미지" />
-                <p>{roomName}</p>
-                <img className='playButton-chatRoom' src={playbutton} alt="재생버튼"></img>
-              </div>
               <div className="message-chatRoom ai">
                 <div className="message-bubble-chatRoom ai">
                   <img src={loadingImage} alt="로딩 중" style={{ width: "18vh" }} />
@@ -195,8 +194,6 @@ useEffect(() => {
               </div>
             </>
           )}
-
-
           <div ref={messageEndRef} />
         </div>
       </div>

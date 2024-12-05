@@ -6,7 +6,6 @@ import playbutton from '../chat/images/Button Play.png'
 
 const Message = ({ role, content, msgImgUrl, characterId, profileImg, keyword }) => {
   const dispatch = useDispatch();
-  const [searchParams] = useSearchParams();
   const characters = useSelector(state => state.chat.currentRoom.characters)
   const selectedCharacter = characters.find(character => character.charNo === characterId);
   // const [savedMsgImgUrl, setSavedMsgImgUrl] = useState(msgImgUrl)
@@ -20,8 +19,6 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg, keyword })
       : null);
 
   const charName = selectedCharacter ? selectedCharacter.charName : '';
-
-  // const keyword = chatRoomInfo.keyword;
 
   // // 이모지 제거 함수(이득규)
   // const removeEmojis = (text) => {
@@ -61,10 +58,6 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg, keyword })
       console.error("오디오 재생 오류:", error);
     }
   };
-  // if(msgImgUrl){
-  //   console.log("🎃🎉🎃msgImgUrl: ", msgImgUrl)
-  // }
-
   
     return (
       <div>
@@ -76,12 +69,12 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg, keyword })
             className='playButton-chatRoom' 
             src={playbutton} 
             alt="재생버튼" 
-            onClick={() => playAudio(content)}></img>
+            onClick={() => playAudio(cleanContent)}></img>
           </div>
         )}
         <div className={`message-chatRoom ${role}`}>
-          <div className={`message-bubble-chatRoom ${role}`}>
-            {content}
+          <div className={`message-bubble-chatRoom ${role} char${characterId}`}>
+            {cleanContent}
           </div>
           {role === 'ai' && msgImgUrl !== "" && (
                 <img src={msgImgUrl} alt="메세지 감정 이미지" style={{width:"50vh"}}/>
