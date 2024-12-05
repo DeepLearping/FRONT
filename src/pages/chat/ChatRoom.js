@@ -190,8 +190,6 @@ useEffect(() => {
               </div>
             </>
           )}
-
-
           <div ref={messageEndRef} />
         </div>
       </div>
