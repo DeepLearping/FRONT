@@ -183,11 +183,6 @@ useEffect(() => {
           ))}
           {isLoading && (
             <>
-              <div className="chat-charInfo-chatRoom">
-                <img className='charaImg-message-chatRoom' src={imageUrl} alt="캐릭터 이미지" />
-                <p>{roomName}</p>
-                <img className='playButton-chatRoom' src={playbutton} alt="재생버튼"></img>
-              </div>
               <div className="message-chatRoom ai">
                 <div className="message-bubble-chatRoom ai">
                   <img src={loadingImage} alt="로딩 중" style={{ width: "18vh" }} />
