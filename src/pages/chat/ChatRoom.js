@@ -19,6 +19,7 @@ const ChatRoom = ({ }) => {
   const sessionId = searchParams.get("session_id"); // URL에서 charNo 추출
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [question, setQuestion] = useState("");
   const [isDescriptionVisible, setDescriptionVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태
   const dispatch = useDispatch();
@@ -90,9 +91,14 @@ const ChatRoom = ({ }) => {
     }
     
     console.log("whoToSend:",whoToSend);
+
+    // whoToSend 배열을 무작위로 섞기
+    const shuffledWhoToSend = whoToSend.sort(() => Math.random() - 0.5);
+    console.log("shuffledWhoToSend:",shuffledWhoToSend);
   
     // for문 써서 whoToSend에 담긴 charNo 만큼 메시지 보내기
-    for (const charNo of whoToSend) {
+    for (const charNo of shuffledWhoToSend) {
+
       // 랜덤 로딩 이미지 설정
       const loadingImages = [loading1, loading2, loading3, loading4, loading5, loading6];
       setLoadingImage(loadingImages[Math.floor(Math.random() * loadingImages.length)]);
@@ -102,7 +108,7 @@ const ChatRoom = ({ }) => {
       const messageInfo = {
         question: input,
         sessionId: sessionId,
-        charNo: charNo, // whoToSend에서 받은 charNo
+        charNo: charNo,
         userId: chatUser.memberNo
       };
   
@@ -115,6 +121,7 @@ const ChatRoom = ({ }) => {
           characterId: charNo
         };
   
+        // setQuestion(aiResponse.answer)
         // 각 메시지 전송 후 상태 업데이트
         setMessages((prevMessages) => [...prevMessages, aiMessage]);
         setIsLoading(false); // 로딩 상태 종료
@@ -133,7 +140,6 @@ const ChatRoom = ({ }) => {
       }
       dispatch(deleteHumanQuestions(DeleteUserMessageRequest))
     }
-    
   };
 
 useEffect(() => {
@@ -156,31 +162,48 @@ useEffect(() => {
     setDescriptionVisible(!isDescriptionVisible);
   };
 
+  const renderCharacterImages = () => {
+    const characterCount = characters.length;
+
+    return characters.slice(0, 4).map((character, index) => (
+        <div 
+            key={index} 
+            className={`charaImg-container-chatRoom ${characterCount === 1 ? 'full-size' : ''}`}
+        >
+            <img
+                className="charaImg-chatRoom"
+                src={`http://localhost:8080/api/v1/character${character.profileImage}`}
+                alt={`캐릭터 이미지 ${index + 1}`}
+            />
+        </div>
+    ));
+};
+
   return (
     <div className="chat-room-chatRoom">
       <div className="chat-scroll-container-chatRoom">
-        <div className="chat-header-chatRoom">
-          {roomInfo && (
-            <>
-              <img
-                className="charaImg-chatRoom"
-                src={imageUrl}
-                alt="캐릭터 이미지"
-              />
-              <p>
-                {roomName}
-                <button onClick={toggleDescription}>
-                  {isDescriptionVisible ? "▲" : "▼"}
-                </button>
-              </p>
-            </>
+        <div className="chatRoom-header-wrapper">
+          <div className="chat-header-chatRoom">
+            {roomInfo && (
+              <>
+                <div className="charaImg-wrapper-chatRoom">
+                  {renderCharacterImages()}
+                </div>
+                <p>
+                  {roomName}
+                  <button onClick={toggleDescription}>
+                    {isDescriptionVisible ? "▲" : "▼"}
+                  </button>
+                </p>
+              </>
+            )}
+          </div>
+          {isDescriptionVisible && (
+            <div className="chat-chara-description-chatRoom">
+              <p>{description}</p>
+            </div>
           )}
         </div>
-        {isDescriptionVisible && (
-          <div className="chat-chara-description-chatRoom">
-            <p>{description}</p>
-          </div>
-        )}
         <div className="chat-messages-chatRoom">
           {messages.map((msg, index) => (
             <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl} characterId={msg.characterId} />
