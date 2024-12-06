@@ -15,7 +15,7 @@ const Navbar = () => {
     const [isProfileModalOpen, setProfileModalOpen] = useState(false);
     const [isGroupChatFormModalOpen, setGroupChatFormModalOpen] = useState(false);
     const token = localStorage.getItem('token');
-    const userInfo = useSelector(state => state.user.userInfo)
+    const userInfo = useSelector(state => state.user.userInfo);
     const recentChats = useSelector(state => state.chat.chatRooms);
     const currentRoom = useSelector(state => state.chat.currentRoom);
     const navigate = useNavigate();
@@ -83,14 +83,26 @@ const Navbar = () => {
             <div className='recent-title'>
             <h3> 최근 기록 </h3>
                 <ul>
-                    {recentChats.map((chat) => (
+                    {recentChats.map((chat) => {
+
+                         // lastChatMessage가 배열이므로 첫 번째 요소를 가져옵니다.
+                        const lastMessage = chat.lastChatMessage.length > 0 ? JSON.parse(chat.lastChatMessage[0].message).data.content : '메시지가 없습니다';
+                        // 이미지 호출하기
+                        const chatRoomImage = `http://localhost:8080/api/v1/character${chat.characters[0].profileImage}`;
+
+                        return(
                         <li key = {chat.sessionId} onClick= {() =>
                             handleRecentChatClick(chat.sessionId)} style={{cursor:'pointer'}}>
-                                {chat.roomName}
+                            <div>
+                                <div>
+                                {chatRoomImage}  {chat.roomName}  
+                                </div>
+                                {lastMessage}
+                            </div>
                         </li>  
-                    ))}
+                        );
+                    })}
                 </ul>
-                <div className='recent-charater'></div>
             </div>
 
             {/* 마이페이지 */}
@@ -100,7 +112,7 @@ const Navbar = () => {
                         src = {mypageIcon} 
                         alt="마이페이지" 
                         className="mypage-icon"
-                        />
+                    />
                 </div>
                 <div className='profile-description'>
                     {token ? (
