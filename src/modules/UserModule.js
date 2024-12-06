@@ -16,15 +16,17 @@ const initialState = {
 export const LOGIN = 'user/LOGIN';
 export const LOG_OUT = 'user/LOG_OUT';
 export const LOAD_ALL_CHARACTER_INFO = 'user/LOAD_ALL_CHARACTER_INFO';
+export const GET_ALL_PROFILE_IMAGE = 'user/GET_ALL_PROFILE_IMAGE';
 export const UPDATE_USER_NICKNAME = 'user/UPDATE_USER_NICKNAME';
 export const LOAD_USER = 'user/LOAD_USER';
 export const CLEAR_MEMBER = 'user/CLEAR_MEMBER';
 
 /* 유저 관련 액션 함수 */
-export const { user : { login, logOut, loadAllCharacterInfo, updateUserNickname, loadUser, clearMember }} = createActions({
+export const { user : { login, logOut, loadAllCharacterInfo,getAllProfileImage, updateUserNickname, loadUser, clearMember }} = createActions({
     [LOGIN]: ({ token, userInfo }) => ({ token, userInfo }),
     [LOG_OUT]: () => ({ }),
     [LOAD_ALL_CHARACTER_INFO]: (data) => (data),
+    [GET_ALL_PROFILE_IMAGE]: (data) => (data),
     [UPDATE_USER_NICKNAME]: (data) => (data),
     [LOAD_USER]: (data) => (data),
     [CLEAR_MEMBER]: () => ({ }),
@@ -49,6 +51,7 @@ const userReducer = handleActions(
             localStorage.removeItem('token');  // 로그인 토큰 삭제
             return initialState;
         },
+
         [LOAD_ALL_CHARACTER_INFO]: (state, data) => {
 
             console.log('data : ', data);
@@ -58,6 +61,15 @@ const userReducer = handleActions(
                 characters: data.payload, // 상태 업데이트
             };
         },
+
+        [GET_ALL_PROFILE_IMAGE]: (state, data) =>{
+            
+            return{
+                ...state,
+                image: data.payload, // 상태 업데이트
+            };
+        },
+
         [UPDATE_USER_NICKNAME]: (state, data) => {
 
             console.log('modifyUserInfo : ', data);

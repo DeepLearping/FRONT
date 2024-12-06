@@ -9,6 +9,7 @@ import BalanceGame from '../../pages/balanceGame/balanceGame';
 import GroupChatFormModal from '../GroupChatFormModal';
 import { enterChatRoom, fetchRecentChats } from '../../apis/ChatAPICalls';
 import { loadUserChatRooms } from '../../modules/ChatModule';
+// import { getAllCharacaterImage } from '../../apis/UserAPICalls';
 
 const Navbar = () => {
     const [isModalOpen, setModalOpen] = useState(false); 
@@ -85,19 +86,28 @@ const Navbar = () => {
                 <ul>
                     {recentChats.map((chat) => {
 
-                         // lastChatMessage가 배열이므로 첫 번째 요소를 가져옵니다.
+                        // lastChatMessage가 배열이므로 첫 번째 요소를 가져옵니다.
                         const lastMessage = chat.lastChatMessage.length > 0 ? JSON.parse(chat.lastChatMessage[0].message).data.content : '메시지가 없습니다';
-                        // 이미지 호출하기
-                        const chatRoomImage = `http://localhost:8080/api/v1/character${chat.characters[0].profileImage}`;
+                        
+                        // 이미지 호출하기 
+                        // const profileImage = getAllCharacaterImage(chat.characters[0].profileImage);
+
+                        const profileImage = `http://localhost:8080/api/v1/character${chat.characters[0].profileImage}`;
+                        
 
                         return(
                         <li key = {chat.sessionId} onClick= {() =>
                             handleRecentChatClick(chat.sessionId)} style={{cursor:'pointer'}}>
                             <div>
-                                <div>
-                                {chatRoomImage}  {chat.roomName}  
+                                <div className = "recentChatRoom-Image-roomName">
+                                    <img className="chatRoomImage" 
+                                        src = {profileImage} 
+                                        style={{ width: '25px', height: '25px', borderRadius: '50%'}}/>
+                                    {chat.roomName}  
                                 </div>
-                                {lastMessage}
+                                <div className="lastMessage">
+                                    {lastMessage}
+                              </div>
                             </div>
                         </li>  
                         );
