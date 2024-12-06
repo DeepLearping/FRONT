@@ -7,6 +7,8 @@ import { request } from "../../apis/Apis";
 import Message from "./Message";
 import voiceButton from "./images/voice.png";
 import playbutton from '../chat/images/Button Play.png'
+import toggleImg from "./images/list_icon.png"
+import searchIcon from "../selectCharacterList/images/icon.png"
 import loading1 from "./images/loading1.gif";
 import loading2 from "./images/loading2.gif";
 import loading3 from "./images/loading3.gif";
@@ -22,6 +24,7 @@ const ChatRoom = ({ }) => {
   const [question, setQuestion] = useState("");
   const [isDescriptionVisible, setDescriptionVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태
+  const [isMembersVisible, setIsMembersVisible] = useState(false);
   const dispatch = useDispatch();
   const messageEndRef = useRef(null);
   const [loadingImage, setLoadingImage] = useState(null);
@@ -173,7 +176,28 @@ useEffect(() => {
             />
         </div>
     ));
-};
+  };
+
+  const renderMemberList = () => {
+    
+    return characters.map((character) => (
+      <div className="member-list-box">
+        <img 
+          className="member-profileImg"
+          src={`http://localhost:8080/api/v1/character${character.profileImage}`}
+          alt="프로필"
+        />
+        <span className="member-name">
+          {character.charName}
+        </span>
+      </div>
+    ))
+  }
+
+  // 멤버 목록 토글
+  const toggleMembers = () => {
+    setIsMembersVisible((prev) => !prev);
+  }
 
   return (
     <div className="chat-room-chatRoom">
@@ -185,20 +209,41 @@ useEffect(() => {
                 <div className="charaImg-wrapper-chatRoom">
                   {renderCharacterImages()}
                 </div>
-                <p>
-                  {roomName}
-                  <button onClick={toggleDescription}>
-                    {isDescriptionVisible ? "▲" : "▼"}
-                  </button>
-                </p>
+                <div className="chatroom-description-container">
+                  <p>
+                    {roomName}
+                    <button onClick={toggleDescription}>
+                      {isDescriptionVisible ? "▲" : "▼"}
+                    </button>
+                  </p>
+                  {isDescriptionVisible && (
+                    <div className="chat-chara-description-chatRoom">
+                      <p>{description}</p>
+                    </div>
+                  )}
+                </div>
+                <div className="chatRoom-tools">
+                  <img
+                    className="chatRoom-search-icon"
+                    src={searchIcon}
+                    alt="검색"
+                  />
+                  <img 
+                    className="chatRoom-member-toggle"
+                    src={toggleImg}
+                    alt="토글"
+                    onClick={toggleMembers}
+                  />
+                </div>
+                <div className={`members-list-container ${isMembersVisible ? 'visible' : ''}`}>
+                  <div className="members-list">
+                    {renderMemberList()}
+                  </div>
+                </div>
               </>
             )}
           </div>
-          {isDescriptionVisible && (
-            <div className="chat-chara-description-chatRoom">
-              <p>{description}</p>
-            </div>
-          )}
+          
         </div>
         <div className="chat-messages-chatRoom">
           {messages.map((msg, index) => (
