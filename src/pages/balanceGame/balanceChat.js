@@ -37,48 +37,70 @@ const BalanceChat = () => {
     const imageUrl = chatRoomInfo.imgUrl;
     const charName = character ? character.charName : "알 수 없음";
     const keyword = chatRoomInfo.keyword;
+    const [modalInput, setModalInput] = useState("");
+    const [situation, setSituation] = useState("");
 
-    console.log("$$$",chatRoomInfo)
 
-    // 메시지 전송
-    const sendMessage = async () => {
-        if (!input.trim()) return;
+    const sendMessage = async (messageInput) => {
+        if (!messageInput || !messageInput.trim()) return; // 공백 메시지 차단
 
-        setInput(""); // 입력값 초기화
+        const userMessage = { role: "user", content: messageInput, situation }; // 상황 추가
 
-        const userMessage = { role: "user", content: input };
+        // 입력 필드 값 초기화 (필드별 구분)
+        if (messageInput === input) {
+            setInput(""); // 채팅 입력 필드 초기화
+        } else if (messageInput === modalInput) {
+            
+        }
+
+        // 사용자 메시지 추가
         setMessages((prevMessages) => [...prevMessages, userMessage]);
 
-        // 랜덤 로딩 이미지 설정
+        // 로딩 상태 처리
+        setIsLoading(true);
         const loadingImages = [loading1, loading2, loading3, loading4, loading5, loading6];
         setLoadingImage(loadingImages[Math.floor(Math.random() * loadingImages.length)]);
 
-        setIsLoading(true); // 로딩 상태 시작
-
-        const messageInfo = {
-            question: input,
-            sessionId,
-            charNo: chatRoomInfo.characterId,
-            userId: chatUser.memberNo,
-            keyword: chatRoomInfo.keyword
-        };
-
         try {
-            const aiResponse = await sendBalanceMessageToAI(messageInfo);
-            const aiMessage = { 
-                role: "ai", 
-                content: aiResponse.answer, 
-                msgImgUrl: aiResponse.msgImg > 0 ? `http://localhost:8080/chatMessage/getMsgImg/${character.charNo}/${aiResponse.msgImg}.jpg` : "",
-                characterId: character.charNo
+            // 메시지 정보 전송
+            const messageInfo = {
+                question: messageInput,
+                sessionId,
+                charNo: chatRoomInfo.characterId,
+                userId: chatUser.memberNo,
+                keyword: chatRoomInfo.keyword,
+                situation: modalInput
             };
 
-            setIsLoading(false); // 로딩 상태 종료
+            const aiResponse = await sendBalanceMessageToAI(messageInfo);
+
+            // AI 응답 메시지 추가
+            const aiMessage = {
+                role: "ai",
+                content: aiResponse.answer,
+                msgImgUrl:
+                    aiResponse.msgImg > 0
+                        ? `http://localhost:8080/chatMessage/getMsgImg/${character.charNo}/${aiResponse.msgImg}.jpg`
+                        : "",
+                characterId: character.charNo,
+            };
+
             setMessages((prevMessages) => [...prevMessages, aiMessage]);
         } catch (error) {
             console.error("메세지 전송 오류:", error);
+        } finally {
             setIsLoading(false); // 로딩 상태 종료
         }
     };
+
+    // 모달 창에서 상황을 설정할 때 호출
+    const handleModalInput = () => {
+        setSituation(modalInput); // 상황을 상태로 설정
+        sendMessage(modalInput); // 입력 값으로 메시지 전송
+        setModalOpen(false); // 모달 닫기
+    };
+
+
 
 
     useEffect(() => {
@@ -105,6 +127,7 @@ const BalanceChat = () => {
                             </p>
                         </>
                     )}
+                    <div className="situation-bc">부여된 상황: {situation}</div>
                     <div className="chat-header-bg">
                         <img
                             className="contextLetter-bg"
@@ -168,12 +191,18 @@ const BalanceChat = () => {
                 <div className="chat-input-bg">
                     <input
                         type="text"
-                        placeholder="캐릭터에게 메세지를 보내보세요!"
+                        placeholder="메세지를 입력하세요"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                e.preventDefault();
+                                sendMessage(input);
+                            }
+                        }}
                     />
-                    <button onClick={sendMessage}>보내기</button>
+                    <button onClick={() => sendMessage(input)}>보내기</button>
+
 
                     {/* 음성 버튼 */}
                     <div className="voice-button-bg">
@@ -190,7 +219,6 @@ const BalanceChat = () => {
                     <div className="modal-content-bg">
                         <div className="modal-title-bg">상황 부여하기</div>
 
-                        {/* 이미지와 입력창을 수평으로 정렬 */}
                         <div className="modal-input-container-bg">
                             <img
                                 src={context1}
@@ -200,17 +228,24 @@ const BalanceChat = () => {
                             />
                             <textarea
                                 type="text"
-                                className="modal-description-input-bg"
-                                placeholder="상황을 부여해보세요."
-                            // value={modalDescription}
-                            // onChange={(e) => setModalDescription(e.target.value)}
+                                placeholder="# 상황 설명: 
+                                상황을 입력하세요. (ex: 집게리아에서 게살버거를 먹다가 핑핑이를 만났다.)"
+                                value={modalInput}
+                                onChange={(e) => setModalInput(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        e.preventDefault();
+                                        handleModalInput();
+                                    }
+                                }}
                             />
                         </div>
 
                         <div className="modal-buttons-bg">
-                            <button className="modal-button-bg" onClick={() => setModalOpen(false)}>적용</button>
+                            <button className="modal-button-bg" onClick={handleModalInput}>적용</button>
                             <button className="modal-button-bg" onClick={() => setModalOpen(false)}>닫기</button>
                         </div>
+
                     </div>
                 </div>
             )}

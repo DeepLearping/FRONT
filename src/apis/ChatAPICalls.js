@@ -19,7 +19,8 @@ export const sendBalanceMessageToAI = async (messageInfo) => {
         conversation_id: messageInfo.sessionId,
         question: messageInfo.question,
         character_id: messageInfo.charNo,
-        keyword:messageInfo.keyword
+        keyword:messageInfo.keyword,
+        situation: messageInfo.situation
     };
 
     const response = await fastAPIrequest("POST", "/balanceChat", payload);
