@@ -2,8 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams, useLocation } from "react-router-dom";
 import "../../css/balanceChat.css";
-import { useNavigate } from 'react-router-dom';
-import { getMsgImg, sendBalanceMessageToAI, sendMessageToAI } from "../../apis/ChatAPICalls";
+import { getMsgImg, sendBalanceMessageToAI } from "../../apis/ChatAPICalls";
 import Message from "../chat/Message";
 import goDownButton from "../chat/images/down.png";
 import loading1 from "../chat/images/loading1.gif";
@@ -18,6 +17,8 @@ import context1 from './images/상황1.png';
 
 
 const BalanceChat = () => {
+    const [searchParams] = useSearchParams();
+    const balanceCharName = searchParams.get("characterName");
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -25,18 +26,20 @@ const BalanceChat = () => {
     const messageEndRef = useRef(null);
     const [loadingImage, setLoadingImage] = useState(null);
     const [isModalOpen, setModalOpen] = useState(false);
-    const location = useLocation();
-    const chatRoomInfo = location.state;
 
-    const roomInfo = useSelector((state) => state.chat.currentRoom);
-    const sessionId = roomInfo.sessionId;
-    const allCharacter = useSelector((state) => state.user.characters);
-    const character = allCharacter.find(character => character.charNo === chatRoomInfo.characterId);
+    // 유저 정보
     const chatUser = useSelector((state) => state.chat.currentRoom.member);
 
+    // 채팅방 & 캐릭터 정보 관련
+    const chatRoomInfo = useSelector((state) => 
+        state.chat.balanceChatRooms.find(room => room.text === balanceCharName)
+    );
+    const sessionId = chatRoomInfo.sessionId;
     const imageUrl = chatRoomInfo.imgUrl;
-    const charName = character ? character.charName : "알 수 없음";
+    const charName = chatRoomInfo ? chatRoomInfo.roomName: "알 수 없음";
     const keyword = chatRoomInfo.keyword;
+    const charId = chatRoomInfo.characterId;
+
     const [modalInput, setModalInput] = useState("# 상황 설명:\n상황을 입력하세요. (ex: 집게리아에서 게살버거를 먹다가 핑핑이를 만났다.)");
     const [situation, setSituation] = useState("");
 
@@ -81,9 +84,9 @@ const BalanceChat = () => {
                 content: aiResponse.answer,
                 msgImgUrl:
                     aiResponse.msgImg > 0
-                        ? `http://localhost:8080/chatMessage/getMsgImg/${character.charNo}/${aiResponse.msgImg}.jpg`
+                        ? `http://localhost:8080/chatMessage/getMsgImg/${charId}/${aiResponse.msgImg}.jpg`
                         : "",
-                characterId: character.charNo,
+                characterId: charId,
             };
 
             setMessages((prevMessages) => [...prevMessages, aiMessage]);
@@ -116,7 +119,7 @@ const BalanceChat = () => {
             {/* 채팅 스크롤 컨테이너 */}
             <div className="chat-scroll-container-bg">
                 <div className="chat-header-bal">
-                    {roomInfo && (
+                    {chatRoomInfo && (
                         <>
                             <img
                                 className="charaImg-bal"
@@ -124,7 +127,7 @@ const BalanceChat = () => {
                                 alt="캐릭터 이미지"
                             />
                             <p>
-                                {roomInfo.roomName}
+                                {chatRoomInfo.roomName}
                             </p>
                         </>
                     )}
@@ -152,7 +155,7 @@ const BalanceChat = () => {
                             role={msg.role}
                             content={msg.content}
                             msgImgUrl={msg.msgImgUrl}
-                            characterId={character.charNo}
+                            characterId={charId}
                             profileImg={imageUrl}
                             keyword={keyword}
                         />
