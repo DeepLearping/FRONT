@@ -19,6 +19,32 @@
     display: inline;
 }
 
+.chat-header-bal {
+    background-color: #f9f9f9;
+    padding-top: 15px;
+    text-align: center;
+    font-size: 20px;
+    color: #333;
+    font-weight: bold;
+    margin-left: 240px
+}
+
+.chat-header-bal button {
+    background-color: #f9f9f9;
+    border: none;
+}
+
+.chat-header-bal p {
+    font-size: 1.1rem;
+    margin: 10px;
+}
+
+.charaImg-bal {
+    width: 10vh;
+    height: 10vh;
+    border-radius: 50%;
+}
+
 .situation-bc{
     /* width: 150px; */
     height: 50px;
