@@ -21,14 +21,14 @@
 
 .situation-bc{
     /* width: 150px; */
-    height: 100px;
+    height: 50px;
     font-weight: 200;
     font-family: "Jua", sans-serif;
     font-size: 1.1rem;
 }
 
 .chat-header-bg {
-    margin-top: -27vh;
+    margin-top: -22vh;
     background-color: #f9f9f9;
     padding-top: 15px;
     text-align: right;
@@ -53,6 +53,14 @@
     border-radius: 50px;
 }
 
+.chat-messages-balChat {
+    margin-top: 5vh;
+    flex: 1;
+    padding: 15px;
+    padding-bottom: 10vh; 
+    background-color: #f9f9f9;
+    scroll-padding-bottom: 10vh;
+}
 
 .chat-messages-bg {
     flex: 1;
@@ -86,6 +94,8 @@
     border-radius: 15px;
     max-width: 70%;
     word-wrap: break-word;
+    transform: translateY(10px); 
+    animation: fadeInUp 0.5s forwards;
 }
 
 .message-bubble-bg.user {

@@ -37,9 +37,10 @@ const BalanceChat = () => {
     const imageUrl = chatRoomInfo.imgUrl;
     const charName = character ? character.charName : "알 수 없음";
     const keyword = chatRoomInfo.keyword;
-    const [modalInput, setModalInput] = useState("");
+    const [modalInput, setModalInput] = useState("# 상황 설명:\n상황을 입력하세요. (ex: 집게리아에서 게살버거를 먹다가 핑핑이를 만났다.)");
     const [situation, setSituation] = useState("");
 
+    const cleanSituation = situation.replace(/^[^:]+:\s*/, '');
 
     const sendMessage = async (messageInput) => {
         if (!messageInput || !messageInput.trim()) return; // 공백 메시지 차단
@@ -50,7 +51,7 @@ const BalanceChat = () => {
         if (messageInput === input) {
             setInput(""); // 채팅 입력 필드 초기화
         } else if (messageInput === modalInput) {
-            
+
         }
 
         // 사용자 메시지 추가
@@ -93,10 +94,10 @@ const BalanceChat = () => {
         }
     };
 
-    // 모달 창에서 상황을 설정할 때 호출
     const handleModalInput = () => {
         setSituation(modalInput); // 상황을 상태로 설정
         sendMessage(modalInput); // 입력 값으로 메시지 전송
+        setModalInput("# 상황 설명:\n상황을 입력하세요. (ex: 집게리아에서 게살버거를 먹다가 핑핑이를 만났다.)");
         setModalOpen(false); // 모달 닫기
     };
 
@@ -127,7 +128,10 @@ const BalanceChat = () => {
                             </p>
                         </>
                     )}
-                    <div className="situation-bc">부여된 상황: {situation}</div>
+                    <div className="situation-bc">
+                        부여된 상황: {cleanSituation && cleanSituation.length > 0 ? (cleanSituation.length > 30 ? cleanSituation.slice(0, 30) + '...' : cleanSituation) : "없음"}
+
+                    </div>
                     <div className="chat-header-bg">
                         <img
                             className="contextLetter-bg"
@@ -141,7 +145,7 @@ const BalanceChat = () => {
 
 
                 {/* 채팅 메시지 영역 */}
-                <div className="chat-messages-chatRoom">
+                <div className="chat-messages-balChat">
                     {messages.map((msg, index) => (
                         <Message
                             key={index}
@@ -227,19 +231,44 @@ const BalanceChat = () => {
                                 style={{ width: "400px", height: "350px" }}
                             />
                             <textarea
-                                type="text"
-                                placeholder="# 상황 설명: 
-                                상황을 입력하세요. (ex: 집게리아에서 게살버거를 먹다가 핑핑이를 만났다.)"
                                 value={modalInput}
-                                onChange={(e) => setModalInput(e.target.value)}
+                                onChange={(e) => {
+                                    const fixedText = "# 상황 설명:\n";
+                                    const userInput = e.target.value;
+
+                                    if (userInput.startsWith(fixedText)) {
+                                        setModalInput(userInput); // Keep the full value if it starts with the fixed text
+                                    } else {
+                                        setModalInput(fixedText + userInput.replace(fixedText, ""));
+                                    }
+                                }}
                                 onKeyDown={(e) => {
+                                    const fixedText = "# 상황 설명:\n";
+                                    const cursorPosition = e.target.selectionStart;
+
+                                    if (e.key === "Backspace") {
+                                        if (modalInput.startsWith(fixedText) && cursorPosition <= fixedText.length) {
+                                            e.preventDefault();
+                                        }
+                                    }
+
                                     if (e.key === "Enter") {
                                         e.preventDefault();
                                         handleModalInput();
                                     }
                                 }}
+                                onFocus={(e) => {
+                                    const fixedText = "# 상황 설명:\n";
+                                    if (modalInput.startsWith(fixedText)) {
+                                        setModalInput(fixedText);
+                                        e.target.setSelectionRange(fixedText.length, fixedText.length);
+                                    }
+                                }}
                             />
+
+
                         </div>
+
 
                         <div className="modal-buttons-bg">
                             <button className="modal-button-bg" onClick={handleModalInput}>적용</button>

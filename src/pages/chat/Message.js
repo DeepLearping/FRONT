@@ -61,7 +61,7 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg, keyword })
       console.error("오디오 재생 오류:", error);
     }
   };
-  
+
     return (
       <div>
         {role === 'ai' && (
@@ -76,7 +76,7 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg, keyword })
           </div>
         )}
         <div className={`message-chatRoom ${role}`}>
-          <div className={`message-bubble-chatRoom ${role} char${characterId}`}>
+          <div className={`message-bubble-chatRoom ${role} char${characterId} ${content.startsWith('# 상황') ? 'balance-situation' : ''}`}>
             {cleanContent}
           </div>
           {role === 'ai' && msgImgUrl !== "" && (
