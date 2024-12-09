@@ -7,6 +7,8 @@ import { request } from "../../apis/Apis";
 import Message from "./Message";
 import goDownButton from "./images/down.png";
 import playbutton from '../chat/images/Button Play.png'
+import toggleImg from "./images/list_icon.png"
+import searchIcon from "../selectCharacterList/images/icon.png"
 import loading1 from "./images/loading1.gif";
 import loading2 from "./images/loading2.gif";
 import loading3 from "./images/loading3.gif";
@@ -19,9 +21,11 @@ const ChatRoom = ({ }) => {
   const sessionId = searchParams.get("session_id"); // URL에서 charNo 추출
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [question, setQuestion] = useState("");
   const [isDescriptionVisible, setDescriptionVisible] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true); // 맨 처음 채팅 기록 로드 (이 때만 맨 아래로 자동 스크롤)
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태
+  const [isMembersVisible, setIsMembersVisible] = useState(false);
   const dispatch = useDispatch();
   const messageEndRef = useRef(null);
   const [loadingImage, setLoadingImage] = useState(null);
@@ -158,9 +162,14 @@ const ChatRoom = ({ }) => {
     }
     
     // console.log("whoToSend:",whoToSend);
+
+    // whoToSend 배열을 무작위로 섞기
+    const shuffledWhoToSend = whoToSend.sort(() => Math.random() - 0.5);
+    // console.log("shuffledWhoToSend:",shuffledWhoToSend);
   
     // for문 써서 whoToSend에 담긴 charNo 만큼 메시지 보내기
-    for (const charNo of whoToSend) {
+    for (const charNo of shuffledWhoToSend) {
+
       // 랜덤 로딩 이미지 설정
       const loadingImages = [loading1, loading2, loading3, loading4, loading5, loading6];
       setLoadingImage(loadingImages[Math.floor(Math.random() * loadingImages.length)]);
@@ -170,7 +179,7 @@ const ChatRoom = ({ }) => {
       const messageInfo = {
         question: input,
         sessionId: sessionId,
-        charNo: charNo, // whoToSend에서 받은 charNo
+        charNo: charNo,
         userId: chatUser.memberNo
       };
   
@@ -183,6 +192,7 @@ const ChatRoom = ({ }) => {
           characterId: charNo
         };
   
+        // setQuestion(aiResponse.answer)
         // 각 메시지 전송 후 상태 업데이트
         setMessages((prevMessages) => [...prevMessages, aiMessage]);
         setIsLoading(false); // 로딩 상태 종료
@@ -201,7 +211,6 @@ const ChatRoom = ({ }) => {
       }
       dispatch(deleteHumanQuestions(DeleteUserMessageRequest))
     }
-    
   };
 
 // 스크롤 내리기
@@ -226,33 +235,92 @@ useEffect(() => {
     setDescriptionVisible(!isDescriptionVisible);
   };
 
+  const renderCharacterImages = () => {
+    const characterCount = characters.length;
+
+    return characters.slice(0, 4).map((character, index) => (
+        <div 
+            key={index} 
+            className={`charaImg-container-chatRoom ${characterCount === 1 ? 'full-size' : ''}`}
+        >
+            <img
+                className="charaImg-chatRoom"
+                src={`http://localhost:8080/api/v1/character${character.profileImage}`}
+                alt={`캐릭터 이미지 ${index + 1}`}
+            />
+        </div>
+    ));
+  };
+
+  const renderMemberList = () => {
+    
+    return characters.map((character) => (
+      <div className="member-list-box">
+        <img 
+          className="member-profileImg"
+          src={`http://localhost:8080/api/v1/character${character.profileImage}`}
+          alt="프로필"
+        />
+        <span className="member-name">
+          {character.charName}
+        </span>
+      </div>
+    ))
+  }
+
+  // 멤버 목록 토글
+  const toggleMembers = () => {
+    setIsMembersVisible((prev) => !prev);
+  }
+
   return (
     <div className="chat-room-chatRoom">
-      <div className="chat-scroll-container-chatRoom" 
+      <div className="chat-scroll-container-chatRoom"
         ref={chatContainerRef} 
         style={{ overflowY: "scroll" }}>
-        <div className="chat-header-chatRoom">
-          {roomInfo && (
-            <>
-              <img
-                className="charaImg-chatRoom"
-                src={imageUrl}
-                alt="캐릭터 이미지"
-              />
-              <p>
-                {roomName}
-                <button onClick={toggleDescription}>
-                  {isDescriptionVisible ? "▲" : "▼"}
-                </button>
-              </p>
-            </>
-          )}
-        </div>
-        {isDescriptionVisible && (
-          <div className="chat-chara-description-chatRoom">
-            <p>{description}</p>
+        <div className="chatRoom-header-wrapper">
+          <div className="chat-header-chatRoom">
+            {roomInfo && (
+              <>
+                <div className="charaImg-wrapper-chatRoom">
+                  {renderCharacterImages()}
+                </div>
+                <div className="chatroom-description-container">
+                  <p>
+                    {roomName}
+                    <button onClick={toggleDescription}>
+                      {isDescriptionVisible ? "▲" : "▼"}
+                    </button>
+                  </p>
+                  {isDescriptionVisible && (
+                    <div className="chat-chara-description-chatRoom">
+                      <p>{description}</p>
+                    </div>
+                  )}
+                </div>
+                <div className="chatRoom-tools">
+                  <img
+                    className="chatRoom-search-icon"
+                    src={searchIcon}
+                    alt="검색"
+                  />
+                  <img 
+                    className="chatRoom-member-toggle"
+                    src={toggleImg}
+                    alt="토글"
+                    onClick={toggleMembers}
+                  />
+                </div>
+                <div className={`members-list-container ${isMembersVisible ? 'visible' : ''}`}>
+                  <div className="members-list">
+                    {renderMemberList()}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
-        )}
+          
+        </div>
         <div className="chat-messages-chatRoom">
           {messages.map((msg, index) => (
             <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl} characterId={msg.characterId} />

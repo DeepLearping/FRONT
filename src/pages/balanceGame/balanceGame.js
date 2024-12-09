@@ -11,6 +11,7 @@ import image6 from './images/김전일.jpg';
 import random from './images/Refresh.png';
 import { useNavigate } from 'react-router-dom';
 import { enterBalanceChatRoom } from '../../apis/ChatAPICalls';
+import { keyboard } from '@testing-library/user-event/dist/keyboard';
 
 const characters = [
     { name: '플랑크톤', img: image1, charNo:5 },
@@ -21,7 +22,7 @@ const characters = [
     { name: '김전일', img: image6, charNo:4 },
 ];
 
-const modifiers = ['집착 심한', '난폭한', '바보같은', '우울한', '애교쟁이', '찌질한', '열혈'];
+const modifiers = ['피곤한', '난폭한', '바보같은', '우울한', '애교쟁이', '찌질한', '열혈'];
 
 const BalanceGame = () => {
     const dispatch = useDispatch();
@@ -31,6 +32,10 @@ const BalanceGame = () => {
     const userInfo = useSelector(state => state.user.userInfo);
     const [selectedLeftCharacter,setSelectedLeftCharacter] = useState('')
     const [selectedRightCharacter,setSelectedRightCharacter] = useState('')
+    const [selectedLeftModifier,setSelectedLeftModifier] = useState('')
+    const [selectedRightModifier,setSelectedRightModifier] = useState('')
+
+
     const navigate = useNavigate();
 
     const generateRandomPair = () => {
@@ -55,23 +60,29 @@ const BalanceGame = () => {
         const shuffledCharacters = [...characters].sort(() => Math.random() - 0.5);
         const shuffledModifiers = [...modifiers].sort(() => Math.random() - 0.5);
 
+        
         const leftCharacter = shuffledCharacters[0];
         console.log("@@@",leftCharacter);
         const rightCharacter = shuffledCharacters[1];
+        const leftModifier = shuffledModifiers[0];
+        const rightModifier = shuffledModifiers[1];
 
         setPair({
             left: {
                 img: leftCharacter.img,
-                text: `${shuffledModifiers[0]} ${leftCharacter.name}`,
+                text: `${leftModifier} ${leftCharacter.name}`,
             },
             right: {
                 img: rightCharacter.img,
-                text: `${shuffledModifiers[1]} ${rightCharacter.name}`,
+                text: `${rightModifier} ${rightCharacter.name}`,
             },
         });
         
         setSelectedLeftCharacter(shuffledCharacters[0].charNo);
         setSelectedRightCharacter(shuffledCharacters[1].charNo);
+        
+        setSelectedLeftModifier(shuffledModifiers[0]);
+        setSelectedRightModifier(shuffledModifiers[1]);
         
     };
 
@@ -94,14 +105,39 @@ const BalanceGame = () => {
         const chatRoomInfo = {
             imgUrl: pair.left?.img,
             text: pair.left?.text,
-            characterId: selectedLeftCharacter
+            characterId: selectedLeftCharacter,
+            keyword: selectedLeftModifier
         }
 
         console.log("chatRoomInfo :",chatRoomInfo);
 
-        navigate('/balanceChat', { state:chatRoomInfo });
+        navigate(`/balanceChat?charaterName=${chatRoomInfo.text}`, { state:chatRoomInfo });
     };
 
+    const handleRightCardClick = () => {
+        
+        // 채팅방 생성
+        const enterChatRoomInfo = {
+            charNo: selectedRightCharacter,
+            charName: pair.right?.text,
+            memberNo: userInfo.memberNo
+        }
+
+        dispatch(enterBalanceChatRoom(enterChatRoomInfo))
+
+        // 생성된 채팅방의 정보를 
+        const chatRoomInfo = {
+            imgUrl: pair.right?.img,
+            text: pair.right?.text,
+            characterId: selectedRightCharacter,
+            keyword: selectedRightModifier
+        }
+
+        console.log("chatRoomInfo :",chatRoomInfo);
+
+
+        navigate(`/balanceChat?charaterName=${chatRoomInfo.text}`, { state:chatRoomInfo });
+    };
     
 
     return (
@@ -122,7 +158,7 @@ const BalanceGame = () => {
                 </div>
             </div>
 
-            <div className="card-bg">
+            <div className="card-bg" onClick={handleRightCardClick}>
                 <img src={pair.right?.img} alt="캐릭터" className="card-image-bg" />
                 <div className="card-text-bg">
                     <span className="change-text2-bg" style={{ color: randomColor2 }}>
