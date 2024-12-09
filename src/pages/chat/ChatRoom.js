@@ -5,7 +5,7 @@ import { useSearchParams } from "react-router-dom";
 import { deleteHumanQuestions, getMsgImg, loadChatRoomInfo, matchCharacter, sendMessageToAI } from "../../apis/ChatAPICalls";
 import { request } from "../../apis/Apis";
 import Message from "./Message";
-import voiceButton from "./images/voice.png";
+import goDownButton from "./images/down.png";
 import playbutton from '../chat/images/Button Play.png'
 import toggleImg from "./images/list_icon.png"
 import searchIcon from "../selectCharacterList/images/icon.png"
@@ -24,12 +24,16 @@ const ChatRoom = ({ }) => {
   const [input, setInput] = useState("");
   const [question, setQuestion] = useState("");
   const [isDescriptionVisible, setDescriptionVisible] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true); // 맨 처음 채팅 기록 로드 (이 때만 맨 아래로 자동 스크롤)
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태
   const [isMembersVisible, setIsMembersVisible] = useState(false);
   const dispatch = useDispatch();
   const messageEndRef = useRef(null);
   const [loadingImage, setLoadingImage] = useState(null);
 
+  const chatContainerRef = useRef(null);
+  const [offset, setOffset] = useState(0);      // 페이징에 필요한 offset
+  const [hasMore, setHasMore] = useState(true); // 로드할 메세지가 더 있는지 확인
 
   // 현재 캐릭터 정보 추출
   const roomInfo = useSelector(state => state.chat.currentRoom);
@@ -43,36 +47,100 @@ const ChatRoom = ({ }) => {
   const roomName = roomInfo ? roomInfo.roomName : "알 수 없음";
   const description = roomInfo ? roomInfo.description : "";
 
-  // 채팅 기록 로드 & 채팅방 정보 불러오기
+  // 채팅 기록 initial 로드 & 채팅방 정보 불러오기
   useEffect(() => {
-    const fetchChatHistory = async () => {
+    const fetchInitialChatHistory = async () => {
+      setMessages([]);
+      setOffset(0);
+      setHasMore(true);
+      setIsInitialLoad(true);
+      setIsLoading(true);
+      
       try {
-        const response = await request("GET", `/chatMessage/history/${sessionId}`);
-
-        const parsedMessages = response.map((chat) => ({
-          role: chat.role,
-          content: JSON.parse(chat.message)?.data?.content || "",
-          msgImgUrl: chat.msgImgUrl ? `http://localhost:8080/chatMessage/getMsgImg${chat.msgImgUrl}` : "",
-          characterId: chat.characterId,
-        }));
-
-        // console.log("채팅기록 : ", parsedMessages);
-        setMessages(parsedMessages || []);
+        await fetchChatHistory();
+        // scrollToBottom(); // 맨 아래로 scroll down
       } catch (error) {
-        console.error("채팅 기록 로드 오류: ", error);
+        console.error("채팅 히스토리 fetch 에러:", error);
+      } finally {
+        setIsInitialLoad(false);
+        setIsLoading(false);
       }
     };
-    fetchChatHistory();
 
-    // 채팅방 정보 state(currentRoom) 반영 
-    dispatch(loadChatRoomInfo(chatUser.memberNo,sessionId));
-
-    // 현재 채팅방 맴버에게 메시지 전송시 inference에 필요한 데이터 미리 로드시켜주기 => FAST API 실행 시 모든 캐릭터 데이터 로드하는 걸로 변경
-    // const requestDataForFastAPI = {
-    //   char_id_list: charNos
-    // }
-    // dispatch(loadChatInfo(requestDataForFastAPI))
+    dispatch(loadChatRoomInfo(chatUser.memberNo, sessionId));
+    fetchInitialChatHistory();
+    
   }, [sessionId]);
+
+  const fetchChatHistory = async () => {
+    if (isLoading || !hasMore) return;
+
+    setIsLoading(true);
+    try {
+      const chatContainer = chatContainerRef.current;
+      const previousScrollHeight = chatContainer.scrollHeight; // Store the scroll height before loading messages
+
+      const response = await request("GET", `/chatMessage/history/${sessionId}?limit=10&offset=${offset}`);
+
+      const parsedMessages = response.map((chat) => ({
+        id: chat.id,
+        role: chat.role,
+        content: JSON.parse(chat.message)?.data?.content || "",
+        msgImgUrl: chat.msgImgUrl ? `http://localhost:8080/chatMessage/getMsgImg${chat.msgImgUrl}` : "",
+        characterId: chat.characterId,
+      }));
+
+      if (parsedMessages.length === 0) {
+        // 더 이상 로드할 메세지가 없음
+        setHasMore(false);
+      } else {
+        if (parsedMessages.length < 10){
+          setHasMore(false);
+        }
+
+        // DESC로 최신 메세지 10개씩 가져와서 ASC order로 정렬해서 보여주기
+        parsedMessages.sort((a, b) => a.id - b.id);
+        
+        setMessages((prevMessages) => [...parsedMessages, ...prevMessages]);
+        setOffset(offset + 1);
+      }
+
+      if (!isInitialLoad) {
+        chatContainer.scrollTop = chatContainer.scrollHeight - previousScrollHeight;
+      }
+    } catch (error) {
+      console.error("채팅 히스토리 fetch 에러:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleScroll = () => {
+    const chatContainer = chatContainerRef.current;
+
+    // Trigger when the scrollbar reaches the top
+    if (chatContainer.scrollTop === 0 && hasMore && !isLoading) {
+      const previousHeight = chatContainer.scrollHeight;
+
+      fetchChatHistory().then(() => {
+        // Adjust scroll position to maintain user view
+        chatContainer.scrollTop = chatContainer.scrollHeight - previousHeight;
+      });
+    }
+  };
+
+  useEffect(() => {
+    const chatContainer = chatContainerRef.current;
+    chatContainer.addEventListener("scroll", handleScroll);
+
+    return () => chatContainer.removeEventListener("scroll", handleScroll);
+  }, [hasMore, isLoading]);
+
+  const scrollToBottom = () => {
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   // 메시지 전송
   const sendMessage = async () => {
@@ -87,18 +155,18 @@ const ChatRoom = ({ }) => {
       conversationId: sessionId,
       question: input
     }
-    console.log("matchCharacterInfo: ",matchCharacterInfo)
+    // console.log("matchCharacterInfo: ",matchCharacterInfo)
     
     let whoToSend = charNos
     if (charNos.length > 1) {
       whoToSend = await dispatch(matchCharacter(matchCharacterInfo));
     }
     
-    console.log("whoToSend:",whoToSend);
+    // console.log("whoToSend:",whoToSend);
 
     // whoToSend 배열을 무작위로 섞기
     const shuffledWhoToSend = whoToSend.sort(() => Math.random() - 0.5);
-    console.log("shuffledWhoToSend:",shuffledWhoToSend);
+    // console.log("shuffledWhoToSend:",shuffledWhoToSend);
   
     // for문 써서 whoToSend에 담긴 charNo 만큼 메시지 보내기
     for (const charNo of shuffledWhoToSend) {
@@ -108,7 +176,7 @@ const ChatRoom = ({ }) => {
       setLoadingImage(loadingImages[Math.floor(Math.random() * loadingImages.length)]);
 
       setIsLoading(true); // 로딩 상태 시작
-      console.log("character:",charNo);
+      // console.log("character:",charNo);
       const messageInfo = {
         question: input,
         sessionId: sessionId,
@@ -137,7 +205,7 @@ const ChatRoom = ({ }) => {
 
     console.log("whoToSend길이:",whoToSend.length-1);
 
-    if (whoToSend.length-1 != 0) {
+    if (whoToSend.length-1 !== 0) {
       const DeleteUserMessageRequest = {
         conversationId:sessionId,
         numToBeDeleted:whoToSend.length-1
@@ -146,12 +214,13 @@ const ChatRoom = ({ }) => {
     }
   };
 
-  useEffect(() => {
-    if (messageEndRef.current) {
-      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
+// 스크롤 내리기
+useEffect(() => {
+  if (messageEndRef.current) {
+    messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+  }
 
-    if (isLoading) {
+    if (isInitialLoad) {
       const interval = setInterval(() => {
         if (messageEndRef.current) {
           messageEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -159,7 +228,8 @@ const ChatRoom = ({ }) => {
       }, 100); 
       return () => clearInterval(interval); 
     }
-  }, [messages, isLoading]);
+  }, [isInitialLoad]);
+// }, [isInitialLoad, messages, isLoading]);
 
   const searchChat = () => {
     dispatch(logOut());
@@ -210,7 +280,9 @@ const ChatRoom = ({ }) => {
 
   return (
     <div className="chat-room-chatRoom">
-      <div className="chat-scroll-container-chatRoom">
+      <div className="chat-scroll-container-chatRoom"
+        ref={chatContainerRef} 
+        style={{ overflowY: "scroll" }}>
         <div className="chatRoom-header-wrapper">
           <div className="chat-header-chatRoom">
             {roomInfo && (
@@ -281,8 +353,8 @@ const ChatRoom = ({ }) => {
         />
         <button onClick={sendMessage}>보내기</button>
         <div className="voice-button-chatRoom">
-          <div className="back-voiceButton-chatRoom">
-            <img src={voiceButton} alt="Voice Button" />
+          <div className="back-voiceButton-chatRoom" onClick={scrollToBottom}>
+            <img src={goDownButton} alt="Voice Button" />
           </div>
         </div>
       </div>

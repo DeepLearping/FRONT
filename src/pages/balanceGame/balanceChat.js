@@ -4,7 +4,7 @@ import { useSearchParams, useLocation } from "react-router-dom";
 import "../../css/balanceChat.css";
 import { getMsgImg, sendBalanceMessageToAI } from "../../apis/ChatAPICalls";
 import Message from "../chat/Message";
-import voiceButton from "../chat/images/voice.png";
+import goDownButton from "../chat/images/down.png";
 import loading1 from "../chat/images/loading1.gif";
 import loading2 from "../chat/images/loading2.gif";
 import loading3 from "../chat/images/loading3.gif";
@@ -214,7 +214,7 @@ const BalanceChat = () => {
                     {/* 음성 버튼 */}
                     <div className="voice-button-bg">
                         <div className="back-voiceButton-bg">
-                            <img src={voiceButton} alt="Voice Button" />
+                            <img src={goDownButton} alt="Voice Button" />
                         </div>
                     </div>
                 </div>
