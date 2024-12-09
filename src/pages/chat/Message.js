@@ -7,7 +7,6 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg }) => {
   const dispatch = useDispatch();
   const characters = useSelector(state => state.chat.currentRoom.characters)
   const selectedCharacter = characters.find(character => character.charNo === characterId);
-  // const [savedMsgImgUrl, setSavedMsgImgUrl] = useState(msgImgUrl)
 
   const imageUrl = profileImg 
   ? profileImg
@@ -58,9 +57,6 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg }) => {
       console.error("오디오 재생 오류:", error);
     }
   };
-  // if(msgImgUrl){
-  //   console.log("🎃🎉🎃msgImgUrl: ", msgImgUrl)
-  // }
   
     return (
       <div>
@@ -76,7 +72,7 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg }) => {
           </div>
         )}
         <div className={`message-chatRoom ${role}`}>
-          <div className={`message-bubble-chatRoom ${role}`}>
+          <div className={`message-bubble-chatRoom ${role} char${characterId}`}>
             {cleanContent}
           </div>
           {role === 'ai' && msgImgUrl !== "" && (

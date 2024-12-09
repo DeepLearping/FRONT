@@ -228,9 +228,33 @@
 }
 
 .message-bubble-chatRoom.ai {
-  background-color: #ffec99;
+  /* background-color: #ffec99; */
   color: #333;
   text-align: left;
+}
+
+.char1 {
+  background-color: #e7ddff;
+}
+
+.char2 {
+  background-color: #ffdcc8;
+}
+
+.char3 {
+  background-color: #bebebe;
+}
+
+.char4 {
+  background-color: #ceddff;
+}
+
+.char5 {
+  background-color: #d1ffde;
+}
+
+.char6 {
+  background-color: #ffefaa;
 }
 
 .message-img-chatRoom {
