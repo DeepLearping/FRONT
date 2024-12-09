@@ -87,7 +87,12 @@ const Navbar = () => {
                     {recentChats.map((chat) => {
 
                         // lastChatMessage가 배열이므로 첫 번째 요소를 가져옵니다.
-                        const lastMessage = chat.lastChatMessage.length > 0 ? JSON.parse(chat.lastChatMessage[0].message).data.content : '메시지가 없습니다';
+                        const lastMessage = chat.lastChatMessage.length > 0 
+                        ? (() => {
+                                const content = JSON.parse(chat.lastChatMessage[0].message).data.content;
+                                return content.length > 15 ? content.substring(0, 15) + '...' : content;
+                        })()
+                        : '메시지가 없습니다';
                         
                         // 이미지 호출하기 
                         // const profileImage = getAllCharacaterImage(chat.characters[0].profileImage);
@@ -114,6 +119,7 @@ const Navbar = () => {
                     })}
                 </ul>
             </div>
+
 
             {/* 마이페이지 */}
             <div className='profile-container' onClick={handleProfileClick}>

@@ -154,11 +154,6 @@ function SelectCharacterList() {
                     )}
                 </div>
             </div>
-
-
-
-
-
         </div>
     );
 }
