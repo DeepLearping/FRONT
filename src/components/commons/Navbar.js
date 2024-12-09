@@ -97,17 +97,26 @@ const Navbar = () => {
                         // 이미지 호출하기 
                         // const profileImage = getAllCharacaterImage(chat.characters[0].profileImage);
 
-                        const profileImage = `http://localhost:8080/api/v1/character${chat.characters[0].profileImage}`;
-                        
+                        let profileImages;
+                        if (chat.characters.length === 1) {
+                            profileImages = [`http://localhost:8080/api/v1/character${chat.characters[0].profileImage}`];
+                        } else {
+                            profileImages = chat.characters.map(character => `http://localhost:8080/api/v1/character${character.profileImage}`);
+                        }
 
                         return(
                         <li key = {chat.sessionId} onClick= {() =>
                             handleRecentChatClick(chat.sessionId)} style={{cursor:'pointer'}}>
                             <div>
                                 <div className = "recentChatRoom-Image-roomName">
+                                    {profileImages.map((image,index) =>(
                                     <img className="chatRoomImage" 
-                                        src = {profileImage} 
-                                        style={{ width: '25px', height: '25px', borderRadius: '50%'}}/>
+                                        key={index}
+                                        src = {image} 
+                                        alt={`Character ${index + 1}`} 
+                                        style={{ width: '18px', height: '18px', borderRadius: '50%'}}/>
+                                    ))}   
+
                                     {chat.roomName}  
                                 </div>
                                 <div className="lastMessage">

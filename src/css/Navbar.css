@@ -142,14 +142,17 @@
 }
 
 .recentChatRoom-Image-roomName{
-    font-size:25px;
+    font-size:20px;
+    
 }
 
 .chatRoomImage{
     margin-top: 0.1em;
-    margin-right: 0.4em;  
+    margin-right: 0.2em;  
+   
 }
 
 .lastMessage{
     font-size:14px;
 }
+
