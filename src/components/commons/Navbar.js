@@ -61,7 +61,7 @@ const Navbar = () => {
     };
 
     const handleRecentChatClick = async(sessionId) => {
-        navigate(`/chat_room?session_id=${sessionId}`);
+        window.location.href = `http://localhost:3000/chat_room?session_id=${sessionId}`
     }
 
     return(
