@@ -16,14 +16,23 @@
 }
 
 .chatRoom-header-wrapper {
-  margin-left: 240px;
+  position: fixed;
+  height: 120px;
+  top: 0; /* 화면의 상단에 위치 */
+  left: 240px; /* 왼쪽에 위치 */
+  right: 0; /* 오른쪽에 위치 */
+  background-color: #fff; /* 배경색 설정 */
+  z-index: 1000; /* 다른 요소들 위에 표시되도록 z-index 설정 */
+  padding: 10px; /* 여백 설정 */
 }
 
 .chat-header-chatRoom {
   position: relative;
   background-color: #f9f9f9;
-  padding-top: 15px;
-  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
   font-size: 20px;
   color: #333;
   font-weight: bold;
@@ -41,25 +50,22 @@
 }
 
 .chat-header-chatRoom p {
-  font-size: 1.1rem;
   margin: 10px;
 }
 
 .chat-chara-description-chatRoom {
-  justify-content: center;
-  align-items: center;
-  margin: auto;
-  margin-left: 42.5%;
   width: 50vh;
   height: auto;
+  font-size: 15px;
+  font-weight: normal;
   background-color: #f9f9f9;
 }
 
 .charaImg-wrapper-chatRoom {
-  position: relative; /* 자식 요소의 절대 위치 지정을 위해 relative 설정 */
-  left: 31vw;
-  width: 100px; /* 원하는 원의 크기 */
-  height: 100px; /* 원하는 원의 크기 */
+  position: relative; 
+  margin: 0 10px 0 10px;
+  width: 100px; 
+  height: 100px; 
   border-radius: 35%;
   overflow: hidden; /* 자식 요소가 원을 넘지 않도록 설정 */
 }
@@ -106,8 +112,84 @@
   height: 100%;
 }
 
+.chatroom-description-container{
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+}
+
+.chatRoom-tools{
+  display: flex;
+  justify-content: center;
+  width: 100px;
+  height: 50px;
+  padding-right: 10px;
+}
+
+.chatRoom-search-icon{
+  padding: 6px;
+  cursor: pointer;
+}
+
+.chatRoom-member-toggle{
+  width: 40px;
+  cursor: pointer;
+}
+
+.members-list-container {
+  position: fixed;
+  background-color: white;
+  width: 200px;
+  max-height: 250px;
+  top: 70px;
+  right: 20px;
+
+  border: 1px solid rgb(180, 180, 180);
+  border-radius: 5px;
+
+  overflow-y: auto; /* 스크롤 가능 */
+  transition: opacity 1s ease, transform 1s ease; /* 애니메이션 효과 */
+  opacity: 0; /* 초기 상태에서 투명하게 설정 */
+  transform: translateY(0); /* 위로 이동 */
+  pointer-events: none; /* 비활성화 상태에서 클릭 방지 */
+}
+
+.members-list-container.visible {
+  opacity: 1; /* 보이게 설정 */
+  transform: translateY(70px); /* 원래 위치로 이동 */
+  pointer-events: auto; /* 활성화 상태에서 클릭 가능 */
+}
+
+.members-list {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5px;
+}
+
+.member-list-box{
+  display: flex;
+  align-items: center;
+  height: 55px;
+}
+
+.member-profileImg{
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+  border-radius: 40%;
+  margin: 5px 5px 0px 5px;
+}
+
+.member-name {
+  width: 160px;
+  padding-right: 10px;
+  text-align: right;
+  font-size: 18px;
+}
+
 .chat-messages-chatRoom {
-  flex: 1;
+  position: relative;
+  top: 130px;
   padding: 15px;
   padding-bottom: 10vh; 
   background-color: #f9f9f9;
@@ -117,7 +199,7 @@
 
 .message-chatRoom {
   margin-top: 5px;
-  margin-left: 350px;
+  margin-left: 300px;
   margin-right: 2%;
   display: flex;
   flex-direction: column;
@@ -136,7 +218,7 @@
   margin-bottom: 10px;
   padding: 10px 15px;
   border-radius: 15px;
-  max-width: 70%;
+  max-width: 60%;
   word-wrap: break-word;
   opacity: 0; 
   transform: translateY(10px); 
@@ -236,7 +318,7 @@
 }
 
 .chat-charInfo-chatRoom {
-  margin-left: 300px;
+  margin-left: 240px;
   display: flex;
   align-items: center;
   gap: 2vh;

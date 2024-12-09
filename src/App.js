@@ -8,7 +8,6 @@ import BalanceGame from "./pages/balanceGame/balanceGame";
 import BalanceChat from "./pages/balanceGame/balanceChat";
 
 function App() {
-  const token = localStorage.getItem('token');
 
   return (
     <BrowserRouter>
@@ -16,7 +15,7 @@ function App() {
         <Route path="/" element={<UserLayout />}>
           <Route index element={<SelectCharacterList />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/chat_room" element={<ProtectedRoute element={<ChatRoom />} token={token} />} />
+          <Route path="/chat_room" element={<ProtectedRoute element={<ChatRoom />} />} />
           <Route path="/selectCharacterList" element={<SelectCharacterList/>} />
           <Route path="/balanceGame" element={<BalanceGame/>}/>
           <Route path="/balanceChat" element={<BalanceChat/>}/>
