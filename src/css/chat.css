@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&family=Yeon+Sung&display=swap');
 .body-chatRoom {
   font-family: Arial, sans-serif;
   background-color: #f9f9f9;
@@ -137,12 +138,15 @@
   border-radius: 15px;
   max-width: 70%;
   word-wrap: break-word;
+  opacity: 0; 
+  transform: translateY(10px); 
+  animation: fadeInUp 0.5s forwards;
 }
 
 .message-bubble-chatRoom.user {
   background-color: #f5c0c0;
   color: #333;
-  text-align: right;
+  text-align: left;
 }
 
 .message-bubble-chatRoom.ai {
@@ -174,6 +178,51 @@
 .char6 {
   background-color: #ffefaa;
 }
+
+
+.message-bubble-chatRoom.user.balance-situation {
+  background-color: #b6cdff;
+  color: black;
+  font-size: 1.2rem;
+  font-family: "Noto Serif KR", serif;
+  font-optical-sizing: auto;
+  font-weight: normal;
+  font-style: normal;
+  animation: sparkleBackground 15s infinite, fadeInUp 0.5s forwards; /* Apply the sparkling animation */
+}
+
+/* Define the sparkle animation */
+@keyframes sparkleBackground {
+  0% {
+    box-shadow: 0 0 5px 1px rgba(150, 183, 255, 0.8), 0 0 5px 3px rgba(150, 183, 255, 0.6);
+  }
+  25% {
+    box-shadow: 0 0 15px 2.5px rgba(150, 183, 255, 1), 0 0 15px 7px rgba(150, 183, 255, 0.8);
+  }
+  50% {
+    box-shadow: 0 0 10px 1.5px rgba(150, 183, 255, 0.6), 0 0 10px 5px rgba(150, 183, 255, 0.4);
+  }
+  75% {
+    box-shadow: 0 0 15px 3px rgba(150, 183, 255, 1), 0 0 15px 9px rgba(150, 183, 255, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 5px 1.5px rgba(150, 183, 255, 0.8), 0 0 5px 2px rgba(150, 183, 255, 0.6);
+  }
+}
+
+
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 
 .message-img-chatRoom {
   text-align: center;
