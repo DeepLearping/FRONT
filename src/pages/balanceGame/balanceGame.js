@@ -12,6 +12,7 @@ import random from './images/Refresh.png';
 import { useNavigate } from 'react-router-dom';
 import { enterBalanceChatRoom } from '../../apis/ChatAPICalls';
 import { keyboard } from '@testing-library/user-event/dist/keyboard';
+import { saveBalanceChatRoom } from '../../modules/ChatModule';
 
 const characters = [
     { name: '플랑크톤', img: image1, charNo:5 },
@@ -62,7 +63,6 @@ const BalanceGame = () => {
 
         
         const leftCharacter = shuffledCharacters[0];
-        console.log("@@@",leftCharacter);
         const rightCharacter = shuffledCharacters[1];
         const leftModifier = shuffledModifiers[0];
         const rightModifier = shuffledModifiers[1];
@@ -90,7 +90,7 @@ const BalanceGame = () => {
         generateRandomPair();
     }, []);
 
-    const handleLeftCardClick = () => {
+    const handleLeftCardClick = async () => {
         
         // 채팅방 생성
         const enterChatRoomInfo = {
@@ -99,22 +99,26 @@ const BalanceGame = () => {
             memberNo: userInfo.memberNo
         }
 
-        dispatch(enterBalanceChatRoom(enterChatRoomInfo))
+        const data = await dispatch(enterBalanceChatRoom(enterChatRoomInfo))
 
         // 생성된 채팅방의 정보를 
         const chatRoomInfo = {
             imgUrl: pair.left?.img,
             text: pair.left?.text,
             characterId: selectedLeftCharacter,
-            keyword: selectedLeftModifier
+            keyword: selectedLeftModifier,
+            sessionId: data.sessionId,
+            roomName: data.roomName,
         }
+
+        dispatch(saveBalanceChatRoom(chatRoomInfo))
 
         console.log("chatRoomInfo :",chatRoomInfo);
 
-        navigate(`/balanceChat?charaterName=${chatRoomInfo.text}`, { state:chatRoomInfo });
+        navigate(`/balanceChat?characterName=${chatRoomInfo.text}`, { state:chatRoomInfo });
     };
 
-    const handleRightCardClick = () => {
+    const handleRightCardClick = async () => {
         
         // 채팅방 생성
         const enterChatRoomInfo = {
@@ -123,20 +127,23 @@ const BalanceGame = () => {
             memberNo: userInfo.memberNo
         }
 
-        dispatch(enterBalanceChatRoom(enterChatRoomInfo))
+        const data = await dispatch(enterBalanceChatRoom(enterChatRoomInfo))
 
         // 생성된 채팅방의 정보를 
         const chatRoomInfo = {
             imgUrl: pair.right?.img,
             text: pair.right?.text,
             characterId: selectedRightCharacter,
-            keyword: selectedRightModifier
+            keyword: selectedRightModifier,
+            sessionId: data.sessionId,
+            roomName: data.roomName,
         }
+
+        dispatch(saveBalanceChatRoom(chatRoomInfo))
 
         console.log("chatRoomInfo :",chatRoomInfo);
 
-
-        navigate(`/balanceChat?charaterName=${chatRoomInfo.text}`, { state:chatRoomInfo });
+        navigate(`/balanceChat?characterName=${chatRoomInfo.text}`, { state:chatRoomInfo });
     };
     
 

@@ -60,8 +60,15 @@ const Navbar = () => {
         setGroupChatFormModalOpen(false);
     };
 
-    const handleRecentChatClick = async(sessionId) => {
-        navigate(`/chat_room?session_id=${sessionId}`);
+    const handleRecentChatClick = async(sessionId, roomName) => {
+        const specialNames = ['피곤한', '난폭한', '바보같은', '우울한', '애교쟁이', '찌질한', '열혈'];
+    
+    // roomName이 specialNames 중 하나로 시작하는지 확인
+    if (specialNames.some(name => roomName.startsWith(name))) {
+        window.location.href = `http://localhost:3000/balanceChat?characterName=${roomName}`;
+    } else {
+        window.location.href = `http://localhost:3000/chat_room?session_id=${sessionId}`;
+    }
     }
 
     return(
@@ -85,7 +92,7 @@ const Navbar = () => {
                 <ul>
                     {recentChats.map((chat) => (
                         <li key = {chat.sessionId} onClick= {() =>
-                            handleRecentChatClick(chat.sessionId)} style={{cursor:'pointer'}}>
+                            handleRecentChatClick(chat.sessionId, chat.roomName)} style={{cursor:'pointer'}}>
                                 {chat.roomName}
                         </li>  
                     ))}

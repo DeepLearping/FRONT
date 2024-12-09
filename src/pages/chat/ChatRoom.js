@@ -15,6 +15,7 @@ import loading3 from "./images/loading3.gif";
 import loading4 from "./images/loading4.gif";
 import loading5 from "./images/loading5.gif";
 import loading6 from "./images/loading6.gif";
+import { logOut } from "../../modules/ChatModule";
 
 const ChatRoom = ({ }) => {
   const [searchParams] = useSearchParams();
@@ -145,20 +146,24 @@ const ChatRoom = ({ }) => {
     }
   };
 
-useEffect(() => {
-  if (messageEndRef.current) {
-    messageEndRef.current.scrollIntoView({ behavior: "smooth" });
-  }
+  useEffect(() => {
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
 
-  if (isLoading) {
-    const interval = setInterval(() => {
-      if (messageEndRef.current) {
-        messageEndRef.current.scrollIntoView({ behavior: "smooth" });
-      }
-    }, 100); 
-    return () => clearInterval(interval); 
+    if (isLoading) {
+      const interval = setInterval(() => {
+        if (messageEndRef.current) {
+          messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100); 
+      return () => clearInterval(interval); 
+    }
+  }, [messages, isLoading]);
+
+  const searchChat = () => {
+    dispatch(logOut());
   }
-}, [messages, isLoading]);
 
   // 캐릭터 설명 토글
   const toggleDescription = () => {
@@ -231,6 +236,7 @@ useEffect(() => {
                     className="chatRoom-search-icon"
                     src={searchIcon}
                     alt="검색"
+                    onClick={searchChat}
                   />
                   <img 
                     className="chatRoom-member-toggle"
