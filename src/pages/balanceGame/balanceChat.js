@@ -115,11 +115,11 @@ const BalanceChat = () => {
         <div className="chat-room-bg">
             {/* 채팅 스크롤 컨테이너 */}
             <div className="chat-scroll-container-bg">
-                <div className="chat-header-chatRoom">
+                <div className="chat-header-bal">
                     {roomInfo && (
                         <>
                             <img
-                                className="charaImg-chatRoom"
+                                className="charaImg-bal"
                                 src={chatRoomInfo.imgUrl}
                                 alt="캐릭터 이미지"
                             />
