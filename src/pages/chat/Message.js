@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams, useLocation } from "react-router-dom";
 import '../../css/chat.css';
 import playbutton from '../chat/images/Button Play.png'
 
-const Message = ({ role, content, msgImgUrl, characterId, profileImg }) => {
+const Message = ({ role, content, msgImgUrl, characterId, profileImg, keyword }) => {
   const dispatch = useDispatch();
   const characters = useSelector(state => state.chat.currentRoom.characters)
   const selectedCharacter = characters.find(character => character.charNo === characterId);
+  // const [savedMsgImgUrl, setSavedMsgImgUrl] = useState(msgImgUrl)
+  const location = useLocation();
+  const chatRoomInfo = location.state;
 
   const imageUrl = profileImg 
   ? profileImg
@@ -16,7 +20,7 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg }) => {
 
   const charName = selectedCharacter ? selectedCharacter.charName : '';
 
-  // 캐릭터 이름과 콜론 제거
+   // 캐릭터 이름과 콜론 제거
   const cleanContent = content.replace(/^[^:]+:\s*/, '');
 
   // // 이모지 제거 함수(이득규)
@@ -57,7 +61,7 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg }) => {
       console.error("오디오 재생 오류:", error);
     }
   };
-  
+
     return (
       <div>
         {role === 'ai' && (
@@ -72,7 +76,7 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg }) => {
           </div>
         )}
         <div className={`message-chatRoom ${role}`}>
-          <div className={`message-bubble-chatRoom ${role} char${characterId}`}>
+          <div className={`message-bubble-chatRoom ${role} char${characterId} ${content.startsWith('# 상황') ? 'balance-situation' : ''}`}>
             {cleanContent}
           </div>
           {role === 'ai' && msgImgUrl !== "" && (

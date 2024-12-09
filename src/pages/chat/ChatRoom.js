@@ -102,7 +102,7 @@ const ChatRoom = ({ }) => {
       const messageInfo = {
         question: input,
         sessionId: sessionId,
-        charNo: charNo, // whoToSend에서 받은 charNo
+        charNo: charNo,
         userId: chatUser.memberNo
       };
   

@@ -19,8 +19,16 @@
     display: inline;
 }
 
+.situation-bc{
+    /* width: 150px; */
+    height: 50px;
+    font-weight: 200;
+    font-family: "Jua", sans-serif;
+    font-size: 1.1rem;
+}
+
 .chat-header-bg {
-    margin-top: -17.5vh;
+    margin-top: -22vh;
     background-color: #f9f9f9;
     padding-top: 15px;
     text-align: right;
@@ -45,6 +53,14 @@
     border-radius: 50px;
 }
 
+.chat-messages-balChat {
+    margin-top: 5vh;
+    flex: 1;
+    padding: 15px;
+    padding-bottom: 10vh; 
+    background-color: #f9f9f9;
+    scroll-padding-bottom: 10vh;
+}
 
 .chat-messages-bg {
     flex: 1;
@@ -78,6 +94,8 @@
     border-radius: 15px;
     max-width: 70%;
     word-wrap: break-word;
+    transform: translateY(10px); 
+    animation: fadeInUp 0.5s forwards;
 }
 
 .message-bubble-bg.user {
@@ -241,8 +259,9 @@
 }
 
 .modal-title-bg {
-    font-size: 1.4rem;
-    font-weight: bold;
+    font-family: "Jua", sans-serif;
+    font-weight: 300;
+    font-size: 1.7rem;
     color: #333;
     margin-bottom: 20px;
 }
@@ -262,7 +281,7 @@
 
 .modal-description-bg {
     flex-grow: 1;
-    font-size: 1rem;
+    font-size: 1.4rem;
     color: #555;
     line-height: 1.5;
     margin-bottom: 20px;
@@ -271,18 +290,20 @@
 
 .modal-buttons-bg {
     display: flex;
-    justify-content: space-around;
-    gap: 15px;
+    justify-content: right;
+    gap: 30px;
+    margin-right: 10px;
 }
 
 .modal-button-bg {
+    font-family: "Jua", sans-serif;
+    font-weight: 100;
     padding: 10px 25px;
     background-color: #ffb3b3;
-    color: #fff;
+    color: #000000;
     border: none;
     border-radius: 5px;
-    font-size: 1rem;
-    font-weight: bold;
+    font-size: 1.2rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
@@ -295,10 +316,13 @@
     background-color: #f78787;;
 }
 
-.modal-description-input-bg {
+
+.modal-input-container-bg textarea {
+    font-family: "Jua", sans-serif;
+    font-weight: 300;
     width: 100%;
     padding: 10px;
-    font-size: 1rem;
+    font-size: 1.25rem;
     color: #555;
     line-height: 1.5;
     border: 1px solid #ddd;
@@ -306,8 +330,10 @@
     resize: vertical;
     margin-bottom: 20px;
     box-sizing: border-box;
-    height: 340px; 
-    overflow: auto; 
+    height: 340px;
+    overflow: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
 
