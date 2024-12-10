@@ -232,7 +232,7 @@ useEffect(() => {
 // }, [isInitialLoad, messages, isLoading]);
 
   const searchChat = () => {
-    dispatch(logOut());
+    // dispatch(logOut());
   }
 
   // 캐릭터 설명 토글
