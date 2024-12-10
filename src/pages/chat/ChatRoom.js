@@ -21,8 +21,9 @@ const ChatRoom = ({ }) => {
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get("session_id"); // URL에서 charNo 추출
   const [messages, setMessages] = useState([]);
+  const [newMessages, setNewMessages] = useState([]);
   const [input, setInput] = useState("");
-  const [question, setQuestion] = useState("");
+  const [lastFetchedId, setLastFetchedId] = useState(-1);
   const [isDescriptionVisible, setDescriptionVisible] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true); // 맨 처음 채팅 기록 로드 (이 때만 맨 아래로 자동 스크롤)
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태
@@ -80,7 +81,7 @@ const ChatRoom = ({ }) => {
       const chatContainer = chatContainerRef.current;
       const previousScrollHeight = chatContainer.scrollHeight; // Store the scroll height before loading messages
 
-      const response = await request("GET", `/chatMessage/history/${sessionId}?limit=10&offset=${offset}`);
+      const response = await request("GET", `/chatMessage/history/${sessionId}?limit=10&lastFetchedId=${lastFetchedId}`);
 
       const parsedMessages = response.map((chat) => ({
         id: chat.id,
@@ -103,6 +104,7 @@ const ChatRoom = ({ }) => {
         
         setMessages((prevMessages) => [...parsedMessages, ...prevMessages]);
         setOffset(offset + 1);
+        setLastFetchedId(parsedMessages[0].id)
       }
 
       if (!isInitialLoad) {
@@ -148,25 +150,24 @@ const ChatRoom = ({ }) => {
 
     setInput(""); // 입력값 초기화
     const userMessage = { role: "user", content: input };
-    setMessages((prevMessages) => [...prevMessages, userMessage]);
+    setNewMessages((prevMessages) => [...prevMessages, userMessage]);
 
     const matchCharacterInfo = {
       charIdList: charNos,
       conversationId: sessionId,
       question: input
     }
-    // console.log("matchCharacterInfo: ",matchCharacterInfo)
+    // console.log("matchCharacterInfo: ", matchCharacterInfo)
     
     let whoToSend = charNos
     if (charNos.length > 1) {
       whoToSend = await dispatch(matchCharacter(matchCharacterInfo));
     }
-    
-    // console.log("whoToSend:",whoToSend);
+    // console.log("whoToSend:", whoToSend);
 
     // whoToSend 배열을 무작위로 섞기
     const shuffledWhoToSend = whoToSend.sort(() => Math.random() - 0.5);
-    // console.log("shuffledWhoToSend:",shuffledWhoToSend);
+    // console.log("shuffledWhoToSend:", shuffledWhoToSend);
   
     // for문 써서 whoToSend에 담긴 charNo 만큼 메시지 보내기
     for (const charNo of shuffledWhoToSend) {
@@ -193,11 +194,9 @@ const ChatRoom = ({ }) => {
           characterId: charNo
         };
   
-        // setQuestion(aiResponse.answer)
         // 각 메시지 전송 후 상태 업데이트
-        setMessages((prevMessages) => [...prevMessages, aiMessage]);
+        setNewMessages((prevMessages) => [...prevMessages, aiMessage]);
         setIsLoading(false); // 로딩 상태 종료
-
       } catch (error) {
         console.error("메세지 전송 오류:", error);
       }
@@ -228,8 +227,7 @@ useEffect(() => {
       }, 100); 
       return () => clearInterval(interval); 
     }
-  }, [isInitialLoad]);
-// }, [isInitialLoad, messages, isLoading]);
+  }, [isInitialLoad, newMessages]);
 
   const searchChat = () => {
     // dispatch(logOut());
@@ -330,6 +328,9 @@ useEffect(() => {
         ref={chatContainerRef} 
         style={{ overflowY: "scroll" }}>
           {messages.map((msg, index) => (
+            <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl} characterId={msg.characterId} />
+          ))}
+          {newMessages.map((msg, index) => (
             <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl} characterId={msg.characterId} />
           ))}
           {isLoading && (
