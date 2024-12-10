@@ -1,5 +1,5 @@
 import { loginRequest, request } from "./Apis";
-import { clearMember, loadAllCharacterInfo, login, updateUser, updateUserNickname} from "../modules/UserModule";
+import { clearMember, loadAllCharacterInfo, getAllProfileImage, login, updateUser, updateUserNickname} from "../modules/UserModule";
 
 /* 로그인 정보 전달 받는 함수 */
 export function callLoginAPI(code) {
@@ -99,6 +99,7 @@ export function getAllCharacterInfo() {
             console.log('data :', data);
 
             dispatch(loadAllCharacterInfo(data))
+           
 
             return result; // 포장한 데이터를 반환해주기.
 
@@ -108,6 +109,32 @@ export function getAllCharacterInfo() {
         }
     }
 }
+
+// 캐릭터 프로필 이미지 정보 불러오기
+// export function getAllCharacaterImage(image) {
+
+//     console.log('모든 캐릭터 이미지 정보 불러오기...',image);
+//     return async (dispatch) => {
+
+//         try {
+//             const result = await request('GET',`/api/v1/character${image}`);
+//             console.log('result : ', result); // 서버에서 받아온 data 정보
+            
+//             const data = result.results.character;
+//             console.log('data :', data);
+
+//             dispatch(getAllProfileImage(data));
+
+//             return result; // 포장한 데이터를 반환해주기.
+
+
+//         } catch (error) {
+//             console.error('API error:', error);
+//         }
+//     }
+// }
+
+
 
 // 유저 삭제
 export function deleteUser(memberNo) {
