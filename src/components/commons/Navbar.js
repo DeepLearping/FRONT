@@ -24,7 +24,7 @@ const Navbar = () => {
 
     useEffect(() => {
         dispatch(fetchRecentChats(userInfo.memberNo));
-    }, [currentRoom]); 
+    }, [currentRoom]);
 
     // 🟨 로그인 모달 창 관리
     const openLoginModal = () => {
@@ -89,48 +89,45 @@ const Navbar = () => {
 
             {/* 챗팅 최근 기록 */}
             <div className='recent-title'>
-            <h3> 최근 기록 </h3>
+                <h3>최근 기록</h3>
                 <ul>
                     {recentChats.map((chat) => {
-
                         // lastChatMessage가 배열이므로 첫 번째 요소를 가져옵니다.
                         const lastMessage = chat.lastChatMessage.length > 0 
-                        ? (() => {
+                            ? (() => {
                                 const content = JSON.parse(chat.lastChatMessage[0].message).data.content;
                                 return content.length > 15 ? content.substring(0, 15) + '...' : content;
-                        })()
-                        : '메시지가 없습니다';
-                        
-                        // 이미지 호출하기 
-                        // const profileImage = getAllCharacaterImage(chat.characters[0].profileImage);
+                            })()
+                            : '메시지가 없습니다';
 
-                        let profileImages;
-                        if (chat.characters.length === 1) {
-                            profileImages = [`http://localhost:8080/api/v1/character${chat.characters[0].profileImage}`];
-                        } else {
-                            profileImages = chat.characters.map(character => `http://localhost:8080/api/v1/character${character.profileImage}`);
-                        }
+                        const characters = chat.characters;
+                        const characterCount = characters.length;
 
-                        return(
-                        <li key = {chat.sessionId} onClick= {() =>
-                            handleRecentChatClick(chat.sessionId, chat.roomName)} style={{cursor:'pointer'}}>
-                            <div>
-                                <div className = "recentChatRoom-Image-roomName">
-                                    {profileImages.map((image,index) =>(
-                                    <img className="chatRoomImage" 
-                                        key={index}
-                                        src = {image} 
-                                        alt={`Character ${index + 1}`} 
-                                        style={{ width: '18px', height: '18px', borderRadius: '50%'}}/>
-                                    ))}   
-
-                                    {chat.roomName}  
+                        return (
+                            <li key={chat.sessionId} onClick={() => handleRecentChatClick(chat.sessionId, chat.roomName)}>
+                                <div className='recentChatRoom-container'>
+                                    <div className='charaImg-wrapper-recentChatRoom'>
+                                        {characters.slice(0, 4).map((character, index) => (
+                                            <div 
+                                                key={index} 
+                                                className={`recentChatRoom-Image-roomName ${characterCount === 1 ? 'full-size' : ''}`}
+                                            >
+                                                <img
+                                                    className="charaImg-recentChatRoom"
+                                                    src={`http://localhost:8080/api/v1/character${character.profileImage}`}
+                                                    alt={`캐릭터 이미지 ${index + 1}`}
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className='recentChatRoom-content-wrapper'>
+                                        <span>{chat.roomName}</span>
+                                        <div className="lastMessage">
+                                            {lastMessage}
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="lastMessage">
-                                    {lastMessage}
-                              </div>
-                            </div>
-                        </li>  
+                            </li>  
                         );
                     })}
                 </ul>

@@ -67,6 +67,61 @@
     
 }
 
+.recentChatRoom-container {
+    display: flex;
+    align-items: center;
+    height: 30px;
+}
+
+.charaImg-wrapper-recentChatRoom {
+    position: relative; 
+    margin: 0 10px 0 10px;
+    width: 30px; 
+    height: 30px; 
+    border-radius: 35%;
+    overflow: hidden; /* 자식 요소가 원을 넘지 않도록 설정 */
+}
+
+.recentChatRoom-Image-roomName {
+    position: absolute; /* 절대 위치 지정 */
+    width: 50%; /* 각 사분면의 너비 */
+    height: 50%; /* 각 사분면의 높이 */
+    display: flex; /* Flexbox 사용 */
+    justify-content: center; /* 중앙 정렬 */
+    align-items: center; /* 중앙 정렬 */
+}
+  
+.recentChatRoom-Image-roomName:nth-child(1) {
+top: 0; /* 첫 번째 사분면 (왼쪽 위) */
+left: 0;
+}
+
+.recentChatRoom-Image-roomName:nth-child(2) {
+top: 0; /* 두 번째 사분면 (오른쪽 위) */
+right: 0;
+}
+
+.recentChatRoom-Image-roomName:nth-child(3) {
+bottom: 0; /* 세 번째 사분면 (왼쪽 아래) */
+left: 0;
+}
+
+.recentChatRoom-Image-roomName:nth-child(4) {
+bottom: 0; /* 네 번째 사분면 (오른쪽 아래) */
+right: 0;
+}
+
+.recentChatRoom-Image-roomName.full-size {
+    width: 100%; /* 전체 너비 */
+    height: 100%; /* 전체 높이 */
+    top: 0; /* 상단 */
+    left: 0; /* 좌측 */
+}
+
+.charaImg-recentChatRoom {
+    width: 100%;
+    height: 100%;
+}
 
 .recent-title{
     height: 25vh;
@@ -75,19 +130,24 @@
     font-family: "Jua", sans-serif;
 }
 
+.recent-title h3 {
+    margin-bottom: 0;
+}
+
 .recent-title ul {
-    width: 210px;
+    padding-top: 10px;
+    background-color: rgb(236, 229, 229);
+    width: 215px;
+    margin-top: 5px;
     max-height: 250px; /* 원하는 높이 */
     font-size: 1rem;
     padding-left: 0;
-    margin: 5;
     overflow-y: scroll; /* 스크롤 가능하게 설정 */
-    /* list-style-type: none;  기본 리스트 스타일 제거  */
 }
 
 /* 스크롤바의 폭 너비 */
 .recent-title ul::-webkit-scrollbar {
-    width: 10px;  
+    width: 6px;  
 }
 
 .recent-title ul::-webkit-scrollbar-thumb {
@@ -100,21 +160,11 @@
 }
 
 .recent-title li {
-    height: 40px; /* 각 항목의 높이 설정 */
-    display: flex; /* 내용 정렬을 위해 flexbox 사용 */
-    align-items: center; /* 수직 중앙 정렬 */
-    padding: 5px; /* 항목 내부 여백 */
-    
-    cursor: pointer; /* 마우스 커서 포인터로 변경 */
-    /* border-bottom: 1px solid #ccc;  항목 구분을 위한 경계선 */
-}
-
-/* .recent-characters{
     display: flex;
-    gap: 10px;
-    width: 40px;
-    height: auto;
-} */
+    flex-direction: column;
+    height: 50px; /* 각 항목의 높이 설정 */
+    cursor: pointer; /* 마우스 커서 포인터로 변경 */
+}
 
 .profile-container {
     position: inherit;
@@ -156,6 +206,11 @@
     font-weight: 600 ;
 }
 
+.recentChatRoom-content-wrapper{
+    display: flex;
+    flex-direction: column;
+}
+
 .recentChatRoom-Image-roomName{
     font-size:20px;
     
@@ -169,5 +224,7 @@
 
 .lastMessage{
     font-size:14px;
+    color:rgb(255, 5, 222);
+    font-weight: lighter;
 }
 
