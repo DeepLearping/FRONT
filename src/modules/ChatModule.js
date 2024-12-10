@@ -56,3 +56,4 @@ const chatReducer = handleActions(
 
 export default chatReducer;
 
+// 이미지 처리 기능
