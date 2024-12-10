@@ -3,10 +3,11 @@ import React, { useEffect, useState } from 'react';
 import '../../css/selectCharacterList.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadAllProfileImages, updateCharacterChatCount } from '../../apis/ImageAPICalls';
-import { callKakaoLoginAPI, callLoginAPI, getAllCharacterInfo } from '../../apis/UserAPICalls';
+import { callKakaoLoginAPI, callLoginAPI, getAllCharacterInfo, getAllCharacaterImage } from '../../apis/UserAPICalls';
 import searchIcon from '../selectCharacterList/images/icon.png';
 import { useNavigate } from 'react-router-dom';
 import { enterChatRoom } from '../../apis/ChatAPICalls';
+// import { getAllProfileImage } from '../../modules/UserModule';
 
 function SelectCharacterList() {
     const dispatch = useDispatch();
@@ -32,6 +33,7 @@ function SelectCharacterList() {
         }
 
         dispatch(getAllCharacterInfo());
+        // dispatch(getAllCharacaterImage());
 
     }, [dispatch]);
 
@@ -152,11 +154,6 @@ function SelectCharacterList() {
                     )}
                 </div>
             </div>
-
-
-
-
-
         </div>
     );
 }
