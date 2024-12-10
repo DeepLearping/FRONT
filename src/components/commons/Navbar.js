@@ -1,19 +1,30 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { NavLink, useNavigate } from "react-router-dom";
 import '../../css/Navbar.css';
 import mypageIcon from '../../images/mypage.png';
 import ProfileModal from "../ProfileModal";
 import LoginModal from '../LoginModal';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import BalanceGame from '../../pages/balanceGame/balanceGame';
 import GroupChatFormModal from '../GroupChatFormModal';
+import { enterChatRoom, fetchRecentChats } from '../../apis/ChatAPICalls';
+import { loadUserChatRooms } from '../../modules/ChatModule';
+// import { getAllCharacaterImage } from '../../apis/UserAPICalls';
 
 const Navbar = () => {
     const [isModalOpen, setModalOpen] = useState(false); 
     const [isProfileModalOpen, setProfileModalOpen] = useState(false);
     const [isGroupChatFormModalOpen, setGroupChatFormModalOpen] = useState(false);
     const token = localStorage.getItem('token');
-    const userInfo = useSelector(state => state.user.userInfo)
+    const userInfo = useSelector(state => state.user.userInfo);
+    const recentChats = useSelector(state => state.chat.chatRooms);
+    const currentRoom = useSelector(state => state.chat.currentRoom);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchRecentChats(userInfo.memberNo));
+    }, [currentRoom]); 
 
     // 🟨 로그인 모달 창 관리
     const openLoginModal = () => {
@@ -50,6 +61,17 @@ const Navbar = () => {
         setGroupChatFormModalOpen(false);
     };
 
+    const handleRecentChatClick = async(sessionId, roomName) => {
+        const specialNames = ['피곤한', '난폭한', '바보같은', '우울한', '애교쟁이', '찌질한', '열혈'];
+    
+    // roomName이 specialNames 중 하나로 시작하는지 확인
+    if (specialNames.some(name => roomName.startsWith(name))) {
+        window.location.href = `http://localhost:3000/balanceChat?characterName=${roomName}`;
+    } else {
+        window.location.href = `http://localhost:3000/chat_room?session_id=${sessionId}`;
+    }
+    }
+
     return(
         <div className = "nav-bar">
             <h1 className="title"><NavLink to="/">캐톡</NavLink></h1>
@@ -61,14 +83,60 @@ const Navbar = () => {
                     단체 채팅
                 </li>
                 <li className="nav-item">
-                    <NavLink to="/balance-game">밸런스 게임</NavLink>
+                    <NavLink to="/balanceGame">밸런스 게임</NavLink>
                 </li>
             </ul> 
 
+            {/* 챗팅 최근 기록 */}
             <div className='recent-title'>
-                {/* <NavLink to= "/"/></NavLink> */}
-                <div className='recent-charater'></div>
+            <h3> 최근 기록 </h3>
+                <ul>
+                    {recentChats.map((chat) => {
+
+                        // lastChatMessage가 배열이므로 첫 번째 요소를 가져옵니다.
+                        const lastMessage = chat.lastChatMessage.length > 0 
+                        ? (() => {
+                                const content = JSON.parse(chat.lastChatMessage[0].message).data.content;
+                                return content.length > 15 ? content.substring(0, 15) + '...' : content;
+                        })()
+                        : '메시지가 없습니다';
+                        
+                        // 이미지 호출하기 
+                        // const profileImage = getAllCharacaterImage(chat.characters[0].profileImage);
+
+                        let profileImages;
+                        if (chat.characters.length === 1) {
+                            profileImages = [`http://localhost:8080/api/v1/character${chat.characters[0].profileImage}`];
+                        } else {
+                            profileImages = chat.characters.map(character => `http://localhost:8080/api/v1/character${character.profileImage}`);
+                        }
+
+                        return(
+                        <li key = {chat.sessionId} onClick= {() =>
+                            handleRecentChatClick(chat.sessionId, chat.roomName)} style={{cursor:'pointer'}}>
+                            <div>
+                                <div className = "recentChatRoom-Image-roomName">
+                                    {profileImages.map((image,index) =>(
+                                    <img className="chatRoomImage" 
+                                        key={index}
+                                        src = {image} 
+                                        alt={`Character ${index + 1}`} 
+                                        style={{ width: '18px', height: '18px', borderRadius: '50%'}}/>
+                                    ))}   
+
+                                    {chat.roomName}  
+                                </div>
+                                <div className="lastMessage">
+                                    {lastMessage}
+                              </div>
+                            </div>
+                        </li>  
+                        );
+                    })}
+                </ul>
             </div>
+
+
             {/* 마이페이지 */}
             <div className='profile-container' onClick={handleProfileClick}>
                 <div className="image-container">
@@ -76,7 +144,7 @@ const Navbar = () => {
                         src = {mypageIcon} 
                         alt="마이페이지" 
                         className="mypage-icon"
-                        />
+                    />
                 </div>
                 <div className='profile-description'>
                     {token ? (

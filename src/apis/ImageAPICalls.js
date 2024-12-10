@@ -1,5 +1,5 @@
 import { request } from "./Apis";
-import axios from 'axios';
+import { loadChatRoom } from '../modules/ChatModule';
 
 export function loadAllProfileImages() {
 
@@ -19,6 +19,31 @@ export function loadAllProfileImages() {
         }
     }
 }
+
+// 챗팅방 이미지 조회하기
+// export function loadChatRoomImage(character){
+
+//     console.log('챗팅방 이미지 불러오기 ...');
+
+//     return async (dispatch, getState) => {
+//         try{
+//             //서버에 API 요청
+//             const result = await request('GET', `/api/v1/character${character.profileImage}`);
+//             console.log('result : ', result); // 서버에서 받아온 data 정보
+
+//             const data = result.results.chatRoom;
+//             console.log('data : ', data);
+
+//             dispatch(loadChatRoom(data));
+
+//             return data; // 포장한 데이터를 반환해주기.
+
+//         } catch (error) {
+//             console.error('API error: ', error);
+//         }
+//     }
+
+// }
 
 // 인기 캐릭터 선정을 위해 캐릭터 선택 횟수 카운팅 하는 함수
 export function updateCharacterChatCount(charNo) {
