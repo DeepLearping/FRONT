@@ -1,15 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import { NavLink, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
 import '../../css/Navbar.css';
+// import cTalk from '../../../public/c-talk.png'
 import mypageIcon from '../../images/mypage.png';
 import ProfileModal from "../ProfileModal";
 import LoginModal from '../LoginModal';
-import { useDispatch, useSelector } from 'react-redux';
-import BalanceGame from '../../pages/balanceGame/balanceGame';
 import GroupChatFormModal from '../GroupChatFormModal';
 import { enterChatRoom, fetchRecentChats } from '../../apis/ChatAPICalls';
-import { loadUserChatRooms } from '../../modules/ChatModule';
-// import { getAllCharacaterImage } from '../../apis/UserAPICalls';
 
 const Navbar = () => {
     const [isModalOpen, setModalOpen] = useState(false); 
@@ -64,25 +62,31 @@ const Navbar = () => {
     const handleRecentChatClick = async(sessionId, roomName) => {
         const specialNames = ['피곤한', '난폭한', '바보같은', '우울한', '애교쟁이', '찌질한', '열혈'];
     
-    // roomName이 specialNames 중 하나로 시작하는지 확인
-    if (specialNames.some(name => roomName.startsWith(name))) {
-        window.location.href = `http://localhost:3000/balanceChat?characterName=${roomName}`;
-    } else {
-        window.location.href = `http://localhost:3000/chat_room?session_id=${sessionId}`;
-    }
+        // roomName이 specialNames 중 하나로 시작하는지 확인
+        if (specialNames.some(name => roomName.startsWith(name))) {
+            window.location.href = `http://localhost:3000/balanceChat?characterName=${roomName}`;
+        } else {
+            window.location.href = `http://localhost:3000/chat_room?session_id=${sessionId}`;
+        }
     }
 
     return(
         <div className = "nav-bar">
-            <h1 className="title"><NavLink to="/">캐톡</NavLink></h1>
+            <div className='nav-title-container' onClick={() => {navigate('/')}}>
+                <img src='/c-talk.png' alt='캐톡로고'/>
+                <h1 className="title">캐톡</h1>
+            </div>
             <ul className="nav-list">
                 <li className="nav-item">
+                    <img src='/images/캐릭터1.png'/>
                     <NavLink to="/selectCharacterList">캐릭터 목록</NavLink>
                 </li>
                 <li className="nav-item" onClick={openGroupChatFormModal}>
-                    단체 채팅
+                    <img src='/images/캐릭터2.png'/>
+                    <span>단체 채팅</span>
                 </li>
                 <li className="nav-item">
+                    <img src='/images/캐릭터3.png'/>
                     <NavLink to="/balanceGame">밸런스 게임</NavLink>
                 </li>
             </ul> 
@@ -138,7 +142,7 @@ const Navbar = () => {
             <div className='profile-container' onClick={handleProfileClick}>
                 <div className="image-container">
                     <img 
-                        src = {mypageIcon} 
+                        src = {userInfo.picture? userInfo.picture : '/images/icon-login2.png'} 
                         alt="마이페이지" 
                         className="mypage-icon"
                     />
