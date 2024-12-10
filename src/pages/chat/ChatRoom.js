@@ -232,7 +232,7 @@ useEffect(() => {
 // }, [isInitialLoad, messages, isLoading]);
 
   const searchChat = () => {
-    dispatch(logOut());
+    // dispatch(logOut());
   }
 
   // 캐릭터 설명 토글
@@ -281,8 +281,7 @@ useEffect(() => {
   return (
     <div className="chat-room-chatRoom">
       <div className="chat-scroll-container-chatRoom"
-        ref={chatContainerRef} 
-        style={{ overflowY: "scroll" }}>
+        >
         <div className="chatRoom-header-wrapper">
           <div className="chat-header-chatRoom">
             {roomInfo && (
@@ -327,7 +326,9 @@ useEffect(() => {
           </div>
           
         </div>
-        <div className="chat-messages-chatRoom">
+        <div className="chat-messages-chatRoom"
+        ref={chatContainerRef} 
+        style={{ overflowY: "scroll" }}>
           {messages.map((msg, index) => (
             <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl} characterId={msg.characterId} />
           ))}
