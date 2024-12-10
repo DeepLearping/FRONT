@@ -76,14 +76,28 @@
 }
 
 .recent-title ul {
-    max-height: 150px; /* 원하는 높이 */
-    overflow-y: scroll; /* 스크롤 가능하게 설정 */
+    width: 210px;
+    max-height: 250px; /* 원하는 높이 */
     font-size: 1rem;
     padding-left: 0;
     margin: 5;
+    overflow-y: scroll; /* 스크롤 가능하게 설정 */
     /* list-style-type: none;  기본 리스트 스타일 제거  */
 }
 
+/* 스크롤바의 폭 너비 */
+.recent-title ul::-webkit-scrollbar {
+    width: 10px;  
+}
+
+.recent-title ul::-webkit-scrollbar-thumb {
+    background: rgba(220, 20, 60); /* 스크롤바 색상 */
+    border-radius: 10px; /* 스크롤바 둥근 테두리 */
+}
+
+.recent-title ul::-webkit-scrollbar-track {
+    background: rgba(220, 20, 60, .1);  /*스크롤바 뒷 배경 색상*/
+}
 
 .recent-title li {
     height: 40px; /* 각 항목의 높이 설정 */
