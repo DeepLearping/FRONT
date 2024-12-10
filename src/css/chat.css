@@ -189,7 +189,8 @@
 
 .chat-messages-chatRoom {
   position: relative;
-  top: 130px;
+  top: 140px;
+  height: 700px;
   padding: 15px;
   padding-bottom: 10vh; 
   background-color: #f9f9f9;
