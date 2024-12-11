@@ -301,12 +301,12 @@ useEffect(() => {
                   )}
                 </div>
                 <div className="chatRoom-tools">
-                  <img
+                  {/* <img
                     className="chatRoom-search-icon"
                     src={searchIcon}
                     alt="검색"
                     onClick={searchChat}
-                  />
+                  /> */}
                   <img 
                     className="chatRoom-member-toggle"
                     src={toggleImg}

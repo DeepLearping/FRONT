@@ -120,7 +120,7 @@
 
 .chatRoom-tools{
   display: flex;
-  justify-content: center;
+  justify-content: right;
   width: 100px;
   height: 50px;
   padding-right: 10px;
