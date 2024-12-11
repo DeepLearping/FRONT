@@ -7,7 +7,6 @@ import { callKakaoLoginAPI, callLoginAPI, getAllCharacterInfo, getAllCharacaterI
 import searchIcon from '../selectCharacterList/images/icon.png';
 import { useNavigate } from 'react-router-dom';
 import { enterChatRoom } from '../../apis/ChatAPICalls';
-// import { getAllProfileImage } from '../../modules/UserModule';
 
 function SelectCharacterList() {
     const dispatch = useDispatch();

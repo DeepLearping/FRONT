@@ -100,8 +100,7 @@
 }
 
 .recent-title li {
-    height: 50px; /* 각 항목의
-     높이 설정 */
+    height: 50px; /* 각 항목의 높이 설정 */
     display: flex; /* 내용 정렬을 위해 flexbox 사용 */
     align-items: center; /* 수직 중앙 정렬 */
     padding: 5px; /* 항목 내부 여백 */

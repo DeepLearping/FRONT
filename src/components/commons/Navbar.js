@@ -5,11 +5,9 @@ import mypageIcon from '../../images/mypage.png';
 import ProfileModal from "../ProfileModal";
 import LoginModal from '../LoginModal';
 import { useDispatch, useSelector } from 'react-redux';
-import BalanceGame from '../../pages/balanceGame/balanceGame';
 import GroupChatFormModal from '../GroupChatFormModal';
 import { enterChatRoom, fetchRecentChats } from '../../apis/ChatAPICalls';
-import { loadUserChatRooms } from '../../modules/ChatModule';
-// import { getAllCharacaterImage } from '../../apis/UserAPICalls';
+
 
 const Navbar = () => {
     const [isModalOpen, setModalOpen] = useState(false); 
@@ -100,10 +98,8 @@ const Navbar = () => {
                                 return content.length > 15 ? content.substring(0, 15) + '...' : content;
                         })()
                         : '메시지가 없습니다';
-                        
-                        // 이미지 호출하기 
-                        // const profileImage = getAllCharacaterImage(chat.characters[0].profileImage);
 
+                        // 챗팅방 이미지 호출
                         let profileImages;
                         if (chat.characters.length === 1) {
                             profileImages = [`http://localhost:8080/api/v1/character${chat.characters[0].profileImage}`];
@@ -123,7 +119,6 @@ const Navbar = () => {
                                         alt={`Character ${index + 1}`} 
                                         style={{ width: '18px', height: '18px', borderRadius: '50%'}}/>
                                     ))}   
-
                                     {chat.roomName}  
                                 </div>
                                 <div className="lastMessage">
