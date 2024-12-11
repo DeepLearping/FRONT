@@ -34,7 +34,7 @@ const ProfileModal = ({ isOpen, onClose }) => {
 
     return (
         <div className="profile-modal-overlay" onClick={onClose}>
-            <div className="profile-modal-container">
+            <div className="profile-modal-container" onClick={e => e.stopPropagation()}>
                 <button className="close-button" onClick={onClose}>X</button>
                 <div className="profile-image-container">
                     <img src={userInfo.picture} alt="Profile" className="profile-image" />

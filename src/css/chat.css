@@ -55,7 +55,8 @@
 
 .chat-chara-description-chatRoom {
   width: 50vh;
-  height: auto;
+  overflow-y: scroll;
+  height: 60px;
   font-size: 15px;
   font-weight: normal;
   background-color: #f9f9f9;

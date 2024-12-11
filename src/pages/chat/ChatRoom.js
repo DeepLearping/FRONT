@@ -155,7 +155,7 @@ const ChatRoom = ({ }) => {
     if (!input.trim()) return;
 
     setInput(""); // 입력값 초기화
-    const userMessage = { role: "user", content: input, createdDate: currentTime };
+    const userMessage = { role: "user", content: input };
     setNewMessages((prevMessages) => [...prevMessages, userMessage]);
 
     const matchCharacterInfo = {
@@ -183,7 +183,7 @@ const ChatRoom = ({ }) => {
       setLoadingImage(loadingImages[Math.floor(Math.random() * loadingImages.length)]);
 
       setIsLoading(true); // 로딩 상태 시작
-      // console.log("character:",charNo);
+
       const messageInfo = {
         question: input,
         sessionId: sessionId,
@@ -197,8 +197,7 @@ const ChatRoom = ({ }) => {
           role: "ai",
           content: aiResponse.answer,
           msgImgUrl: aiResponse.msgImg > 0 ? `http://localhost:8080/chatMessage/getMsgImg/${charNo}/${aiResponse.msgImg}.jpg` : "",
-          characterId: charNo,
-          createdDate: aiResponse.createdDate
+          characterId: charNo
         };
 
         // 각 메시지 전송 후 상태 업데이트
@@ -209,7 +208,7 @@ const ChatRoom = ({ }) => {
       }
     }
 
-    console.log("whoToSend길이:", whoToSend.length - 1);
+    console.log("whoToSend길이:",whoToSend.length-1);
 
     if (whoToSend.length - 1 !== 0) {
       const DeleteUserMessageRequest = {
