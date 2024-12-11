@@ -39,6 +39,11 @@ const BalanceChat = () => {
     const charName = chatRoomInfo ? chatRoomInfo.roomName: "알 수 없음";
     const keyword = chatRoomInfo.keyword;
     const charId = chatRoomInfo.characterId;
+    const now = new Date();
+    const kst = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+    const hours = kst.getUTCHours(); // KST 시간
+    const minutes = kst.getUTCMinutes(); // KST 분
+    const currentTime = `${hours}:${minutes < 10 ? '0' + minutes : minutes}`
 
     const [modalInput, setModalInput] = useState("# 상황 설명:\n상황을 입력하세요. (ex: 집게리아에서 게살버거를 먹다가 핑핑이를 만났다.)");
     const [situation, setSituation] = useState("");
@@ -48,7 +53,8 @@ const BalanceChat = () => {
     const sendMessage = async (messageInput) => {
         if (!messageInput || !messageInput.trim()) return; // 공백 메시지 차단
 
-        const userMessage = { role: "user", content: messageInput, situation }; // 상황 추가
+        const userMessage = { role: "user", content: messageInput, situation , createdDate: currentTime  }; // 상황 추가
+        console.log("🍕🍕",currentTime)
 
         // 입력 필드 값 초기화 (필드별 구분)
         if (messageInput === input) {
@@ -87,6 +93,7 @@ const BalanceChat = () => {
                         ? `http://localhost:8080/chatMessage/getMsgImg/${charId}/${aiResponse.msgImg}.jpg`
                         : "",
                 characterId: charId,
+                createdDate: aiResponse.createdDate
             };
 
             setMessages((prevMessages) => [...prevMessages, aiMessage]);
@@ -158,6 +165,7 @@ const BalanceChat = () => {
                             characterId={charId}
                             profileImg={imageUrl}
                             keyword={keyword}
+                            createdDate={msg.createdDate}
                         />
                     ))}
 

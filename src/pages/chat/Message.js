@@ -11,7 +11,7 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg, keyword, c
   // const [savedMsgImgUrl, setSavedMsgImgUrl] = useState(msgImgUrl)
   const location = useLocation();
   const chatRoomInfo = location.state;
-  const messageTime = `${createdDate[3]}:${createdDate[4]}`;
+  const messageTime = createdDate;
 
   const imageUrl = profileImg
     ? profileImg
