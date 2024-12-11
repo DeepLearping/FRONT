@@ -8,6 +8,7 @@ import ProfileModal from "../ProfileModal";
 import LoginModal from '../LoginModal';
 import GroupChatFormModal from '../GroupChatFormModal';
 import { enterChatRoom, fetchRecentChats } from '../../apis/ChatAPICalls';
+import { logOut } from '../../modules/ChatModule';
 
 const Navbar = () => {
     const [isModalOpen, setModalOpen] = useState(false); 
@@ -21,7 +22,11 @@ const Navbar = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(fetchRecentChats(userInfo.memberNo));
+        if(userInfo.length == 0) {
+            dispatch(logOut())
+        } else {
+            dispatch(fetchRecentChats(userInfo.memberNo));
+        }
     }, [currentRoom]);
 
     // 🟨 로그인 모달 창 관리

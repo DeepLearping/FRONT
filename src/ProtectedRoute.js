@@ -11,13 +11,12 @@ const ProtectedRoute = ({ element }) => {
   const dispatch = useDispatch();
   const token = localStorage.getItem('token');
 
-  const decodedToken = jwtDecode(token);
   const currentTime = Date.now() / 1000; // 현재 시간 (초 단위)
 
   useEffect(() => {
     if (!token) {
       setModalOpen(true);
-    } else if (decodedToken.exp < currentTime) {
+    } else if (jwtDecode(token).exp < currentTime) {
       
       setModalOpen(true);
 
@@ -41,7 +40,6 @@ const ProtectedRoute = ({ element }) => {
   } else {
     return (
       <>
-        {element}
         {isModalOpen && <LoginModal isOpen={isModalOpen} onClose={handleClose} />}
       </>
     );
