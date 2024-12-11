@@ -21,6 +21,7 @@
 }
 
 .nav-title-container img {
+    border-radius: 30%;
     width: 80px;
 }
 
