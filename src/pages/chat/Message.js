@@ -4,13 +4,14 @@ import { useSearchParams, useLocation } from "react-router-dom";
 import '../../css/chat.css';
 import playbutton from '../chat/images/Button Play.png'
 
-const Message = ({ role, content, msgImgUrl, characterId, profileImg, keyword }) => {
+const Message = ({ role, content, msgImgUrl, characterId, profileImg, keyword, createdDate }) => {
   const dispatch = useDispatch();
   const characters = useSelector(state => state.chat.currentRoom.characters)
   const selectedCharacter = characters.find(character => character.charNo === characterId);
   // const [savedMsgImgUrl, setSavedMsgImgUrl] = useState(msgImgUrl)
   const location = useLocation();
   const chatRoomInfo = location.state;
+  const messageTime = `${createdDate[3]}:${createdDate[4]}`;
 
   const imageUrl = profileImg 
   ? profileImg
@@ -83,6 +84,7 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg, keyword })
                 <img src={msgImgUrl} alt="메세지 감정 이미지" style={{width:"50vh"}}/>
             )}
         </div>
+        <div className='message-time-chatRoom'>{messageTime}</div>
       </div>
     );
 };
