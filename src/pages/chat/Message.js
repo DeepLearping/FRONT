@@ -13,15 +13,15 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg, keyword, c
   const chatRoomInfo = location.state;
   const messageTime = `${createdDate[3]}:${createdDate[4]}`;
 
-  const imageUrl = profileImg 
-  ? profileImg
-  : (selectedCharacter && selectedCharacter.profileImage 
-      ? `http://localhost:8080/api/v1/character${selectedCharacter.profileImage}` 
+  const imageUrl = profileImg
+    ? profileImg
+    : (selectedCharacter && selectedCharacter.profileImage
+      ? `http://localhost:8080/api/v1/character${selectedCharacter.profileImage}`
       : null);
 
   const charName = selectedCharacter ? selectedCharacter.charName : '';
 
-   // 캐릭터 이름과 콜론 제거
+  // 캐릭터 이름과 콜론 제거
   const cleanContent = content.replace(/^[^:]+:\s*/, '');
 
   // // 이모지 제거 함수(이득규)
@@ -42,7 +42,7 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg, keyword, c
       // 이모지 제거
       // const filteredText = cleanText(removeEmojis(text));
       // console.log("Filtered Text: ", filteredText); //로그 찍어보기
-      
+
       const response = await fetch(`http://localhost:8000/chat/stream_audio?text=${encodeURIComponent(text)}`, {
         method: "GET",
         headers: {
@@ -63,30 +63,36 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg, keyword, c
     }
   };
 
-    return (
-      <div>
-        {role === 'ai' && (
-          <div className="chat-charInfo-chatRoom">
-            <img className='charaImg-message-chatRoom' src={imageUrl} alt="캐릭터 이미지" />
-            <p>{charName}</p>
-            <img 
-            className='playButton-chatRoom' 
-            src={playbutton} 
-            alt="재생버튼" 
+  return (
+    <div>
+      {role === 'ai' && (
+        <div className="chat-charInfo-chatRoom">
+          <img className='charaImg-message-chatRoom' src={imageUrl} alt="캐릭터 이미지" />
+          <p>{charName}</p>
+          <img
+            className='playButton-chatRoom'
+            src={playbutton}
+            alt="재생버튼"
             onClick={() => playAudio(cleanContent)}></img>
-          </div>
-        )}
-        <div className={`message-chatRoom ${role}`}>
+        </div>
+      )}
+      <div className={`message-chatRoom ${role}`}>
+        <div className="message-wrapper">
+          {role === 'user' && <div className="message-time-chatRoom">{messageTime}</div>}
           <div className={`message-bubble-chatRoom ${role} char${characterId} ${content.startsWith('# 상황') ? 'balance-situation' : ''}`}>
             {cleanContent}
           </div>
-          {role === 'ai' && msgImgUrl !== "" && (
-                <img src={msgImgUrl} alt="메세지 감정 이미지" style={{width:"50vh"}}/>
-            )}
+          {role === 'ai' && <div className="message-time-chatRoom">{messageTime}</div>}
         </div>
-        <div className='message-time-chatRoom'>{messageTime}</div>
+        {role === 'ai' && msgImgUrl !== "" && (
+          <img src={msgImgUrl} alt="메세지 감정 이미지" style={{ width: "50vh" }} />
+        )}
       </div>
-    );
+
+
+
+    </div>
+  );
 };
 
 export default Message;

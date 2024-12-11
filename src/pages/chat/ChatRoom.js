@@ -335,10 +335,10 @@ const ChatRoom = ({ }) => {
           ref={chatContainerRef}
           style={{ overflowY: "scroll" }}>
           {messages.map((msg, index) => (
-            <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl} characterId={msg.characterId} />
+            <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl} characterId={msg.characterId} createdDate={msg.createdDate} />
           ))}
           {newMessages.map((msg, index) => (
-            <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl} characterId={msg.characterId} />
+            <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl} characterId={msg.characterId} createdDate={msg.createdDate}/>
           ))}
           {isLoading && (
             <>

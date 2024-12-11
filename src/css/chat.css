@@ -218,7 +218,6 @@
 }
 
 .message-bubble-chatRoom {
-  margin-bottom: 10px;
   padding: 10px 15px;
   border-radius: 15px;
   max-width: 60%;
@@ -228,6 +227,20 @@
   animation: fadeInUp 0.5s forwards;
 }
 
+.message-wrapper {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px; 
+}
+
+.message-wrapper.user {
+  justify-content: flex-start;
+}
+
+.message-wrapper.ai {
+  justify-content: flex-end;
+}
+
 .message-bubble-chatRoom.user {
   background-color: #f5c0c0;
   color: #333;
@@ -235,9 +248,18 @@
 }
 
 .message-bubble-chatRoom.ai {
-  /* background-color: #ffec99; */
   color: #333;
   text-align: left;
+}
+
+.message-time-chatRoom{
+  color: #a1a1a1;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.message-time-chatRoom.user {
+  order: -1;
 }
 
 .char1 {
@@ -333,12 +355,6 @@
 .playButton-chatRoom{
   width: 2.0vh;
   cursor: pointer;
-}
-
-.message-time-chatRoom{
-  color: #a1a1a1;
-  font-size: 1rem;
-  margin-left: 400px;
 }
 
 .chat-charInfo-chatRoom p {
