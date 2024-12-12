@@ -38,6 +38,8 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg, keyword })
   const playAudio = async (text) => {
     try {
 
+
+      
       // 이모지 제거
       // const filteredText = cleanText(removeEmojis(text));
       // console.log("Filtered Text: ", filteredText); //로그 찍어보기
