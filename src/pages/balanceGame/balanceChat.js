@@ -178,7 +178,7 @@ const BalanceChat = () => {
                     {isLoading && (
                         <>
                             {/* 캐릭터 정보 영역 */}
-                            <div className="chat-charInfo-bg">
+                            {/* <div className="chat-charInfo-bg">
                                 <img
                                     className="charaImg-message-bg"
                                     src={chatRoomInfo.imgUrl}
@@ -190,7 +190,7 @@ const BalanceChat = () => {
                                     src={playbutton}
                                     alt="재생버튼"
                                 />
-                            </div>
+                            </div> */}
 
                             {/* 로딩 중 메시지 */}
                             <div className="message-bg ai">
