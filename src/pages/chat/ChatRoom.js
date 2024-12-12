@@ -15,7 +15,7 @@ import loading3 from "./images/loading3.gif";
 import loading4 from "./images/loading4.gif";
 import loading5 from "./images/loading5.gif";
 import loading6 from "./images/loading6.gif";
-import { logOut } from "../../modules/ChatModule";
+import { logOut, updateLastMessage } from "../../modules/ChatModule";
 
 const ChatRoom = ({ }) => {
   const [searchParams] = useSearchParams();
@@ -203,6 +203,9 @@ const ChatRoom = ({ }) => {
         };
         
 
+        // 마지막 메시지 상태 업데이트
+        dispatch(updateLastMessage(aiResponse.answer));
+
         // 각 메시지 전송 후 상태 업데이트
         setNewMessages((prevMessages) => [...prevMessages, aiMessage]);
         setIsLoading(false); // 로딩 상태 종료
@@ -220,6 +223,7 @@ const ChatRoom = ({ }) => {
       }
       dispatch(deleteHumanQuestions(DeleteUserMessageRequest))
     }
+
   };
 
   // 스크롤 내리기
