@@ -85,7 +85,7 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg, keyword, c
           {role === 'ai' && <div className="message-time-chatRoom">{messageTime}</div>}
         </div>
         {role === 'ai' && msgImgUrl !== "" && (
-          <img src={msgImgUrl} alt="메세지 감정 이미지" style={{ width: "50vh" }} />
+          <img className='message-img-chatRoom' src={msgImgUrl} alt="메세지 감정 이미지" style={{ width: "50vh" }} />
         )}
       </div>
 

@@ -94,7 +94,7 @@ const ChatRoom = ({ }) => {
         content: JSON.parse(chat.message)?.data?.content || "",
         msgImgUrl: chat.msgImgUrl ? `http://localhost:8080/chatMessage/getMsgImg${chat.msgImgUrl}` : "",
         characterId: chat.characterId,
-        createdDate: chat.createdDate
+        createdDate: `${chat.createdDate[3]}:${chat.createdDate[4] < '10' ? '0' + chat.createdDate[4] : chat.createdDate[4]}`
       }));
 
       if (parsedMessages.length === 0) {
@@ -155,7 +155,7 @@ const ChatRoom = ({ }) => {
     if (!input.trim()) return;
 
     setInput(""); // 입력값 초기화
-    const userMessage = { role: "user", content: input };
+    const userMessage = { role: "user", content: input, createdDate: currentTime};
     setNewMessages((prevMessages) => [...prevMessages, userMessage]);
 
     const matchCharacterInfo = {
@@ -190,6 +190,7 @@ const ChatRoom = ({ }) => {
         charNo: charNo,
         userId: chatUser.memberNo
       };
+      
 
       try {
         const aiResponse = await sendMessageToAI(messageInfo);
@@ -197,8 +198,10 @@ const ChatRoom = ({ }) => {
           role: "ai",
           content: aiResponse.answer,
           msgImgUrl: aiResponse.msgImg > 0 ? `http://localhost:8080/chatMessage/getMsgImg/${charNo}/${aiResponse.msgImg}.jpg` : "",
-          characterId: charNo
+          characterId: charNo,
+          createdDate: `${aiResponse.createdDate[3]}:${aiResponse.createdDate[4] < '10' ? '0' + aiResponse.createdDate[4] : aiResponse.createdDate[4]}`
         };
+        
 
         // 각 메시지 전송 후 상태 업데이트
         setNewMessages((prevMessages) => [...prevMessages, aiMessage]);
@@ -334,10 +337,10 @@ const ChatRoom = ({ }) => {
           ref={chatContainerRef}
           style={{ overflowY: "scroll" }}>
           {messages.map((msg, index) => (
-            <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl} characterId={msg.characterId} createdDate={`${msg.createdDate[3]}:${msg.createdDate[4]}`} />
+            <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl} characterId={msg.characterId} createdDate={msg.createdDate} />
           ))}
           {newMessages.map((msg, index) => (
-            <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl} characterId={msg.characterId} createdDate={`${msg.createdDate[3]}:${msg.createdDate[4]}`}/>
+            <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl} characterId={msg.characterId} createdDate={msg.createdDate}/>
           ))}
           {isLoading && (
             <>

@@ -94,8 +94,9 @@ const BalanceChat = () => {
                         : "",
                 characterId: charId,
                 createdDate: aiResponse.createdDate
+                
             };
-
+        
             setMessages((prevMessages) => [...prevMessages, aiMessage]);
         } catch (error) {
             console.error("메세지 전송 오류:", error);
@@ -103,6 +104,7 @@ const BalanceChat = () => {
             setIsLoading(false); // 로딩 상태 종료
         }
     };
+
 
     const handleModalInput = () => {
         setSituation(modalInput); // 상황을 상태로 설정
