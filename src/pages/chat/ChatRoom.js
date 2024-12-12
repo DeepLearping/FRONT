@@ -47,6 +47,11 @@ const ChatRoom = ({ }) => {
     : "";
   const roomName = roomInfo ? roomInfo.roomName : "알 수 없음";
   const description = roomInfo ? roomInfo.description : "";
+  const now = new Date();
+  const kst = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+  const hours = kst.getUTCHours(); // KST 시간
+  const minutes = kst.getUTCMinutes(); // KST 분
+  const currentTime = `${hours}:${minutes < 10 ? '0' + minutes : minutes}`
 
   // 채팅 기록 initial 로드 & 채팅방 정보 불러오기
   useEffect(() => {
@@ -56,7 +61,7 @@ const ChatRoom = ({ }) => {
       setHasMore(true);
       setIsInitialLoad(true);
       setIsLoading(true);
-      
+
       try {
         await fetchChatHistory();
         // scrollToBottom(); // 맨 아래로 scroll down
@@ -70,7 +75,7 @@ const ChatRoom = ({ }) => {
 
     dispatch(loadChatRoomInfo(chatUser.memberNo, sessionId));
     fetchInitialChatHistory();
-    
+
   }, [sessionId]);
 
   const fetchChatHistory = async () => {
@@ -89,20 +94,20 @@ const ChatRoom = ({ }) => {
         content: JSON.parse(chat.message)?.data?.content || "",
         msgImgUrl: chat.msgImgUrl ? `http://localhost:8080/chatMessage/getMsgImg${chat.msgImgUrl}` : "",
         characterId: chat.characterId,
-        createdDate: chat.createdDate
+        createdDate: `${chat.createdDate[3]}:${chat.createdDate[4] < '10' ? '0' + chat.createdDate[4] : chat.createdDate[4]}`
       }));
 
       if (parsedMessages.length === 0) {
         // 더 이상 로드할 메세지가 없음
         setHasMore(false);
       } else {
-        if (parsedMessages.length < 10){
+        if (parsedMessages.length < 10) {
           setHasMore(false);
         }
 
         // DESC로 최신 메세지 10개씩 가져와서 ASC order로 정렬해서 보여주기
         parsedMessages.sort((a, b) => a.id - b.id);
-        
+
         setMessages((prevMessages) => [...parsedMessages, ...prevMessages]);
         setOffset(offset + 1);
         setLastFetchedId(parsedMessages[0].id)
@@ -150,7 +155,7 @@ const ChatRoom = ({ }) => {
     if (!input.trim()) return;
 
     setInput(""); // 입력값 초기화
-    const userMessage = { role: "user", content: input }; // createdDate: 현재 시간 추가 필요
+    const userMessage = { role: "user", content: input, createdDate: currentTime};
     setNewMessages((prevMessages) => [...prevMessages, userMessage]);
 
     const matchCharacterInfo = {
@@ -159,7 +164,7 @@ const ChatRoom = ({ }) => {
       question: input
     }
     // console.log("matchCharacterInfo: ", matchCharacterInfo)
-    
+
     let whoToSend = charNos
     if (charNos.length > 1) {
       whoToSend = await dispatch(matchCharacter(matchCharacterInfo));
@@ -169,7 +174,7 @@ const ChatRoom = ({ }) => {
     // whoToSend 배열을 무작위로 섞기
     const shuffledWhoToSend = whoToSend.sort(() => Math.random() - 0.5);
     // console.log("shuffledWhoToSend:", shuffledWhoToSend);
-  
+
     // for문 써서 whoToSend에 담긴 charNo 만큼 메시지 보내기
     for (const charNo of shuffledWhoToSend) {
 
@@ -185,16 +190,18 @@ const ChatRoom = ({ }) => {
         charNo: charNo,
         userId: chatUser.memberNo
       };
-  
+      
+
       try {
         const aiResponse = await sendMessageToAI(messageInfo);
         const aiMessage = {
           role: "ai",
           content: aiResponse.answer,
-          msgImgUrl: aiResponse.msgImg !== '0' ? `http://localhost:8080/chatMessage/getMsgImg/${charNo}/${aiResponse.msgImg}.jpg` : "",
+          msgImgUrl: aiResponse.msgImg > 0 ? `http://localhost:8080/chatMessage/getMsgImg/${charNo}/${aiResponse.msgImg}.jpg` : "",
           characterId: charNo,
-          createdDate: aiResponse.createdDate
+          createdDate: `${aiResponse.createdDate[3]}:${aiResponse.createdDate[4] < '10' ? '0' + aiResponse.createdDate[4] : aiResponse.createdDate[4]}`
         };
+        
 
         // 마지막 메시지 상태 업데이트
         dispatch(updateLastMessage(aiResponse.answer));
@@ -207,29 +214,31 @@ const ChatRoom = ({ }) => {
       }
     }
 
-    if (whoToSend.length-1 !== 0) {
+    console.log("whoToSend길이:",whoToSend.length-1);
+
+    if (whoToSend.length - 1 !== 0) {
       const DeleteUserMessageRequest = {
-        conversationId:sessionId,
-        numToBeDeleted:whoToSend.length-1
+        conversationId: sessionId,
+        numToBeDeleted: whoToSend.length - 1
       }
       dispatch(deleteHumanQuestions(DeleteUserMessageRequest))
     }
 
   };
 
-// 스크롤 내리기
-useEffect(() => {
-  if (messageEndRef.current) {
-    messageEndRef.current.scrollIntoView({ behavior: "smooth" });
-  }
+  // 스크롤 내리기
+  useEffect(() => {
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
 
     if (isInitialLoad) {
       const interval = setInterval(() => {
         if (messageEndRef.current) {
           messageEndRef.current.scrollIntoView({ behavior: "smooth" });
         }
-      }, 100); 
-      return () => clearInterval(interval); 
+      }, 100);
+      return () => clearInterval(interval);
     }
   }, [isInitialLoad, newMessages]);
 
@@ -246,24 +255,24 @@ useEffect(() => {
     const characterCount = characters.length;
 
     return characters.slice(0, 4).map((character, index) => (
-        <div 
-            key={index} 
-            className={`charaImg-container-chatRoom ${characterCount === 1 ? 'full-size' : ''}`}
-        >
-            <img
-                className="charaImg-chatRoom"
-                src={`http://localhost:8080/api/v1/character${character.profileImage}`}
-                alt={`캐릭터 이미지 ${index + 1}`}
-            />
-        </div>
+      <div
+        key={index}
+        className={`charaImg-container-chatRoom ${characterCount === 1 ? 'full-size' : ''}`}
+      >
+        <img
+          className="charaImg-chatRoom"
+          src={`http://localhost:8080/api/v1/character${character.profileImage}`}
+          alt={`캐릭터 이미지 ${index + 1}`}
+        />
+      </div>
     ));
   };
 
   const renderMemberList = () => {
-    
+
     return characters.map((character) => (
       <div className="member-list-box">
-        <img 
+        <img
           className="member-profileImg"
           src={`http://localhost:8080/api/v1/character${character.profileImage}`}
           alt="프로필"
@@ -283,7 +292,7 @@ useEffect(() => {
   return (
     <div className="chat-room-chatRoom">
       <div className="chat-scroll-container-chatRoom"
-        >
+      >
         <div className="chatRoom-header-wrapper">
           <div className="chat-header-chatRoom">
             {roomInfo && (
@@ -311,7 +320,7 @@ useEffect(() => {
                     alt="검색"
                     onClick={searchChat}
                   /> */}
-                  <img 
+                  <img
                     className="chatRoom-member-toggle"
                     src={toggleImg}
                     alt="토글"
@@ -326,16 +335,16 @@ useEffect(() => {
               </>
             )}
           </div>
-          
+
         </div>
         <div className="chat-messages-chatRoom"
-        ref={chatContainerRef} 
-        style={{ overflowY: "scroll" }}>
+          ref={chatContainerRef}
+          style={{ overflowY: "scroll" }}>
           {messages.map((msg, index) => (
-            <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl} characterId={msg.characterId} />
+            <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl} characterId={msg.characterId} createdDate={msg.createdDate} />
           ))}
           {newMessages.map((msg, index) => (
-            <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl} characterId={msg.characterId} />
+            <Message key={index} role={msg.role} content={msg.content} msgImgUrl={msg.msgImgUrl} characterId={msg.characterId} createdDate={msg.createdDate}/>
           ))}
           {isLoading && (
             <>

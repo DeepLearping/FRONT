@@ -39,16 +39,23 @@ const BalanceChat = () => {
     const charName = chatRoomInfo ? chatRoomInfo.roomName: "알 수 없음";
     const keyword = chatRoomInfo.keyword;
     const charId = chatRoomInfo.characterId;
+    const now = new Date();
+    const kst = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+    const hours = kst.getUTCHours(); // KST 시간
+    const minutes = kst.getUTCMinutes(); // KST 분
+    const currentTime = `${hours}:${minutes < 10 ? '0' + minutes : minutes}`
 
     const [modalInput, setModalInput] = useState("# 상황 설명:\n상황을 입력하세요. (ex: 집게리아에서 게살버거를 먹다가 핑핑이를 만났다.)");
     const [situation, setSituation] = useState("");
+    const [tempInput, setTempInput] = useState("# 상황 설명:\n");
 
     const cleanSituation = situation.replace(/^[^:]+:\s*/, '');
 
     const sendMessage = async (messageInput) => {
         if (!messageInput || !messageInput.trim()) return; // 공백 메시지 차단
 
-        const userMessage = { role: "user", content: messageInput, situation }; // 상황 추가
+        const userMessage = { role: "user", content: messageInput, situation , createdDate: currentTime  }; // 상황 추가
+        console.log("🍕🍕",currentTime)
 
         // 입력 필드 값 초기화 (필드별 구분)
         if (messageInput === input) {
@@ -87,8 +94,10 @@ const BalanceChat = () => {
                         ? `http://localhost:8080/chatMessage/getMsgImg/${charId}/${aiResponse.msgImg}.jpg`
                         : "",
                 characterId: charId,
+                createdDate: aiResponse.createdDate
+                
             };
-
+        
             setMessages((prevMessages) => [...prevMessages, aiMessage]);
         } catch (error) {
             console.error("메세지 전송 오류:", error);
@@ -97,14 +106,18 @@ const BalanceChat = () => {
         }
     };
 
+
     const handleModalInput = () => {
-        setSituation(modalInput); // 상황을 상태로 설정
-        sendMessage(modalInput); // 입력 값으로 메시지 전송
-        setModalInput("# 상황 설명:\n상황을 입력하세요. (ex: 집게리아에서 게살버거를 먹다가 핑핑이를 만났다.)");
+        setModalInput(tempInput); // "적용" 버튼을 누를 때만 저장
+        setSituation(tempInput); // 상황을 업데이트
+        sendMessage(tempInput); // 입력 값으로 메시지 전송
         setModalOpen(false); // 모달 닫기
     };
-
-
+    
+    const handleModalClose = () => {
+        setModalOpen(false); // 모달 닫기
+        setTempInput(modalInput); // 모달을 닫을 때 입력 초기화
+    };
 
 
     useEffect(() => {
@@ -132,7 +145,7 @@ const BalanceChat = () => {
                         </>
                     )}
                     <div className="situation-bc">
-                        부여된 상황: {cleanSituation && cleanSituation.length > 0 ? (cleanSituation.length > 30 ? cleanSituation.slice(0, 30) + '...' : cleanSituation) : "없음"}
+                        현재 상황: {cleanSituation && cleanSituation.length > 0 ? (cleanSituation.length > 30 ? cleanSituation.slice(0, 30) + '...' : cleanSituation) : "없음"}
 
                     </div>
                     <div className="chat-header-bg">
@@ -158,13 +171,14 @@ const BalanceChat = () => {
                             characterId={charId}
                             profileImg={imageUrl}
                             keyword={keyword}
+                            createdDate={msg.createdDate}
                         />
                     ))}
 
                     {isLoading && (
                         <>
                             {/* 캐릭터 정보 영역 */}
-                            <div className="chat-charInfo-bg">
+                            {/* <div className="chat-charInfo-bg">
                                 <img
                                     className="charaImg-message-bg"
                                     src={chatRoomInfo.imgUrl}
@@ -176,7 +190,7 @@ const BalanceChat = () => {
                                     src={playbutton}
                                     alt="재생버튼"
                                 />
-                            </div>
+                            </div> */}
 
                             {/* 로딩 중 메시지 */}
                             <div className="message-bg ai">
@@ -222,66 +236,61 @@ const BalanceChat = () => {
 
             {/* 모달 창 */}
             {isModalOpen && (
-                <div className="modal-bg">
-                    <div className="modal-content-bg">
-                        <div className="modal-title-bg">상황 부여하기</div>
+    <div className="modal-bg">
+        <div className="modal-content-bg">
+            <div className="modal-title-bg">상황 부여하기</div>
 
-                        <div className="modal-input-container-bg">
-                            <img
-                                src={context1}
-                                alt="캐릭터 이미지"
-                                className="modal-image-bg"
-                                style={{ width: "400px", height: "350px" }}
-                            />
-                            <textarea
-                                value={modalInput}
-                                onChange={(e) => {
-                                    const fixedText = "# 상황 설명:\n";
-                                    const userInput = e.target.value;
+            <div className="modal-input-container-bg">
+                <img
+                    src={context1}
+                    alt="캐릭터 이미지"
+                    className="modal-image-bg"
+                    style={{ width: "400px", height: "350px" }}
+                />
+                <textarea
+                    value={tempInput}
+                    onChange={(e) => {
+                        const fixedText = "# 상황 설명:\n";
+                        const userInput = e.target.value;
 
-                                    if (userInput.startsWith(fixedText)) {
-                                        setModalInput(userInput); // Keep the full value if it starts with the fixed text
-                                    } else {
-                                        setModalInput(fixedText + userInput.replace(fixedText, ""));
-                                    }
-                                }}
-                                onKeyDown={(e) => {
-                                    const fixedText = "# 상황 설명:\n";
-                                    const cursorPosition = e.target.selectionStart;
+                        if (userInput.startsWith(fixedText)) {
+                            setTempInput(userInput);
+                        } else {
+                            setTempInput(fixedText + userInput.replace(fixedText, ""));
+                        }
+                    }}
+                    onKeyDown={(e) => {
+                        const fixedText = "# 상황 설명:\n";
+                        const cursorPosition = e.target.selectionStart;
 
-                                    if (e.key === "Backspace") {
-                                        if (modalInput.startsWith(fixedText) && cursorPosition <= fixedText.length) {
-                                            e.preventDefault();
-                                        }
-                                    }
+                        if (e.key === "Backspace") {
+                            if (tempInput.startsWith(fixedText) && cursorPosition <= fixedText.length) {
+                                e.preventDefault();
+                            }
+                        }
 
-                                    if (e.key === "Enter") {
-                                        e.preventDefault();
-                                        handleModalInput();
-                                    }
-                                }}
-                                onFocus={(e) => {
-                                    const fixedText = "# 상황 설명:\n";
-                                    if (modalInput.startsWith(fixedText)) {
-                                        setModalInput(fixedText);
-                                        e.target.setSelectionRange(fixedText.length, fixedText.length);
-                                    }
-                                }}
-                            />
+                        if (e.key === "Enter") {
+                            e.preventDefault();
+                            handleModalInput();
+                        }
+                    }}
+                    onFocus={(e) => {
+                        const fixedText = "# 상황 설명:\n";
+                        if (tempInput.startsWith(fixedText)) {
+                            setTempInput(fixedText);
+                            e.target.setSelectionRange(fixedText.length, fixedText.length);
+                        }
+                    }}
+                />
+            </div>
 
-
-                        </div>
-
-
-                        <div className="modal-buttons-bg">
-                            <button className="modal-button-bg" onClick={handleModalInput}>적용</button>
-                            <button className="modal-button-bg" onClick={() => setModalOpen(false)}>닫기</button>
-                        </div>
-
-                    </div>
-                </div>
-            )}
-
+            <div className="modal-buttons-bg">
+                <button className="modal-button-bg" onClick={handleModalInput}>적용</button>
+                <button className="modal-button-bg" onClick={handleModalClose}>닫기</button>
+            </div>
+        </div>
+    </div>
+)}
         </div>
     );
 }

@@ -196,13 +196,15 @@
   padding-bottom: 10vh; 
   background-color: #f9f9f9;
   scroll-padding-bottom: 10vh;
+  padding-left: 50px;
+  padding-right: 50px;
 }
 
 
 .message-chatRoom {
   margin-top: 5px;
   margin-left: 300px;
-  margin-right: 2%;
+  margin-right: 20px;
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
@@ -217,14 +219,28 @@
 }
 
 .message-bubble-chatRoom {
-  margin-bottom: 10px;
   padding: 10px 15px;
   border-radius: 15px;
-  max-width: 60%;
+  max-width: 800px;
   word-wrap: break-word;
+  flex-shrink: 0; 
   opacity: 0; 
   transform: translateY(10px); 
   animation: fadeInUp 0.5s forwards;
+}
+
+.message-wrapper {
+  display: flex;
+  align-items: flex-end;
+  gap: 7px; 
+}
+
+.message-wrapper.user {
+  justify-content: flex-start;
+}
+
+.message-wrapper.ai {
+  justify-content: flex-end;
 }
 
 .message-bubble-chatRoom.user {
@@ -234,9 +250,18 @@
 }
 
 .message-bubble-chatRoom.ai {
-  /* background-color: #ffec99; */
   color: #333;
   text-align: left;
+}
+
+.message-time-chatRoom{
+  color: #a1a1a1;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.message-time-chatRoom.user {
+  order: -1;
 }
 
 .char1 {
@@ -312,7 +337,8 @@
   text-align: center;
 }
 
-.message-img-chatRoom img {
+.message-img-chatRoom {
+  margin-top: 5px;
   width: 18vh;
   height: auto;
   border-radius: 10px;
@@ -331,6 +357,7 @@
 
 .playButton-chatRoom{
   width: 2.0vh;
+  cursor: pointer;
 }
 
 .chat-charInfo-chatRoom p {
