@@ -15,7 +15,7 @@ import loading3 from "./images/loading3.gif";
 import loading4 from "./images/loading4.gif";
 import loading5 from "./images/loading5.gif";
 import loading6 from "./images/loading6.gif";
-import { logOut } from "../../modules/ChatModule";
+import { logOut, updateLastMessage } from "../../modules/ChatModule";
 
 const ChatRoom = ({ }) => {
   const [searchParams] = useSearchParams();
@@ -89,6 +89,7 @@ const ChatRoom = ({ }) => {
         content: JSON.parse(chat.message)?.data?.content || "",
         msgImgUrl: chat.msgImgUrl ? `http://localhost:8080/chatMessage/getMsgImg${chat.msgImgUrl}` : "",
         characterId: chat.characterId,
+        createdDate: chat.createdDate
       }));
 
       if (parsedMessages.length === 0) {
@@ -149,7 +150,7 @@ const ChatRoom = ({ }) => {
     if (!input.trim()) return;
 
     setInput(""); // 입력값 초기화
-    const userMessage = { role: "user", content: input };
+    const userMessage = { role: "user", content: input }; // createdDate: 현재 시간 추가 필요
     setNewMessages((prevMessages) => [...prevMessages, userMessage]);
 
     const matchCharacterInfo = {
@@ -177,7 +178,7 @@ const ChatRoom = ({ }) => {
       setLoadingImage(loadingImages[Math.floor(Math.random() * loadingImages.length)]);
 
       setIsLoading(true); // 로딩 상태 시작
-      // console.log("character:",charNo);
+
       const messageInfo = {
         question: input,
         sessionId: sessionId,
@@ -190,10 +191,14 @@ const ChatRoom = ({ }) => {
         const aiMessage = {
           role: "ai",
           content: aiResponse.answer,
-          msgImgUrl: aiResponse.msgImg > 0 ? `http://localhost:8080/chatMessage/getMsgImg/${charNo}/${aiResponse.msgImg}.jpg` : "",
-          characterId: charNo
+          msgImgUrl: aiResponse.msgImg !== '0' ? `http://localhost:8080/chatMessage/getMsgImg/${charNo}/${aiResponse.msgImg}.jpg` : "",
+          characterId: charNo,
+          createdDate: aiResponse.createdDate
         };
-  
+
+        // 마지막 메시지 상태 업데이트
+        dispatch(updateLastMessage(aiResponse.answer));
+
         // 각 메시지 전송 후 상태 업데이트
         setNewMessages((prevMessages) => [...prevMessages, aiMessage]);
         setIsLoading(false); // 로딩 상태 종료
@@ -202,8 +207,6 @@ const ChatRoom = ({ }) => {
       }
     }
 
-    console.log("whoToSend길이:",whoToSend.length-1);
-
     if (whoToSend.length-1 !== 0) {
       const DeleteUserMessageRequest = {
         conversationId:sessionId,
@@ -211,6 +214,7 @@ const ChatRoom = ({ }) => {
       }
       dispatch(deleteHumanQuestions(DeleteUserMessageRequest))
     }
+
   };
 
 // 스크롤 내리기
