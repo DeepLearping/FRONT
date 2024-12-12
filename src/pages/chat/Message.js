@@ -13,6 +13,7 @@ const Message = ({ role, content, msgImgUrl, characterId, profileImg, keyword, c
   const chatRoomInfo = location.state;
   const messageTime = createdDate;
 
+  console.log("🍿🍿🍿", messageTime)
   const imageUrl = profileImg
     ? profileImg
     : (selectedCharacter && selectedCharacter.profileImage

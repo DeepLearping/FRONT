@@ -221,8 +221,9 @@
 .message-bubble-chatRoom {
   padding: 10px 15px;
   border-radius: 15px;
-  max-width: 60%;
+  max-width: 800px;
   word-wrap: break-word;
+  flex-shrink: 0; 
   opacity: 0; 
   transform: translateY(10px); 
   animation: fadeInUp 0.5s forwards;

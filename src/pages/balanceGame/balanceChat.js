@@ -47,6 +47,7 @@ const BalanceChat = () => {
 
     const [modalInput, setModalInput] = useState("# 상황 설명:\n상황을 입력하세요. (ex: 집게리아에서 게살버거를 먹다가 핑핑이를 만났다.)");
     const [situation, setSituation] = useState("");
+    const [tempInput, setTempInput] = useState("# 상황 설명:\n");
 
     const cleanSituation = situation.replace(/^[^:]+:\s*/, '');
 
@@ -107,13 +108,16 @@ const BalanceChat = () => {
 
 
     const handleModalInput = () => {
-        setSituation(modalInput); // 상황을 상태로 설정
-        sendMessage(modalInput); // 입력 값으로 메시지 전송
-        setModalInput("# 상황 설명:\n상황을 입력하세요. (ex: 집게리아에서 게살버거를 먹다가 핑핑이를 만났다.)");
+        setModalInput(tempInput); // "적용" 버튼을 누를 때만 저장
+        setSituation(tempInput); // 상황을 업데이트
+        sendMessage(tempInput); // 입력 값으로 메시지 전송
         setModalOpen(false); // 모달 닫기
     };
-
-
+    
+    const handleModalClose = () => {
+        setModalOpen(false); // 모달 닫기
+        setTempInput(modalInput); // 모달을 닫을 때 입력 초기화
+    };
 
 
     useEffect(() => {
@@ -141,7 +145,7 @@ const BalanceChat = () => {
                         </>
                     )}
                     <div className="situation-bc">
-                        부여된 상황: {cleanSituation && cleanSituation.length > 0 ? (cleanSituation.length > 30 ? cleanSituation.slice(0, 30) + '...' : cleanSituation) : "없음"}
+                        현재 상황: {cleanSituation && cleanSituation.length > 0 ? (cleanSituation.length > 30 ? cleanSituation.slice(0, 30) + '...' : cleanSituation) : "없음"}
 
                     </div>
                     <div className="chat-header-bg">
@@ -232,66 +236,61 @@ const BalanceChat = () => {
 
             {/* 모달 창 */}
             {isModalOpen && (
-                <div className="modal-bg">
-                    <div className="modal-content-bg">
-                        <div className="modal-title-bg">상황 부여하기</div>
+    <div className="modal-bg">
+        <div className="modal-content-bg">
+            <div className="modal-title-bg">상황 부여하기</div>
 
-                        <div className="modal-input-container-bg">
-                            <img
-                                src={context1}
-                                alt="캐릭터 이미지"
-                                className="modal-image-bg"
-                                style={{ width: "400px", height: "350px" }}
-                            />
-                            <textarea
-                                value={modalInput}
-                                onChange={(e) => {
-                                    const fixedText = "# 상황 설명:\n";
-                                    const userInput = e.target.value;
+            <div className="modal-input-container-bg">
+                <img
+                    src={context1}
+                    alt="캐릭터 이미지"
+                    className="modal-image-bg"
+                    style={{ width: "400px", height: "350px" }}
+                />
+                <textarea
+                    value={tempInput}
+                    onChange={(e) => {
+                        const fixedText = "# 상황 설명:\n";
+                        const userInput = e.target.value;
 
-                                    if (userInput.startsWith(fixedText)) {
-                                        setModalInput(userInput); // Keep the full value if it starts with the fixed text
-                                    } else {
-                                        setModalInput(fixedText + userInput.replace(fixedText, ""));
-                                    }
-                                }}
-                                onKeyDown={(e) => {
-                                    const fixedText = "# 상황 설명:\n";
-                                    const cursorPosition = e.target.selectionStart;
+                        if (userInput.startsWith(fixedText)) {
+                            setTempInput(userInput);
+                        } else {
+                            setTempInput(fixedText + userInput.replace(fixedText, ""));
+                        }
+                    }}
+                    onKeyDown={(e) => {
+                        const fixedText = "# 상황 설명:\n";
+                        const cursorPosition = e.target.selectionStart;
 
-                                    if (e.key === "Backspace") {
-                                        if (modalInput.startsWith(fixedText) && cursorPosition <= fixedText.length) {
-                                            e.preventDefault();
-                                        }
-                                    }
+                        if (e.key === "Backspace") {
+                            if (tempInput.startsWith(fixedText) && cursorPosition <= fixedText.length) {
+                                e.preventDefault();
+                            }
+                        }
 
-                                    if (e.key === "Enter") {
-                                        e.preventDefault();
-                                        handleModalInput();
-                                    }
-                                }}
-                                onFocus={(e) => {
-                                    const fixedText = "# 상황 설명:\n";
-                                    if (modalInput.startsWith(fixedText)) {
-                                        setModalInput(fixedText);
-                                        e.target.setSelectionRange(fixedText.length, fixedText.length);
-                                    }
-                                }}
-                            />
+                        if (e.key === "Enter") {
+                            e.preventDefault();
+                            handleModalInput();
+                        }
+                    }}
+                    onFocus={(e) => {
+                        const fixedText = "# 상황 설명:\n";
+                        if (tempInput.startsWith(fixedText)) {
+                            setTempInput(fixedText);
+                            e.target.setSelectionRange(fixedText.length, fixedText.length);
+                        }
+                    }}
+                />
+            </div>
 
-
-                        </div>
-
-
-                        <div className="modal-buttons-bg">
-                            <button className="modal-button-bg" onClick={handleModalInput}>적용</button>
-                            <button className="modal-button-bg" onClick={() => setModalOpen(false)}>닫기</button>
-                        </div>
-
-                    </div>
-                </div>
-            )}
-
+            <div className="modal-buttons-bg">
+                <button className="modal-button-bg" onClick={handleModalInput}>적용</button>
+                <button className="modal-button-bg" onClick={handleModalClose}>닫기</button>
+            </div>
+        </div>
+    </div>
+)}
         </div>
     );
 }
