@@ -154,7 +154,7 @@ const Navbar = () => {
                 </div>
                 <div className='profile-description'>
                     {token ? (
-                        <span>{userInfo.name}님</span> // username이 없을 경우 '유저이름' 표시
+                        <span>{userInfo.nickname? userInfo.nickname: userInfo.username}님</span> // username이 없을 경우 '유저이름' 표시
                     ) : (
                         <span>로그인</span>
                     )}
